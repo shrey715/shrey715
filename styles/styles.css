@@ -402,6 +402,7 @@
     font-size: 1.1rem;
 
     display: flex;
+    flex-direction: row;
 
     background-color: var(--color-navbar);
     color: var(--color-navtext);
@@ -595,55 +596,5 @@
     .footer-socials {
         width: 100%;
         margin: 0;
-    }
-
-    .nav-links {
-        position: absolute;
-        top: 60px; 
-        left: 0;
-        width: 100%;
-        flex-direction: column;
-        display: none;
-        background-color: var(--color-navbar);
-        z-index: 1;
-    }
-
-    .nav-links.active {
-        display: flex;
-    }
-
-    .topbar {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .nav-links li {
-        padding: 10px 20px;
-    }
-
-    .nav-links li a:hover {
-        background-color: var(--color-tertiary);
-        padding: 10px 20px;
-        border-radius: 0;
-    }
-
-    #viewid {
-        display: block;
-    }
-
-    .footer-content {
-        width: 100%;
-    }
-
-    .footer-socials {
-        width: 100%;
-        margin-right: 0;
-        align-items: center;
-    }
-
-    .link-content {
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
     }
 }

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Homepage</title>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="author" content="Shreyas Deb">
+
+        <link rel="stylesheet" type="text/css" href="styles/styles.css">
+    </head>
+
+    <body class="main-content">
+        <header class="topbar">
+            <img class="logo" src="icons/logo.png" alt="LogoLogo">
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="#" onclick="showSection('sec0'); return false;">Home</a></li>
+                    <li><a href="#" onclick="showSection('sec1'); return false;">About Me</a></li>
+                    <li><a href="#" onclick="showSection('sec2'); return false;">Timeline</a></li>
+                    <li><a href="#" onclick="showSection('sec3'); return false;">Achievements</a>
+                    <li><a href="#" onclick="showSection('sec4'); return false;">Skills</a>
+                    <li><a href="#" onclick="showSection('sec5'); return false;">Blogs</a>
+                </ul>
+            </nav>
+            <div class="toggle">
+                <a href="#"><img class="toggle-logo" src="icons/menu.svg"></a>
+            </div>
+            <img class="viewmode" src="icons/sun.svg" alt="LightMode" id="viewid" onclick="modeToggle()">
+        </header>
+
+        <main class="section-info">
+            <section class="info-section section-0 active" id="sec0">
+                <div class="home-content">
+                    <div class="typing-anim-content">
+                        <h1 class="typing-anim">Hello, World!</h1>
+                        <h1 class="typing-anim">Shreyas here.</h1>
+                    </div>
+                    <div class="me-div">
+                        <img class="me-img" src="icons/me.jpeg" alt="Me">
+                    </div>
+                </div>
+            </section>
+            <section class="info-section section-1" id="sec1">
+                <div class="about-content">
+                    <div class="me-div">
+                        <img class="me-img-aboutme" src="icons/me.jpeg" alt="Me">
+                    </div>
+                    <div class="about-me">
+                        <h1>About Me</h1>
+                        <ul class="desc-me">
+                            <li> I am a first-year student at IIIT Hyderabad pursuing a B.Tech in Computer Science along with an MS by Research in the CNS stream.</li>
+                            <li>Thriving on the cutting edge of technology, my passion lies in becoming a proficient full-stack developer. Beyond the realms of academics, I am an avid competitive programmer, finding joy in the art of problem-solving and algorithmic challenges.</li>
+                            <li>My interests extend beyond the digital realm, as I am an enthusiast of chess and basketball, finding both strategic moves on the board and the dynamic plays on the court equally exhilarating. When not immersed in coding or sports, you can often find me engrossed in the captivating world of anime, exploring diverse storylines and art styles.</li>
+                            <li>I approach education with an insatiable thirst for knowledge, valuing a genuine understanding over rote memorization. Eager to grasp concepts the right way, my focus is on deepening my understanding rather than merely preparing for exams. I believe in continuous learning, embracing opportunities to broaden my horizons and stay ahead in the ever-evolving landscape of technology.</li>
+                            <li><a id="resume" href="resume.pdf" target="_blank">Open PDF</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section class="info-section section-2" id="sec2">
+                <div class="timeline-content">
+                    <div class="timeline-main-heading">
+                        <h1>Timeline</h1>
+                    </div>
+                    <div class="timeline-card">
+                        <div class="timeline-heading">
+                            <h3>2023</h3>
+                        </div>
+                        <img class="timeline-pic" src="icons/iiith.jpg" alt="IIITH">
+                        <div class="timeline-text">
+                            <p>Joined IIIT Hyderabad under the BTechCS + MS by Research in CNS stream</p>
+                        </div>
+                    </div>
+                    <div class="timeline-card">
+                        <div class="timeline-heading">
+                            <h3>2023</h3>
+                        </div>
+                        <img class="timeline-pic" src="icons/aps.jpg" alt="aps">
+                        <div class="timeline-text">
+                            <p>Completed my 12th grade from Alpine Public School, Bangalore, CBSE Board with 96%</p>
+                        </div>
+                    </div>  
+                    <div class="timeline-card">
+                        <div class="timeline-heading">
+                            <h3>2021</h3>
+                        </div>
+                        <img class="timeline-pic" src="icons/vhs.jpg" alt="vhs">
+                        <div class="timeline-text">
+                            <p>Completed my 10th grade from Vibgyor High School, Bangalore, ICSE Board with 95%</p>
+                        </div>  
+                    </div>  
+                </div>
+            </section>
+
+            <section class="info-section section-3" id="sec3">
+                <div class="achievements-content">
+                    <h1>Achievements</h1>
+                    <ul class="ach-list">
+                        <li><strong>Captain Crunch-Time</strong><br> Successfully crammed an entire semester's worth of knowledge into a single caffeine-fueled all-nighter, earning the prestigious title of "Master of the Midnight Study Session."</li>
+                        
+                        <li><strong>Procrastination Prodigy</strong><br> Delivered A-grade assignments with such finesse that it seemed like they were effortlessly pulled together at the last minute, proving that deadlines are more like suggestions.</li>
+                        
+                        <li><strong>Snack-Attack Specialist</strong><br> Developed a sixth sense for detecting the most obscure vending machines on campus, ensuring a constant supply of study fuel in the form of chips, candy, and energy drinks.</li>
+                        
+                        <li><strong>Zen Master of Zoning Out</strong><br> Achieved a state of unparalleled concentration during lectures while appearing completely disconnected, mastering the art of nodding in agreement while mentally planning the next weekend adventure.</li>
+                        
+                        <li><strong>Sleep Deprivation Survivor</strong><br> Conquered the treacherous landscape of sleepless nights and early morning classes, wearing the bags under the eyes as a badge of honor.</li>
+                        
+                        <li><strong>Emoji Linguist</strong><br> Communicated entire paragraphs of emotion and expression using only emojis, turning mundane text conversations into a colorful and comedic masterpiece.</li>
+                        
+                        <li><strong>Professor's Pet Detective</strong><br> Developed the uncanny ability to predict exam questions with eerie accuracy, making it seem as if the syllabus was a secret code waiting to be deciphered.</li>
+                        
+                        <li><strong>WiFi Warrior</strong><br> Navigated the unpredictable seas of campus WiFi, finding the one elusive spot with a perfect connection for last-minute research and online assignments.</li>
+                        
+                        <li><strong>Netflix Ninja</strong><br> Achieved the perfect balance between binge-watching favorite shows and acing exams, proving that a good TV series is the ideal study break.</li>
+                        
+                    </ul>
+                      
+                </div>
+            </section>
+
+            <section class="info-section section-4" id="sec4">
+                <div class="skills-content">
+                    
+                    <div class="skills-heading">
+                        <h3>Technical Skills</h3>
+                    </div>
+
+                    <div class="info-card">
+                        <img class="skill-icons" src="icons/c.svg" alt="C">
+                        <span class="info-text">C</span>
+                    </div>
+                    <div class="info-card">
+                        <img class="skill-icons" src="icons/c++.svg" alt="C++">
+                        <span class="info-text">C++</span>
+                    </div>
+                    <div class="info-card">
+                        <img class="skill-icons" src="icons/python.svg" alt="Python">
+                        <span class="info-text">Python</span>
+                    </div>
+                    <div class="info-card">
+                        <img class="skill-icons" src="icons/java.svg" alt="Java">
+                        <span class="info-text">Java</span>
+                    </div>
+                    <div class="info-card">
+                        <img class="skill-icons" src="icons/numpy.svg" alt="Numpy">
+                        <span class="info-text">Numpy</span>
+                    </div>
+                    <div class="info-card">
+                        <img class="skill-icons" src="icons/pandas.svg" alt="Pandas">
+                        <span class="info-text">Pandas</span>
+                    </div>
+                    <div class="info-card">
+                        <img class="skill-icons" src="icons/matplotlib.svg" alt="Matplotlib">
+                        <span class="info-text">Matplotlib</span>
+                    </div>
+                    <div class="info-card">
+                        <img class="skill-icons" src="icons/django.svg" alt="Django">
+                        <span class="info-text">Django</span>
+                    </div>
+                    <div class="info-card">
+                        <img class="skill-icons" src="icons/flask.svg" alt="Flask">
+                        <span class="info-text">Flask</span>
+                    </div>
+                    <div class="info-card">
+                        <img class="skill-icons" src="icons/html.svg" alt="HTML">
+                        <span class="info-text">HTML</span>
+                    </div>
+                    <div class="info-card">
+                        <img class="skill-icons" src="icons/css.svg" alt="CSS">
+                        <span class="info-text">CSS</span>
+                    </div>
+                    <div class="info-card">
+                        <img class="skill-icons" src="icons/javascript.svg" alt="JavaScript">
+                        <span class="info-text">JavaScript</span>
+                    </div>
+
+                    <div class="skills-heading">
+                        <h3>Artisitic Skills</h3>
+                    </div>
+
+                    <div class="info-card">
+                        <img class="skill-icons" src="icons/theatre.svg" alt="Theatre">
+                        <span class="info-text">Theatre</span>
+                    </div>
+                    <div class="info-card">
+                        <img class="skill-icons" src="icons/sketch.svg" alt="Sketching">
+                        <span class="info-text">Sketching</span>
+                    </div>
+                    <div class="info-card">
+                        <img class="skill-icons" src="icons/painting.svg" alt="Painting">
+                        <span class="info-text">Painting</span>
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="info-section section-5" id="sec5">
+                <div class="blogs-content">
+                    <h1>Latest Blogs</h1>
+                    <div class="blog-card">
+                        <a href="blogpage1.html" target="_blank"><h1>The Battle of Shiganshina</h1>
+                        In the vast and diverse realm of manga, where epic battles and intense story arcs abound, one particular gem shines brightly as a testament to the brilliance of storytelling and character development. Shiganshina, the climax of Hajime Isayama's "Attack on Titan," stands out as the best battle arc in manga history. This essay will delve into the multifaceted reasons..... Read More</a>
+                    </div>
+                    <div class="blog-card">
+                        <a href="blogpage2.html" target="_blank"><h1>Stein's Gate: A Masterclass Work of Fiction</h1>
+                            In the vast landscape of anime, there are few series that manage to transcend the boundaries of storytelling, leaving an indelible mark on the hearts of viewers. One such masterpiece that stands out among the rest is "Steins;Gate." Dive into the....... Read More</a>
+                    </div>
+            </section>
+        </main>
+
+        <footer class="bottombar">
+            <div class="footer-content">
+                <p>© 2024 Shreyas Deb</p>
+                <br>
+                <p>Contact Information:</p>
+                <p>Email: <a href="mailto:shreyas.deb@research.iiit.ac.in">shreyas.deb@research.iiit.ac.in</a></p>
+                <p>Phone: +91 9876543210</p>
+            </div>
+            <div class="footer-socials">
+                <a href="https://github.com/shrey715" target="_blank">
+                    <div class="link-content">
+                        <span>Github</span>
+                        <img class="socials-icons" src="icons/github.svg" alt="GitHub">
+                    </div>
+                </a>
+                <a href="https://www.linkedin.com/in/shreyas-deb-b6a144283/" target="_blank">
+                    <div class="link-content">
+                        <span>LinkedIn</span>
+                        <img class="socials-icons" src="icons/linkedin.svg" alt="LinkedIn">
+                    </div>
+                </a>
+                <a>
+                    <div class="link-content">
+                        <span>Username: d_shrey</span>
+                        <img class="socials-icons" src="icons/discord.svg" alt="Discord">
+                    </div>
+                </a>
+            </div>
+        </footer>
+
+        <script src="script.js"></script>
+    </body>
+</html>

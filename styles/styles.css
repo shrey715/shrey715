@@ -361,6 +361,7 @@
     justify-content: space-between;
     flex-direction: row;
     height: 67vh;
+    overflow: scroll;
 
     h1{
         width: 100%;

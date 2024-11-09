@@ -13,8 +13,8 @@ export default function Home() {
       <CursorFollower />
       <Navbar />
       <Hero id="Hero" />
-      <About id="About" />
-      <Projects id="Projects" />
+      {/* <About id="About" />
+      <Projects id="Projects" /> */}
       <Contact id="Contact" />
       <Footer />
     </main>

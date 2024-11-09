@@ -2,32 +2,55 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+html {
+    scroll-behavior: smooth;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+*{
+    scrollbar-width: thin;
+    scrollbar-color: #4A5568 #2D3748;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: #2D3748;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #4A5568;
+    border-radius: 20px;
+    border: 3px solid #2D3748;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #4A5568;
+}
+
+@keyframes customSpin {
+    0% {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.before\:inset-profile1::before {
+    inset: -10px 140px;
+}
+
+.before\:custom-animate::before {
+    @apply animate-customSpin;
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+    .animate-customSpin {
+        animation: customSpin 4s linear infinite;
+    }
 }

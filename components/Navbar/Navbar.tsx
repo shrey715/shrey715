@@ -21,16 +21,16 @@ const NavItems = [
         icon: <FaHome />,
         link: '#Hero'
     },
-    {
-        title: 'About',
-        icon: <SiAboutdotme />,
-        link: '#About'
-    },
-    {
-        title: 'Projects',
-        icon: <GrProjects />,
-        link: '#Projects'        
-    },
+    // {
+    //     title: 'About',
+    //     icon: <SiAboutdotme />,
+    //     link: '#About'
+    // },
+    // {
+    //     title: 'Projects',
+    //     icon: <GrProjects />,
+    //     link: '#Projects'        
+    // },
     {
         title: 'Contact',
         icon: <GrContactInfo />,

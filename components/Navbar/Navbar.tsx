@@ -17,7 +17,7 @@ const poppins = Poppins({
 
 const NavItems = [
     {
-        title: 'Hero',
+        title: 'Home',
         icon: <FaHome />,
         link: '#Hero'
     },

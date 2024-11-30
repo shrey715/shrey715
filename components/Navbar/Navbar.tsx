@@ -21,16 +21,16 @@ const NavItems = [
         icon: <FaHome />,
         link: '#Hero'
     },
-    // {
-    //     title: 'About',
-    //     icon: <SiAboutdotme />,
-    //     link: '#About'
-    // },
-    // {
-    //     title: 'Projects',
-    //     icon: <GrProjects />,
-    //     link: '#Projects'        
-    // },
+    {
+        title: 'About',
+        icon: <SiAboutdotme />,
+        link: '#About'
+    },
+    {
+        title: 'Projects',
+        icon: <GrProjects />,
+        link: '#Projects'        
+    },
     {
         title: 'Contact',
         icon: <GrContactInfo />,
@@ -66,27 +66,27 @@ const BurgerMenu = ({ isOpen, setIsOpen } : { isOpen: boolean, setIsOpen: React.
     )
 }
 
-const MobileNav = ({ isOpen, setIsOpen } : { isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
+const MobileNav = ({ isOpen, setIsOpen }: { isOpen: boolean, setIsOpen: React.Dispatch<React.SetStateAction<boolean>> }) => {
     return (
+        isOpen ? 
+        <BurgerMenu isOpen={isOpen} setIsOpen={setIsOpen} /> :
         <motion.nav 
-            className="fixed top-0 left-0 w-full flex justify-between items-center h-16 bg-transparent text-gray-200 font-mono px-4 md:px-8 z-50" 
+            className="fixed top-0 left-0 w-full flex justify-between items-center h-16 bg-transparent text-gray-200 font-mono px-4 md:px-8 z-50 mix-blend-exclusion" 
             initial={{ y: -100 }}
             animate={{ y: 0 }}
             transition={{ delay: 0.2, type: 'spring', stiffness: 120 }}
         >
-            <div className={cn('font-bold text-3xl', poppins.className, 'no-underline bg-primary rounded-lg p-0.5')}>
+            <div className={cn('font-bold text-3xl', poppins.className, 'no-underline p-0.5')}>
                 <Link href="/" className="md:hidden no-underline">sd.</Link>
             </div>
-            <div className="md:hidden flex items-center bg-primary rounded-xl p-1">
+            <div className="md:hidden flex items-center p-1">
                 <button onClick={() => setIsOpen(!isOpen)} className="focus:outline-none">
                     <FaBars size={30} />
                 </button>
             </div>
-            <BurgerMenu isOpen={isOpen} setIsOpen={setIsOpen} />
         </motion.nav>
     )
 }
-
 const Nav = () => {
     return (
         <motion.nav 

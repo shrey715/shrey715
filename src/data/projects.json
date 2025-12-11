@@ -26,13 +26,13 @@
   },
   {
     "id": "project-3",
-    "title": "C-Shell",
+    "title": "AIshA",
     "description": "Custom C shell implementation (no README details provided), likely a command-line interpreter project in C for learning OS/process concepts.",
     "tech": [
       "C",
       "Makefile"
     ],
-    "link": "https://github.com/shrey715/c-shell",
+    "link": "https://github.com/shrey715/aisha",
     "year": "2025",
     "featured": false
   },

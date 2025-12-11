@@ -15,7 +15,7 @@ export default function ContactForm() {
         </h3>
         
         <p className="text-[#808080] mb-8 leading-relaxed">
-          Whether you have a question, a project idea, or just want to discuss systems biology - my inbox is always open!
+          Whether you have a question, a project idea, or just want to discuss something interesting - my inbox is always open!
         </p>
 
         <motion.a

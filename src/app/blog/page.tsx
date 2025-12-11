@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { Calendar, Clock, ArrowRight, Sparkles } from 'lucide-react';
 
 export const metadata = {
-  title: 'Blog | Shreyas Deb',
+  title: 'Blogs | Shreyas Deb',
   description: 'Thoughts on systems, AI, gaming, distro-hopping, and everything in between.',
 };
 

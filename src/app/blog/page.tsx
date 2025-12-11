@@ -121,7 +121,7 @@ function FeaturedPostCard({ post }: { post: BlogPost }) {
           
           {/* Featured Badge */}
           <span className="absolute top-6 left-6 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider rounded-full bg-white/90 text-[#1a1a1a] backdrop-blur-sm">
-            Featured
+            New
           </span>
         </div>
         

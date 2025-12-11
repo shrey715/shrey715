@@ -2,6 +2,7 @@ import { promises as fs } from 'fs';
 import path from 'path';
 import Hero from '@/components/sections/Hero';
 import AboutSection from '@/components/sections/AboutSection';
+import ExperienceSection from '@/components/sections/ExperienceSection';
 import SkillsSection from '@/components/sections/SkillsSection';
 import ProjectsCarousel from '@/components/sections/ProjectsCarousel';
 import Footer from '@/components/sections/Footer';
@@ -36,6 +37,21 @@ interface SkillsData {
   categories: SkillCategory[];
 }
 
+interface Experience {
+  id: string;
+  title: string;
+  organization: string;
+  location?: string;
+  duration: string;
+  type?: string;
+  highlights: string[];
+}
+
+interface ExperienceData {
+  workExperience: Experience[];
+  leadership: Experience[];
+}
+
 async function getProjects(): Promise<Project[]> {
   const filePath = path.join(process.cwd(), 'src/data/projects.json');
   const jsonData = await fs.readFile(filePath, 'utf-8');
@@ -49,9 +65,16 @@ async function getSkills(): Promise<SkillCategory[]> {
   return data.categories;
 }
 
+async function getExperience(): Promise<ExperienceData> {
+  const filePath = path.join(process.cwd(), 'src/data/experience.json');
+  const jsonData = await fs.readFile(filePath, 'utf-8');
+  return JSON.parse(jsonData);
+}
+
 export default async function Home() {
   const projects = await getProjects();
   const skillCategories = await getSkills();
+  const experienceData = await getExperience();
 
   return (
     <main className="relative overflow-x-hidden">
@@ -75,14 +98,35 @@ export default async function Home() {
       {/* Content */}
       <div className="relative z-20 bg-[#1a1a1a]">
         <AboutSection />
+        <WaveDivider fromColor="#1a1a1a" toColor="#f1efe7" />
+      </div>
+
+      {/* Experience Section - Creamy Background */}
+      <div className="relative z-20 bg-[#f1efe7]">
+        <ExperienceSection 
+          workExperience={experienceData.workExperience} 
+          leadership={experienceData.leadership} 
+        />
+        <WaveDivider fromColor="#f1efe7" toColor="#1a1a1a" />
+      </div>
+
+      {/* Skills Section - Dark Background */}
+      <div className="relative z-20 bg-[#1a1a1a]">
         <SkillsSection categories={skillCategories} />
         <WaveDivider fromColor="#1a1a1a" toColor="#f1efe7" />
-        <section id="projects" className="bg-[#f1efe7]">
-          <ProjectsCarousel projects={projects} />
-        </section>
+      </div>
+
+      {/* Projects Section */}
+      <section id="projects" className="relative z-20 bg-[#f1efe7]">
+        <ProjectsCarousel projects={projects} />
         <WaveDivider fromColor="#f1efe7" toColor="#1a1a1a" />
+      </section>
+
+      {/* Footer */}
+      <div className="relative z-20">
         <Footer />
       </div>
     </main>
   );
 }
+

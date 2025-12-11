@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Playfair_Display, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/effects/CustomCursor";
+import SkipToContent from "@/components/ui/SkipToContent";
+import { JsonLdScript } from "@/lib/schema";
 
 // Elegant serif for headings
 const playfair = Playfair_Display({
@@ -53,12 +55,17 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <JsonLdScript />
+      </head>
       <body
         className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-[#f1efe7] text-[#1a1a1a]`}
       >
+        <SkipToContent />
         <CustomCursor />
         {children}
       </body>
     </html>
   );
 }
+

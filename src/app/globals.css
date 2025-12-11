@@ -186,3 +186,12 @@ textarea:focus-visible {
     scroll-behavior: auto;
   }
 }
+
+/* ===== MDX CODE STYLING ===== */
+/* Only style inline code, leave code blocks (inside pre) alone */
+:not(pre) > code {
+  background-color: #e8e8e8;
+  color: #1a1a1a;
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+}

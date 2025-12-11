@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const navLinks = [
   { label: 'About', href: '#about' },
+  { label: 'Experience', href: '#experience' },
   { label: 'Skills', href: '#skills' },
   { label: 'Projects', href: '#projects' },
 ];
@@ -20,7 +21,7 @@ export default function Navbar() {
         requestAnimationFrame(() => {
           setIsVisible(window.scrollY > 100);
           
-          const sections = ['projects', 'skills', 'about'];
+          const sections = ['projects', 'skills', 'experience', 'about'];
           let maxVisibleHeight = 0;
           let currentBestSection = activeSection;
 

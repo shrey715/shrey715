@@ -1,0 +1,74 @@
+{
+    "workExperience": [
+        {
+            "id": "exp-1",
+            "title": "Undergraduate Researcher",
+            "organization": "Center for Computational Natural Sciences and Bioinformatics (CCNSB)",
+            "location": "Hyderabad, Telangana",
+            "duration": "Aug 2025 – Present",
+            "type": "research",
+            "highlights": [
+                "Conducting research under Dr. Vinod P K, focusing on computational modeling of complex biological systems through Systems and Network Biology.",
+                "Investigating the intersection of Deep Learning and Network Biology to decipher emergent disease mechanisms and predict clinical outcomes for precision medicine."
+            ]
+        },
+        {
+            "id": "exp-2",
+            "title": "Software Development Intern",
+            "organization": "MontyCloud",
+            "location": "Bengaluru, Karnataka",
+            "duration": "May 2025 – July 2025",
+            "type": "industry",
+            "highlights": [
+                "Built a production-grade Agentic Suite for Product Management (PM360), including a Spec Writer, Meeting Analyzer, and Product Value Agent — increasing PM efficiency by 40%.",
+                "Designed multi-agent LLM systems using GraphRAG pipelines grounded in a Neo4j Knowledge Graph with temporal memory and vector search.",
+                "Achieved 80%+ reduction in spec creation time and 90%+ spec accuracy; deployed globally across US, EU, and India."
+            ]
+        },
+        {
+            "id": "exp-3",
+            "title": "Software Engineering Intern",
+            "organization": "uExcelerate",
+            "location": "Hyderabad, Telangana",
+            "duration": "Jan 2025 – April 2025",
+            "type": "industry",
+            "highlights": [
+                "Developed a scalable Learning Management System with enhanced UI and personalized content delivery, increasing user engagement by 35%.",
+                "Designed a modular recommendation system using hybrid filtering techniques, achieving 80%+ recommendation accuracy."
+            ]
+        },
+        {
+            "id": "exp-4",
+            "title": "Software Intern",
+            "organization": "Texperia",
+            "location": "Bengaluru, Karnataka",
+            "duration": "Jan 2025 – Feb 2025",
+            "type": "industry",
+            "highlights": [
+                "Optimized the frontend architecture for the Playda platform, achieving a 32% reduction in average page load time.",
+                "Contributed to the U.S. market expansion initiative, directly supporting a projected 40% increase in user acquisition."
+            ]
+        }
+    ],
+    "leadership": [
+        {
+            "id": "lead-1",
+            "title": "Tech Team Head",
+            "organization": "E-Cell IIIT Hyderabad",
+            "duration": "Aug 2024 – Present",
+            "highlights": [
+                "Spearheaded technical operations for the Entrepreneurship Cell, maintaining official server infrastructure and ensuring 98% uptime.",
+                "Managed the technical team for Megathon, the largest student-run hackathon in Hyderabad, overseeing registration portals and live event dashboards."
+            ]
+        },
+        {
+            "id": "lead-2",
+            "title": "Team Member",
+            "organization": "Open Source Developers Group (OSDG)",
+            "duration": "March 2025 – Present",
+            "highlights": [
+                "Contributing to the campus open-source ecosystem by organizing workshops and maintaining student-run projects."
+            ]
+        }
+    ]
+}

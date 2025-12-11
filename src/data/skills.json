@@ -1,0 +1,114 @@
+{
+    "categories": [
+        {
+            "title": "Core Languages",
+            "skills": [
+                {
+                    "name": "Rust",
+                    "icon": "SiRust",
+                    "color": "#CE422B"
+                },
+                {
+                    "name": "C",
+                    "icon": "SiC",
+                    "color": "#A8B9CC"
+                },
+                {
+                    "name": "C++",
+                    "icon": "SiCplusplus",
+                    "color": "#00599C"
+                },
+                {
+                    "name": "Python",
+                    "icon": "SiPython",
+                    "color": "#3776AB"
+                },
+                {
+                    "name": "R",
+                    "icon": "SiR",
+                    "color": "#276DC3"
+                }
+            ]
+        },
+        {
+            "title": "Machine Learning & AI",
+            "skills": [
+                {
+                    "name": "PyTorch",
+                    "icon": "SiPytorch",
+                    "color": "#EE4C2C"
+                },
+                {
+                    "name": "TensorFlow",
+                    "icon": "SiTensorflow",
+                    "color": "#FF6F00"
+                },
+                {
+                    "name": "LangChain",
+                    "icon": "SiLangchain",
+                    "color": "#1C3C3C"
+                },
+                {
+                    "name": "Hugging Face",
+                    "icon": "SiHuggingface",
+                    "color": "#FFD21E"
+                }
+            ]
+        },
+        {
+            "title": "Systems & Cloud",
+            "skills": [
+                {
+                    "name": "Linux",
+                    "icon": "SiLinux",
+                    "color": "#FCC624"
+                },
+                {
+                    "name": "Docker",
+                    "icon": "SiDocker",
+                    "color": "#2496ED"
+                },
+                {
+                    "name": "AWS",
+                    "icon": "SiAmazon",
+                    "color": "#FF9900"
+                },
+                {
+                    "name": "Azure",
+                    "icon": "SiMicrosoftazure",
+                    "color": "#0078D4"
+                },
+                {
+                    "name": "Git",
+                    "icon": "SiGit",
+                    "color": "#F05032"
+                }
+            ]
+        },
+        {
+            "title": "Web Technologies",
+            "skills": [
+                {
+                    "name": "Next.js",
+                    "icon": "SiNextdotjs",
+                    "color": "#ffffff"
+                },
+                {
+                    "name": "React",
+                    "icon": "SiReact",
+                    "color": "#61DAFB"
+                },
+                {
+                    "name": "TypeScript",
+                    "icon": "SiTypescript",
+                    "color": "#3178C6"
+                },
+                {
+                    "name": "Tailwind",
+                    "icon": "SiTailwindcss",
+                    "color": "#06B6D4"
+                }
+            ]
+        }
+    ]
+}

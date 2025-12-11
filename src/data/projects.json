@@ -1,0 +1,102 @@
+[
+  {
+    "id": "project-1",
+    "title": "Network File System",
+    "description": "Simplified distributed file system with support for concurrency, versioning, and multiple clients; core parts include name server, storage server, and client components.",
+    "tech": [
+      "C",
+      "Makefile"
+    ],
+    "link": "https://github.com/shrey715/network-file-system",
+    "year": "2025",
+    "featured": false
+  },
+  {
+    "id": "project-2",
+    "title": "shAI",
+    "description": "CLI tool that translates natural language queries into safe, executable bash commands using local LLM inference with Ollama.",
+    "tech": [
+      "Python",
+      "Shell",
+      "LLM"
+    ],
+    "link": "https://github.com/shrey715/shAI",
+    "year": "2025",
+    "featured": true
+  },
+  {
+    "id": "project-3",
+    "title": "C-Shell",
+    "description": "Custom C shell implementation (no README details provided), likely a command-line interpreter project in C for learning OS/process concepts.",
+    "tech": [
+      "C",
+      "Makefile"
+    ],
+    "link": "https://github.com/shrey715/c-shell",
+    "year": "2025",
+    "featured": false
+  },
+  {
+    "id": "project-4",
+    "title": "Diet Manager",
+    "description": "CLI diet management system built in C++ with features like food database, daily logs, calorie tracking, and undo/redo support.",
+    "tech": [
+      "C++",
+      "CMake"
+    ],
+    "link": "https://github.com/shrey715/diet_manager",
+    "year": "2025",
+    "featured": false
+  },
+  {
+    "id": "project-5",
+    "title": "TradeHub E-Commerce Website",
+    "description": "An e-commerce marketplace (TradeHub) built using the MERN stack with modern UI inspired by design principles — includes both backend and frontend code.",
+    "tech": [
+      "JavaScript",
+      "React",
+      "Node.js",
+      "Express",
+      "MongoDB"
+    ],
+    "link": "https://github://github.com/shrey715/tradehub-ecommerce-website",
+    "year": "2025",
+    "featured": true
+  },
+  {
+    "id": "project-6",
+    "title": "project-y2k",
+    "description": "\"Y2K Video Editor\" — a web application developed as part of an academic course, integrating video editing features.",
+    "tech": [
+      "HTML",
+      "CSS",
+      "Python"
+    ],
+    "link": "https://github.com/shrey715/project-y2k",
+    "year": "2024",
+    "featured": false
+  },
+  {
+    "id": "project-7",
+    "title": "Snake Game (C)",
+    "description": "Classic Snake game implemented in C as part of the C-Programming course.",
+    "tech": [
+      "C"
+    ],
+    "link": "https://github.com/shrey715/snake_game_cpro23",
+    "year": "2023",
+    "featured": false
+  },
+  {
+    "id": "project-8",
+    "title": "HMS Project (Hotel Management System)",
+    "description": "Hotel management system built in Python, created as a mini-project during secondary school.",
+    "tech": [
+      "Python",
+      "MySQL"
+    ],
+    "link": "https://github.com/shrey715/hms_project",
+    "year": "2022",
+    "featured": false
+  }
+]

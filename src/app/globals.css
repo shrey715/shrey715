@@ -65,8 +65,8 @@ body {
 
 /* ===== SELECTION ===== */
 ::selection {
-  background: rgba(26, 26, 26, 0.12);
-  color: #1a1a1a;
+  background: rgba(26, 26, 26, 0.9);
+  color: #ffffff;
 }
 
 /* ===== TEXTURE OVERLAYS ===== */

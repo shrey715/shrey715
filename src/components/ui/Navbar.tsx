@@ -21,13 +21,28 @@ export default function Navbar() {
           setIsVisible(window.scrollY > 100);
           
           const sections = ['projects', 'skills', 'about'];
+          let maxVisibleHeight = 0;
+          let currentBestSection = activeSection;
+
+          const viewportHeight = window.innerHeight;
+
           for (const section of sections) {
             const el = document.getElementById(section);
-            if (el && window.scrollY >= el.offsetTop - 300) {
-              setActiveSection(section);
-              break;
+            if (!el) continue;
+
+            const rect = el.getBoundingClientRect();
+            // Calculate intersection with viewport [0, viewportHeight]
+            const overlapStart = Math.max(rect.top, 0);
+            const overlapEnd = Math.min(rect.bottom, viewportHeight);
+            const visibleHeight = Math.max(0, overlapEnd - overlapStart);
+
+            if (visibleHeight > maxVisibleHeight) {
+              maxVisibleHeight = visibleHeight;
+              currentBestSection = section;
             }
           }
+          
+          if (currentBestSection) setActiveSection(currentBestSection);
           ticking = false;
         });
         ticking = true;

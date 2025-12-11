@@ -101,10 +101,10 @@ export default function AboutSection() {
               The Engineer
             </h3>
             <p>
-              Beyond the theory, I love systems. <span className="text-[#f1efe7]">Physics and Mathematics</span> are my playground, 
-              and I find joy in understanding how things work from the first principles—whether it's the kernel of an OS 
-              or the weights of a Transformer. I'm deeply invested in <span className="text-[#f1efe7]">Machine Learning</span> 
-              (CNNs, RNNs, Diffusion Models) and <span className="text-[#f1efe7]">Distributed Systems</span>.
+              Beyond the theory, I am a builder at heart. <span className="text-[#f1efe7]">Physics and Mathematics</span> are my playground, 
+              and I find joy in understanding complex machinery from first principles. My interests span the entire computing spectrum: 
+              from the low-level logic of <span className="text-[#f1efe7]">Kernels and Operating Systems</span> to the high-dimensional 
+              latent spaces of <span className="text-[#f1efe7]">Deep Learning and AI</span>.
             </p>
           </div>
 

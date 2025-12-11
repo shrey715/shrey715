@@ -142,7 +142,7 @@ export default function Hero() {
         className="absolute bottom-8 left-4 sm:left-8 z-40 flex flex-col gap-0.5"
       >
         <span className="text-[10px] sm:text-xs uppercase tracking-[0.15em] text-[#1a1a1a]/40 font-medium">
-          Third Year CS
+          Third Year CND
         </span>
         <span className="text-[10px] sm:text-xs uppercase tracking-[0.15em] text-[#1a1a1a]/60 font-semibold">
           IIIT Hyderabad

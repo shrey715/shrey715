@@ -26,19 +26,19 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   title: "Shreyas Deb | Developer & CS Student",
-  description: "Portfolio of Shreyas Deb - Computer Science student at IIIT Hyderabad. Building elegant solutions with modern web technologies, systems programming, and machine learning.",
-  keywords: ["Shreyas Deb", "Developer", "IIIT Hyderabad", "Computer Science", "Portfolio", "Web Development", "React", "TypeScript"],
+  description: "Portfolio of Shreyas Deb - Dual Degree student (CS + MS by Research) at IIIT Hyderabad. Building elegant solutions with modern web technologies, systems programming, and machine learning.",
+  keywords: ["Shreyas Deb", "Developer", "IIIT Hyderabad", "Computer Science", "Dual Degree", "CND", "Portfolio", "Web Development", "React", "TypeScript"],
   authors: [{ name: "Shreyas Deb" }],
   openGraph: {
     title: "Shreyas Deb | Developer",
-    description: "Developer crafting digital experiences. Third Year CS @ IIIT Hyderabad.",
+    description: "Developer crafting digital experiences. Dual Degree Student @ IIIT Hyderabad.",
     type: "website",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
     title: "Shreyas Deb | Developer",
-    description: "Developer crafting digital experiences. Third Year CS @ IIIT Hyderabad.",
+    description: "Developer crafting digital experiences. Dual Degree Student @ IIIT Hyderabad.",
   },
   robots: {
     index: true,

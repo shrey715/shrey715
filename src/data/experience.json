@@ -70,5 +70,28 @@
                 "Contributing to the campus open-source ecosystem by organizing workshops and maintaining student-run projects."
             ]
         }
+    ],
+    "achievements": [
+        {
+            "id": "ach-1",
+            "title": "Dean's List",
+            "organization": "IIIT Hyderabad",
+            "year": "2024",
+            "description": "Awarded Dean's List recognition for exceptional academic performance."
+        },
+        {
+            "id": "ach-2",
+            "title": "Merit List",
+            "organization": "IIIT Hyderabad",
+            "year": "2023",
+            "description": "Recognized on the Merit List for outstanding academic achievement."
+        },
+        {
+            "id": "ach-3",
+            "title": "Action Plan Finalist",
+            "organization": "IIT Bombay",
+            "year": "2023",
+            "description": "Selected as Top 25 finalist from 3000+ entries at Action Plan — the flagship social entrepreneurship event of Abhyuday, IIT Bombay's Advitya Social Fest."
+        }
     ]
 }

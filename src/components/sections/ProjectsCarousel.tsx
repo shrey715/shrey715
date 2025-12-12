@@ -2,17 +2,8 @@
 import { useRef, useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
-
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  tech: string[];
-  link: string;
-  image?: string;
-  year?: string;
-  status?: string;
-}
+import FadeIn from '@/components/ui/FadeIn';
+import type { Project } from '@/types';
 
 interface ProjectsCarouselProps {
   projects: Project[];
@@ -158,13 +149,7 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
     <section className="py-28 bg-[#f1efe7] dot-grid relative">
       {/* Section Header */}
       <div className="max-w-5xl mx-auto px-4 mb-14">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="flex items-end justify-between"
-        >
+        <FadeIn duration={0.6} className="flex items-end justify-between">
           <div>
             <h2 
               className="text-4xl md:text-5xl font-bold text-gradient-dark mb-3"
@@ -206,7 +191,7 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
               <ChevronRight size={22} />
             </motion.button>
           </div>
-        </motion.div>
+        </FadeIn>
       </div>
 
       {/* Scroll Container - Enhanced smoothness */}

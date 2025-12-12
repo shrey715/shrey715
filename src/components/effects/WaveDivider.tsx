@@ -20,10 +20,10 @@ const WAVE_PATHS = [
 ];
 
 const WAVES = [
-  { opacity: 0.2, duration: 25, yRange: [15, -15], animateX: [0, '-50vw'] },
-  { opacity: 0.4, duration: 18, yRange: [25, -25], animateX: ['-50vw', 0] },
-  { opacity: 0.65, duration: 12, yRange: [10, -10], animateX: [0, '-50vw'] },
-  { opacity: 1, duration: 8, yRange: [0, 0], animateX: ['-50vw', 0] }
+  { opacity: 0.2, duration: 30, yRange: [15, -15] },
+  { opacity: 0.4, duration: 24, yRange: [25, -25] },
+  { opacity: 0.65, duration: 18, yRange: [10, -10] },
+  { opacity: 1, duration: 15, yRange: [0, 0] }
 ];
 
 export default function WaveDivider({ fromColor, toColor, flip = false }: WaveDividerProps) {
@@ -65,11 +65,16 @@ export default function WaveDivider({ fromColor, toColor, flip = false }: WaveDi
           <motion.div
             className="absolute bottom-0 h-full w-[200vw]"
             style={{ 
-              left: '-50vw',
-              willChange: 'transform' // Performance optimization
+              left: 0,
+              willChange: 'transform'
             }}
-            animate={{ x: wave.animateX }}
-            transition={{ duration: wave.duration, repeat: Infinity, ease: "linear" }}
+            animate={{ x: [0, '-100vw'] }}
+            transition={{ 
+              duration: wave.duration, 
+              repeat: Infinity, 
+              ease: 'linear',
+              repeatType: 'loop'
+            }}
           >
             <svg
               viewBox="0 0 2880 320"

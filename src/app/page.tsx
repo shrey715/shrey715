@@ -10,46 +10,16 @@ import Navbar from '@/components/ui/Navbar';
 import ParallaxBackground from '@/components/effects/ParallaxBackground';
 import WaveDivider from '@/components/effects/WaveDivider';
 
-interface Project {
-  id: string;
-  title: string;
-  description: string;
-  tech: string[];
-  link: string;
-  image?: string;
-  featured?: boolean;
-  year?: string;
-  status?: string;
-}
-
-interface Skill {
-  name: string;
-  icon: string;
-  color: string;
-}
-
-interface SkillCategory {
-  title: string;
-  skills: Skill[];
-}
+import type { Project, Skill, SkillCategory, Experience, Achievement } from '@/types';
 
 interface SkillsData {
   categories: SkillCategory[];
 }
 
-interface Experience {
-  id: string;
-  title: string;
-  organization: string;
-  location?: string;
-  duration: string;
-  type?: string;
-  highlights: string[];
-}
-
 interface ExperienceData {
   workExperience: Experience[];
   leadership: Experience[];
+  achievements: Achievement[];
 }
 
 async function getProjects(): Promise<Project[]> {
@@ -105,7 +75,8 @@ export default async function Home() {
       <div className="relative z-20 bg-[#f1efe7]">
         <ExperienceSection 
           workExperience={experienceData.workExperience} 
-          leadership={experienceData.leadership} 
+          leadership={experienceData.leadership}
+          achievements={experienceData.achievements}
         />
         <WaveDivider fromColor="#f1efe7" toColor="#1a1a1a" />
       </div>

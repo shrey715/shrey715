@@ -1,23 +1,18 @@
 'use client';
-import { motion } from 'framer-motion';
-import { Briefcase, Users, MapPin, Calendar } from 'lucide-react';
-
-interface Experience {
-  id: string;
-  title: string;
-  organization: string;
-  location?: string;
-  duration: string;
-  type?: string;
-  highlights: string[];
-}
+import { Briefcase, Users, MapPin, Calendar, Award } from 'lucide-react';
+import FadeIn from '@/components/ui/FadeIn';
+import SubsectionHeader from '@/components/ui/SubsectionHeader';
+import { Card, CardHeader, CardContent } from '@/components/ui/Card';
+import Badge from '@/components/ui/Badge';
+import type { Experience, Achievement } from '@/types';
 
 interface ExperienceSectionProps {
   workExperience: Experience[];
   leadership: Experience[];
+  achievements: Achievement[];
 }
 
-export default function ExperienceSection({ workExperience, leadership }: ExperienceSectionProps) {
+export default function ExperienceSection({ workExperience, leadership, achievements }: ExperienceSectionProps) {
   return (
     <section 
       id="experience" 
@@ -29,13 +24,7 @@ export default function ExperienceSection({ workExperience, leadership }: Experi
       
       <div className="max-w-5xl mx-auto relative z-10">
         {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
+        <FadeIn duration={0.6} className="text-center mb-16">
           <h2 
             className="text-4xl md:text-5xl font-bold mb-6 text-gradient-dark"
             style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
@@ -45,25 +34,11 @@ export default function ExperienceSection({ workExperience, leadership }: Experi
           <p className="text-[#6b6b6b] text-lg max-w-lg mx-auto">
             From research labs to fast-paced startups
           </p>
-        </motion.div>
+        </FadeIn>
 
         {/* Work Experience */}
         <div className="mb-16">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="flex items-center gap-3 mb-8"
-          >
-            <div className="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center text-[#f1efe7]">
-              <Briefcase size={18} />
-            </div>
-            <h3 className="text-xl font-semibold text-[#1a1a1a] uppercase tracking-widest">
-              Work
-            </h3>
-            <div className="flex-1 h-px bg-[#1a1a1a]/10" />
-          </motion.div>
-
+          <SubsectionHeader icon={Briefcase} title="Work" />
           <div className="space-y-6">
             {workExperience.map((exp, index) => (
               <ExperienceCard key={exp.id} experience={exp} index={index} />
@@ -72,25 +47,45 @@ export default function ExperienceSection({ workExperience, leadership }: Experi
         </div>
 
         {/* Leadership */}
-        <div>
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="flex items-center gap-3 mb-8"
-          >
-            <div className="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center text-[#f1efe7]">
-              <Users size={18} />
-            </div>
-            <h3 className="text-xl font-semibold text-[#1a1a1a] uppercase tracking-widest">
-              Leadership
-            </h3>
-            <div className="flex-1 h-px bg-[#1a1a1a]/10" />
-          </motion.div>
-
+        <div className="mb-16">
+          <SubsectionHeader icon={Users} title="Leadership" />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {leadership.map((exp, index) => (
-              <LeadershipCard key={exp.id} experience={exp} index={index} />
+              <FadeIn key={exp.id} delay={index * 0.1} className="h-full">
+                <Card className="h-full flex flex-col">
+                  <CardHeader>
+                    <div>
+                      <h4 className="text-lg font-bold text-[#1a1a1a] mb-1">{exp.title}</h4>
+                      <p className="text-[#4a4a4a] font-medium">{exp.organization}</p>
+                    </div>
+                    <Badge>{exp.duration}</Badge>
+                  </CardHeader>
+                  <CardContent>
+                    <HighlightList highlights={exp.highlights} />
+                  </CardContent>
+                </Card>
+              </FadeIn>
+            ))}
+          </div>
+        </div>
+
+        {/* Achievements */}
+        <div>
+          <SubsectionHeader icon={Award} title="Achievements" />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {achievements.map((achievement, index) => (
+              <FadeIn key={achievement.id} delay={index * 0.1} className="h-full">
+                <Card className="h-full flex flex-col">
+                  <CardHeader className="mb-3">
+                    <h4 className="text-lg font-bold text-[#1a1a1a]">{achievement.title}</h4>
+                    <Badge>{achievement.year}</Badge>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-[#4a4a4a] font-medium mb-2">{achievement.organization}</p>
+                    <p className="text-sm text-[#6b6b6b] leading-relaxed">{achievement.description}</p>
+                  </CardContent>
+                </Card>
+              </FadeIn>
             ))}
           </div>
         </div>
@@ -99,16 +94,11 @@ export default function ExperienceSection({ workExperience, leadership }: Experi
   );
 }
 
+// Sub-components
 function ExperienceCard({ experience, index }: { experience: Experience; index: number }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group"
-    >
-      <div className="p-6 rounded-2xl bg-white border border-[#e8e8e8] shadow-sm hover:shadow-lg hover:border-[#d0d0d0] transition-all duration-300">
+    <FadeIn delay={index * 0.1} className="group">
+      <Card>
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-4">
           <div>
             <h4 className="text-lg font-bold text-[#1a1a1a] mb-1 group-hover:text-[#2a2a2a] transition-colors">
@@ -129,47 +119,23 @@ function ExperienceCard({ experience, index }: { experience: Experience; index: 
             )}
           </div>
         </div>
-        
-        <ul className="space-y-2">
-          {experience.highlights.map((highlight, i) => (
-            <li key={i} className="text-sm text-[#6b6b6b] leading-relaxed pl-4 relative before:content-[''] before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:rounded-full before:bg-[#1a1a1a]/20">
-              {highlight}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </motion.div>
+        <HighlightList highlights={experience.highlights} />
+      </Card>
+    </FadeIn>
   );
 }
 
-function LeadershipCard({ experience, index }: { experience: Experience; index: number }) {
+function HighlightList({ highlights }: { highlights: string[] }) {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5, delay: index * 0.1 }}
-      className="group"
-    >
-      <div className="p-5 rounded-xl bg-white/80 border border-[#e8e8e8] hover:bg-white hover:shadow-md transition-all duration-300 h-full">
-        <div className="flex justify-between items-start mb-3">
-          <div>
-            <h4 className="text-base font-bold text-[#1a1a1a] mb-0.5">{experience.title}</h4>
-            <p className="text-sm text-[#4a4a4a]">{experience.organization}</p>
-          </div>
-          <span className="text-xs text-[#808080] bg-[#f5f5f5] px-2.5 py-1 rounded-full whitespace-nowrap">
-            {experience.duration}
-          </span>
-        </div>
-        
-        <ul className="space-y-1.5">
-          {experience.highlights.slice(0, 2).map((highlight, i) => (
-            <li key={i} className="text-xs text-[#6b6b6b] leading-relaxed">
-              • {highlight}
-            </li>
-          ))}
-        </ul>
-      </div>
-    </motion.div>
+    <ul className="space-y-2">
+      {highlights.map((highlight, i) => (
+        <li 
+          key={i} 
+          className="text-sm text-[#6b6b6b] leading-relaxed pl-4 relative before:content-[''] before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:rounded-full before:bg-[#1a1a1a]/20"
+        >
+          {highlight}
+        </li>
+      ))}
+    </ul>
   );
 }

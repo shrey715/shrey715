@@ -3,8 +3,9 @@ import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 import { HiOutlineNewspaper, HiOutlineDocumentText } from 'react-icons/hi';
 import ContactForm from '@/components/ui/ContactForm';
-
-const socialLinks = [
+import FadeIn from '@/components/ui/FadeIn';
+import type { SocialLink } from '@/types';
+const socialLinks: SocialLink[] = [
   { icon: FaGithub, href: "https://github.com/shrey715", label: "GitHub" },
   { icon: FaLinkedin, href: "https://www.linkedin.com/in/shreyasdeb/", label: "LinkedIn" },
   { icon: HiOutlineDocumentText, href: "/assets/shreyas_deb_resume.pdf", label: "Resume" },
@@ -23,13 +24,11 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-start">
           
           {/* Left Column: Info */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="text-left"
-          >
-            <h3 className="text-3xl md:text-4xl font-bold mb-6 bg-gradient-to-br from-[#f1efe7] to-[#808080] bg-clip-text text-transparent">
+          <FadeIn direction="left">
+            <h3 
+              className="text-3xl md:text-4xl font-bold mb-6 pb-1 bg-gradient-to-br from-[#f1efe7] to-[#808080] bg-clip-text text-transparent"
+              style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+            >
               Let's Build Something<br />Amazing Together.
             </h3>
             <p className="text-[#808080] mb-10 text-lg leading-relaxed max-w-sm">
@@ -53,19 +52,14 @@ export default function Footer() {
             </div>
 
             <div className="mt-16 text-sm text-[#606060]">
-               {new Date().getFullYear()} Shreyas Deb ·
+              © {new Date().getFullYear()} Shreyas Deb
             </div>
-          </motion.div>
+          </FadeIn>
 
           {/* Right Column: Contact Form */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-          >
+          <FadeIn direction="right" delay={0.2}>
             <ContactForm />
-          </motion.div>
+          </FadeIn>
 
         </div>
       </div>

@@ -81,17 +81,17 @@
         },
         {
             "id": "ach-2",
+            "title": "Action Plan Finalist",
+            "organization": "IIT Bombay",
+            "year": "2024",
+            "description": "Selected as Top 25 finalist from 3000+ entries at Action Plan — the flagship social entrepreneurship event of Abhyuday, IIT Bombay's Advitya Social Fest."
+        },
+        {
+            "id": "ach-3",
             "title": "Merit List",
             "organization": "IIIT Hyderabad",
             "year": "2023",
             "description": "Recognized on the Merit List for outstanding academic achievement."
-        },
-        {
-            "id": "ach-3",
-            "title": "Action Plan Finalist",
-            "organization": "IIT Bombay",
-            "year": "2023",
-            "description": "Selected as Top 25 finalist from 3000+ entries at Action Plan — the flagship social entrepreneurship event of Abhyuday, IIT Bombay's Advitya Social Fest."
         }
     ]
 }

@@ -10,6 +10,9 @@ const nextConfig: NextConfig = {
     basePath: '/~shreyas.deb',
     assetPrefix: '/~shreyas.deb',
     images: { unoptimized: true },
+    env: {
+      NEXT_PUBLIC_BASE_PATH: '/~shreyas.deb',
+    },
   }),
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],
   ...(!isStaticExport && {

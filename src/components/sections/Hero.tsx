@@ -3,6 +3,8 @@ import Image from 'next/image';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useRef } from 'react';
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -123,7 +125,7 @@ export default function Hero() {
           className="relative w-[100vw] max-w-[800px] h-[60vh] sm:h-[65vh] md:h-[75vh] lg:h-[80vh]"
         >
           <Image 
-            src="/shreyas_cropped.png" 
+            src={`${basePath}/shreyas_cropped.png`}
             alt="Shreyas Deb" 
             fill 
             className="object-contain object-bottom" 

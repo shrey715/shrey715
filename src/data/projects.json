@@ -77,6 +77,24 @@
   },
   {
     "id": "project-6",
+    "title": "Utility Apps Collection",
+    "description": "Next.js-based web application featuring 8+ mini utility tools including QR code generator, SGPA calculator, dictionary (Free Dictionary API), currency converter (Freecurrency API), color picker with palette explorer, weather app (OpenWeather API), real-time markdown editor with syntax highlighting, and PDF merger. Built with TypeScript, Tailwind CSS, and deployed on Vercel with responsive design and dark mode support.",
+    "tech": [
+      "TypeScript",
+      "Next.js",
+      "React",
+      "Tailwind CSS",
+      "Framer Motion",
+      "pdf-lib",
+      "Axios",
+      "React Markdown"
+    ],
+    "link": "https://github.com/shrey715/utility_apps",
+    "year": "2024",
+    "featured": false
+  },
+  {
+    "id": "project-7",
     "title": "Y2K Video Editor",
     "description": "Web-based video editor application built with Flask backend and frontend interface. Features video editing capabilities using MoviePy and OpenCV for video processing, Flask-SQLAlchemy for database management, JWT authentication, CORS support for cross-origin requests, and SSL support for secure connections. Developed as a semester project with focus on multimedia processing.",
     "tech": [
@@ -91,7 +109,7 @@
     "featured": false
   },
   {
-    "id": "project-7",
+    "id": "project-8",
     "title": "Snake Game",
     "description": "Classic Snake game implementation in C with modular architecture and comprehensive Makefile build system. Includes source files, test suite, and development tools. Created as part of C Programming course at IIIT Hyderabad during Monsoon Semester 2023.",
     "tech": [
@@ -102,7 +120,7 @@
     "featured": false
   },
   {
-    "id": "project-8",
+    "id": "project-9",
     "title": "Hotel Management System",
     "description": "Hotel management system with database-driven backend built in Python with MySQL integration. Developed as a mini-project during secondary school at Alpine Public School. Features include hotel operations management with persistent storage using MySQL database.",
     "tech": [

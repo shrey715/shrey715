@@ -7,6 +7,8 @@ const isStaticExport = process.env.STATIC_EXPORT === 'true';
 const nextConfig: NextConfig = {
   ...(isStaticExport && {
     output: 'export',
+    basePath: '/~shreyas.deb',
+    assetPrefix: '/~shreyas.deb',
     images: { unoptimized: true },
   }),
   pageExtensions: ["js", "jsx", "md", "mdx", "ts", "tsx"],

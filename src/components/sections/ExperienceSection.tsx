@@ -37,7 +37,7 @@ export default function ExperienceSection({ workExperience, leadership }: Experi
           className="text-center mb-16"
         >
           <h2 
-            className="text-4xl md:text-5xl font-bold mb-4 text-gradient-dark"
+            className="text-4xl md:text-5xl font-bold mb-6 text-gradient-dark"
             style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
           >
             Experience

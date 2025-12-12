@@ -2,7 +2,6 @@
 import Image from 'next/image';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { useRef } from 'react';
-import { ChevronDown } from 'lucide-react';
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -149,29 +148,6 @@ export default function Hero() {
         </span>
       </motion.div>
 
-      {/* Scroll indicator */}
-      <motion.button
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 1 }}
-        onClick={() => document.getElementById('about')?.scrollIntoView({ behavior: 'smooth' })}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-40 flex flex-col items-center gap-1 group"
-      >
-        <motion.span 
-          className="text-[10px] sm:text-xs uppercase tracking-[0.2em] text-[#1a1a1a]/40 font-medium group-hover:text-[#1a1a1a]/60 transition-colors"
-          animate={{ opacity: [0.4, 0.8, 0.4] }}
-          transition={{ duration: 2, repeat: Infinity }}
-        >
-          Scroll
-        </motion.span>
-        <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
-          className="text-[#1a1a1a]/30 group-hover:text-[#1a1a1a]/50 transition-colors"
-        >
-          <ChevronDown size={20} />
-        </motion.div>
-      </motion.button>
     </section>
   );
 }

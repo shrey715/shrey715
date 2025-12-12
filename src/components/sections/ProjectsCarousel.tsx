@@ -22,12 +22,21 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // Card dimensions
+  const getCardWidth = () => window.innerWidth >= 768 ? 424 : 364;
 
   const checkScrollButtons = () => {
     if (!scrollRef.current) return;
     const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
     setCanScrollLeft(scrollLeft > 10);
     setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    
+    // Update active index
+    const cardWidth = getCardWidth();
+    const newIndex = Math.round(scrollLeft / cardWidth);
+    setActiveIndex(Math.max(0, Math.min(newIndex, projects.length - 1)));
   };
 
   useEffect(() => {
@@ -39,13 +48,110 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
     }
   }, []);
 
+  // Convert vertical scroll to horizontal scroll within the carousel
+  // Using window-level listener with hover detection to bypass child element event capturing
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    
+    let isOverCarousel = false;
+    let snapTimeout: NodeJS.Timeout | null = null;
+    let velocity = 0;
+    let lastScrollTime = 0;
+    
+    // Snap to nearest card after scrolling stops
+    const snapToNearestCard = () => {
+      const cardWidth = getCardWidth();
+      const currentScroll = el.scrollLeft;
+      const nearestCardIndex = Math.round(currentScroll / cardWidth);
+      const targetScroll = nearestCardIndex * cardWidth;
+      
+      // Smooth snap with CSS transition
+      el.style.scrollBehavior = 'smooth';
+      el.scrollLeft = targetScroll;
+      
+      setTimeout(() => {
+        el.style.scrollBehavior = 'auto';
+      }, 350);
+    };
+
+    const handleMouseEnter = () => { isOverCarousel = true; };
+    const handleMouseLeave = () => { 
+      isOverCarousel = false;
+      // Snap when leaving the carousel area
+      if (snapTimeout) clearTimeout(snapTimeout);
+      snapToNearestCard();
+    };
+
+    const handleWheel = (e: WheelEvent) => {
+      if (!isOverCarousel) return;
+      
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.preventDefault();
+        
+        // Apply momentum-based scrolling with damping
+        const now = Date.now();
+        const timeDelta = now - lastScrollTime;
+        lastScrollTime = now;
+        
+        // Smooth out rapid scroll events
+        const scrollMultiplier = timeDelta < 50 ? 0.8 : 1;
+        const scrollAmount = e.deltaY * scrollMultiplier;
+        
+        // Update velocity for momentum
+        velocity = velocity * 0.3 + scrollAmount * 0.7;
+        el.scrollLeft += velocity;
+        
+        // Debounce snap - wait for scrolling to stop
+        if (snapTimeout) clearTimeout(snapTimeout);
+        snapTimeout = setTimeout(() => {
+          velocity = 0;
+          snapToNearestCard();
+        }, 120);
+      }
+    };
+
+    el.addEventListener('mouseenter', handleMouseEnter);
+    el.addEventListener('mouseleave', handleMouseLeave);
+    window.addEventListener('wheel', handleWheel, { passive: false });
+
+    return () => {
+      el.removeEventListener('mouseenter', handleMouseEnter);
+      el.removeEventListener('mouseleave', handleMouseLeave);
+      window.removeEventListener('wheel', handleWheel);
+      if (snapTimeout) clearTimeout(snapTimeout);
+    };
+  }, []);
+
   const scroll = (direction: 'left' | 'right') => {
     if (!scrollRef.current) return;
-    const scrollAmount = 440;
-    scrollRef.current.scrollTo({
-      left: scrollRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount),
-      behavior: 'smooth'
-    });
+    const cardWidth = getCardWidth();
+    const targetIndex = direction === 'left' 
+      ? Math.max(0, activeIndex - 1) 
+      : Math.min(projects.length - 1, activeIndex + 1);
+    
+    scrollRef.current.style.scrollBehavior = 'smooth';
+    scrollRef.current.scrollLeft = targetIndex * cardWidth;
+    
+    setTimeout(() => {
+      if (scrollRef.current) {
+        scrollRef.current.style.scrollBehavior = 'auto';
+      }
+    }, 400);
+  };
+
+  const scrollToIndex = (index: number) => {
+    if (!scrollRef.current) return;
+    const cardWidth = getCardWidth();
+    
+    scrollRef.current.style.scrollBehavior = 'smooth';
+    scrollRef.current.scrollLeft = index * cardWidth;
+    
+    setTimeout(() => {
+      if (scrollRef.current) {
+        scrollRef.current.style.scrollBehavior = 'auto';
+      }
+    }, 400);
   };
 
   return (
@@ -101,13 +207,11 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
       {/* Scroll Container - Enhanced smoothness */}
       <div 
         ref={scrollRef}
-        className="flex gap-6 overflow-x-auto px-4 md:px-8 pb-6 snap-x snap-mandatory"
+        className="flex gap-6 overflow-x-auto px-4 md:px-8 pb-6"
         style={{ 
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
           WebkitOverflowScrolling: 'touch',
-          scrollBehavior: 'smooth',
-          scrollSnapType: 'x mandatory',
         }}
       >
         {/* Left spacer */}
@@ -121,8 +225,101 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
         <div className="flex-shrink-0 w-4 md:w-[calc(50vw-240px)]" />
       </div>
 
+      {/* Progress Dots - Sliding Window */}
+      <div className="flex justify-center items-center gap-1.5 mt-8">
+        {(() => {
+          const maxVisible = 5;
+          const total = projects.length;
+          
+          // Calculate the visible window
+          let windowStart: number;
+          let windowEnd: number;
+          
+          if (total <= maxVisible) {
+            // Show all dots if we have 5 or fewer
+            windowStart = 0;
+            windowEnd = total - 1;
+          } else {
+            // Center the active index in the window when possible
+            const halfWindow = Math.floor(maxVisible / 2);
+            windowStart = Math.max(0, activeIndex - halfWindow);
+            windowEnd = windowStart + maxVisible - 1;
+            
+            // Adjust if we're near the end
+            if (windowEnd >= total) {
+              windowEnd = total - 1;
+              windowStart = windowEnd - maxVisible + 1;
+            }
+          }
+          
+          const hasMoreLeft = windowStart > 0;
+          const hasMoreRight = windowEnd < total - 1;
+          
+          return (
+            <>
+              {/* Left indicator dot */}
+              {hasMoreLeft && (
+                <motion.button
+                  onClick={() => scrollToIndex(windowStart - 1)}
+                  className="w-3 h-3 flex items-center justify-center"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  aria-label="Previous projects"
+                >
+                  <div className="w-1 h-1 rounded-full bg-[#a0a0a0]" />
+                </motion.button>
+              )}
+              
+              {/* Visible dots */}
+              {projects.slice(windowStart, windowEnd + 1).map((_, i) => {
+                const actualIndex = windowStart + i;
+                return (
+                  <motion.button
+                    key={actualIndex}
+                    onClick={() => scrollToIndex(actualIndex)}
+                    className="relative w-4 h-4 flex items-center justify-center group"
+                    aria-label={`Go to project ${actualIndex + 1}`}
+                    layout
+                  >
+                    <motion.div
+                      className={`rounded-full transition-all duration-300 ${
+                        actualIndex === activeIndex 
+                          ? 'w-2.5 h-2.5 bg-[#1a1a1a]' 
+                          : 'w-2 h-2 bg-[#c0c0c0] group-hover:bg-[#808080]'
+                      }`}
+                      layout
+                    />
+                    {actualIndex === activeIndex && (
+                      <motion.div
+                        className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-[#1a1a1a]/30"
+                        initial={{ scale: 0, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ duration: 0.2 }}
+                      />
+                    )}
+                  </motion.button>
+                );
+              })}
+              
+              {/* Right indicator dot */}
+              {hasMoreRight && (
+                <motion.button
+                  onClick={() => scrollToIndex(windowEnd + 1)}
+                  className="w-3 h-3 flex items-center justify-center"
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  aria-label="More projects"
+                >
+                  <div className="w-1 h-1 rounded-full bg-[#a0a0a0]" />
+                </motion.button>
+              )}
+            </>
+          );
+        })()}
+      </div>
+
       {/* Mobile swipe hint */}
-      <p className="text-center text-sm text-[#808080] mt-6 md:hidden">
+      <p className="text-center text-sm text-[#808080] mt-4 md:hidden">
         ← Swipe to explore →
       </p>
     </section>

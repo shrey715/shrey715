@@ -3,7 +3,7 @@ import Script from "next/script";
 import { Playfair_Display, Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/effects/CustomCursor";
-import SkipToContent from "@/components/ui/SkipToContent";
+import ScrollIndicator from "@/components/effects/ScrollIndicator";
 import { JsonLdScript } from "@/lib/schema";
 
 // Elegant serif for headings
@@ -103,8 +103,8 @@ export default function RootLayout({
       <body
         className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-[#f1efe7] text-[#1a1a1a]`}
       >
-        <SkipToContent />
         <CustomCursor />
+        <ScrollIndicator />
         {children}
       </body>
     </html>

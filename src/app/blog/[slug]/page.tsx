@@ -2,9 +2,10 @@ import { getPostBySlug, getAllPostSlugs } from '@/lib/blog';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Calendar, Clock, ArrowLeft, Share2 } from 'lucide-react';
+import { Calendar, Clock, ArrowLeft } from 'lucide-react';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import { useMDXComponents } from '../../../../mdx-components';
+import ShareButton from './ShareButton';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -123,13 +124,7 @@ export default async function BlogPostPage({ params }: Props) {
               </span>
             </div>
             
-            <button 
-              className="flex items-center gap-2 px-4 py-2 text-sm text-[#6b6b6b] hover:text-[#1a1a1a] hover:bg-[#f0f0f0] rounded-full transition-colors w-fit"
-              title="Share"
-            >
-              <Share2 size={15} />
-              Share
-            </button>
+            <ShareButton slug={slug} />
           </div>
         </div>
       </div>

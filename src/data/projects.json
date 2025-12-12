@@ -1,11 +1,13 @@
 [
   {
     "id": "project-1",
-    "title": "Network File System",
-    "description": "Simplified distributed file system with support for concurrency, versioning, and multiple clients; core parts include name server, storage server, and client components.",
+    "title": "Network File System (Docs++)",
+    "description": "Distributed file system called \"Docs++\" with Google Docs-like functionality, featuring concurrent editing with sentence-level locking, hierarchical folder structure, checkpoint-based version control, access control with request/approval workflow, and comprehensive logging. Architecture includes Name Server (central coordinator), Storage Servers (file storage nodes), and Client components with 12+ file operations.",
     "tech": [
       "C",
-      "Makefile"
+      "POSIX",
+      "Sockets",
+      "Multi-threading"
     ],
     "link": "https://github.com/shrey715/network-file-system",
     "year": "2025",
@@ -14,11 +16,13 @@
   {
     "id": "project-2",
     "title": "shAI",
-    "description": "CLI tool that translates natural language queries into safe, executable bash commands using local LLM inference with Ollama.",
+    "description": "CLI tool that translates natural language queries into safe, executable bash commands using local LLM inference with Ollama (CodeLlama model). Features query validation, command safety checks, detailed execution results, and error reporting—all running locally without external API calls.",
     "tech": [
       "Python",
       "Shell",
-      "LLM"
+      "LLM",
+      "Ollama",
+      "CodeLlama"
     ],
     "link": "https://github.com/shrey715/shAI",
     "year": "2025",
@@ -27,10 +31,12 @@
   {
     "id": "project-3",
     "title": "AIshA",
-    "description": "Custom C shell implementation (no README details provided), likely a command-line interpreter project in C for learning OS/process concepts.",
+    "description": "Unix shell implementation in C with integrated Gemini AI capabilities. Features include natural language command translation, command explanation, AI chat, custom readline implementation using termios (no ncurses), 40+ built-in commands, job control, background process management, and tab completion. Built entirely with POSIX APIs and raw OpenSSL sockets for HTTPS without external dependencies.",
     "tech": [
       "C",
-      "Makefile"
+      "POSIX",
+      "OpenSSL",
+      "Gemini API"
     ],
     "link": "https://github.com/shrey715/aisha",
     "year": "2025",
@@ -39,10 +45,9 @@
   {
     "id": "project-4",
     "title": "Diet Manager",
-    "description": "CLI diet management system built in C++ with features like food database, daily logs, calorie tracking, and undo/redo support.",
+    "description": "CLI-based diet management system with comprehensive nutritional tracking. Features include food database management (basic and composite foods), daily consumption logs with undo/redo support using Command pattern, multiple calorie calculation methods (Harris-Benedict, Mifflin-St Jeor, WHO), keyword-based food search, and extensible plugin architecture for external food data sources. All data persisted in JSON format.",
     "tech": [
-      "C++",
-      "CMake"
+      "C++"
     ],
     "link": "https://github.com/shrey715/diet_manager",
     "year": "2025",
@@ -51,13 +56,20 @@
   {
     "id": "project-5",
     "title": "TradeHub E-Commerce Website",
-    "description": "An e-commerce marketplace (TradeHub) built using the MERN stack with modern UI inspired by design principles — includes both backend and frontend code.",
+    "description": "Full-stack e-commerce marketplace for IIIT Hyderabad community built with MERN stack. Features include product buying/selling, user authentication with JWT, image upload via Cloudinary, AI-powered chatbot using Gemini 1.5 Flash, state management with Zustand, responsive UI with Tailwind CSS and Framer Motion animations, and real-time toast notifications.",
     "tech": [
       "JavaScript",
       "React",
       "Node.js",
       "Express",
-      "MongoDB"
+      "MongoDB",
+      "Zustand",
+      "Tailwind CSS",
+      "JWT",
+      "Cloudinary",
+      "Gemini API",
+      "Axios",
+      "Framer Motion"
     ],
     "link": "https://github.com/shrey715/tradehub-ecommerce-website",
     "year": "2025",
@@ -65,12 +77,14 @@
   },
   {
     "id": "project-6",
-    "title": "project-y2k",
-    "description": "\"Y2K Video Editor\" — a web application developed as part of an academic course, integrating video editing features.",
+    "title": "Y2K Video Editor",
+    "description": "Web-based video editor application built with Flask backend and frontend interface. Features video editing capabilities using MoviePy and OpenCV for video processing, Flask-SQLAlchemy for database management, JWT authentication, CORS support for cross-origin requests, and SSL support for secure connections. Developed as a semester project with focus on multimedia processing.",
     "tech": [
+      "Python",
+      "Flask",
+      "OpenCV",
       "HTML",
-      "CSS",
-      "Python"
+      "CSS"
     ],
     "link": "https://github.com/shrey715/project-y2k",
     "year": "2024",
@@ -78,8 +92,8 @@
   },
   {
     "id": "project-7",
-    "title": "Snake Game (C)",
-    "description": "Classic Snake game implemented in C as part of the C-Programming course.",
+    "title": "Snake Game",
+    "description": "Classic Snake game implementation in C with modular architecture and comprehensive Makefile build system. Includes source files, test suite, and development tools. Created as part of C Programming course at IIIT Hyderabad during Monsoon Semester 2023.",
     "tech": [
       "C"
     ],
@@ -89,8 +103,8 @@
   },
   {
     "id": "project-8",
-    "title": "HMS Project (Hotel Management System)",
-    "description": "Hotel management system built in Python, created as a mini-project during secondary school.",
+    "title": "Hotel Management System",
+    "description": "Hotel management system with database-driven backend built in Python with MySQL integration. Developed as a mini-project during secondary school at Alpine Public School. Features include hotel operations management with persistent storage using MySQL database.",
     "tech": [
       "Python",
       "MySQL"

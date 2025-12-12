@@ -166,7 +166,12 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
           className="flex items-end justify-between"
         >
           <div>
-            <h2 className="text-4xl md:text-5xl font-bold text-gradient-dark mb-3">Projects</h2>
+            <h2 
+              className="text-4xl md:text-5xl font-bold text-gradient-dark mb-3"
+              style={{ fontFamily: 'var(--font-playfair), Georgia, serif' }}
+            >
+              Projects
+            </h2>
             <p className="text-[#6b6b6b] text-lg">A selection of my recent work</p>
           </div>
           

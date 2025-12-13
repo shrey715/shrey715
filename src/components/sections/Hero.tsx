@@ -19,41 +19,32 @@ export default function Hero() {
   return (
     <section 
       ref={sectionRef}
-      className="min-h-screen relative bg-[#f1efe7] overflow-hidden dot-grid"
+      className="min-h-screen relative bg-[#f1efe7] overflow-hidden"
     >
       {/* Background effects */}
       <div 
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: 'radial-gradient(ellipse 80% 60% at 50% 30%, rgba(251, 191, 36, 0.12) 0%, transparent 60%)'
+          background: 'radial-gradient(ellipse 80% 60% at 50% 30%, rgba(251, 191, 36, 0.08) 0%, transparent 60%)'
         }}
       />
       
-      {/* Dot grid */}
-      <div 
-        className="absolute inset-0 pointer-events-none opacity-40"
-        style={{
-          backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px)',
-          backgroundSize: '24px 24px'
-        }}
-      />
-
-      {/* Ambient floating shapes */}
+      {/* Ambient floating shapes - Golden Theme */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div 
-          className="absolute w-[700px] h-[700px] rounded-full bg-gradient-to-br from-amber-300/30 to-orange-200/20 blur-[150px]"
+          className="absolute w-[700px] h-[700px] rounded-full bg-gradient-to-br from-amber-400/20 to-orange-300/15 blur-[150px]"
           animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
           transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
           style={{ top: '-20%', right: '-10%' }}
         />
         <motion.div 
-          className="absolute w-[500px] h-[500px] rounded-full bg-gradient-to-br from-rose-200/25 to-purple-200/20 blur-[120px]"
+          className="absolute w-[500px] h-[500px] rounded-full bg-gradient-to-br from-yellow-400/15 to-amber-200/10 blur-[120px]"
           animate={{ x: [0, -20, 0], y: [0, 30, 0] }}
           transition={{ duration: 25, repeat: Infinity, ease: "easeInOut" }}
           style={{ bottom: '10%', left: '-15%' }}
         />
         <div 
-          className="absolute w-[600px] h-[600px] rounded-full bg-gradient-to-t from-amber-200/20 to-transparent blur-[100px]"
+          className="absolute w-[600px] h-[600px] rounded-full bg-gradient-to-t from-orange-100/30 to-transparent blur-[100px]"
           style={{ bottom: '-10%', left: '50%', transform: 'translateX(-50%)' }}
         />
       </div>

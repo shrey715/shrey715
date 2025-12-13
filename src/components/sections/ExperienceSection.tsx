@@ -6,6 +6,8 @@ import { Card, CardHeader, CardContent } from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import type { Experience, Achievement } from '@/types';
 
+import GlowOrb from '@/components/effects/GlowOrb';
+
 interface ExperienceSectionProps {
   workExperience: Experience[];
   leadership: Experience[];
@@ -16,11 +18,21 @@ export default function ExperienceSection({ workExperience, leadership, achievem
   return (
     <section 
       id="experience" 
-      className="py-28 px-6 bg-[#f1efe7] dot-grid relative overflow-hidden"
+      className="py-28 px-6 bg-[#f1efe7] relative overflow-hidden"
     >
-      {/* Subtle ambient glow */}
-      <div className="absolute top-[-10%] left-[-5%] w-[400px] h-[400px] rounded-full bg-amber-200/30 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[10%] right-[-10%] w-[350px] h-[350px] rounded-full bg-rose-200/20 blur-[100px] pointer-events-none" />
+      {/* Golden ambient glow */}
+      <GlowOrb 
+        color="bg-amber-500/15" 
+        size="lg" 
+        blur="xl" 
+        position={{ top: '10%', left: '-5%' }} 
+      />
+      <GlowOrb 
+        color="bg-yellow-500/10" 
+        size="lg" 
+        blur="xl" 
+        position={{ bottom: '10%', right: '-10%' }} 
+      />
       
       <div className="max-w-5xl mx-auto relative z-10">
         {/* Section Header */}

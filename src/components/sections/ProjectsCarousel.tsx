@@ -5,6 +5,8 @@ import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
 import type { Project } from '@/types';
 
+import GlowOrb from '@/components/effects/GlowOrb';
+
 interface ProjectsCarouselProps {
   projects: Project[];
 }
@@ -69,66 +71,67 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
     const handleMouseEnter = () => { isOverCarousel = true; };
     const handleMouseLeave = () => { 
       isOverCarousel = false;
-      // Snap when leaving the carousel area
       if (snapTimeout) clearTimeout(snapTimeout);
-      snapToNearestCard();
+      snapTimeout = setTimeout(snapToNearestCard, 100);
     };
 
     const handleWheel = (e: WheelEvent) => {
       if (!isOverCarousel) return;
-      
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        e.preventDefault();
-        
-        // Apply momentum-based scrolling with damping
-        const now = Date.now();
-        const timeDelta = now - lastScrollTime;
-        lastScrollTime = now;
-        
-        // Smooth out rapid scroll events
-        const scrollMultiplier = timeDelta < 50 ? 0.8 : 1;
-        const scrollAmount = e.deltaY * scrollMultiplier;
-        
-        // Update velocity for momentum
-        velocity = velocity * 0.3 + scrollAmount * 0.7;
-        el.scrollLeft += velocity;
-        
-        // Debounce snap - wait for scrolling to stop
-        if (snapTimeout) clearTimeout(snapTimeout);
-        snapTimeout = setTimeout(() => {
-          velocity = 0;
-          snapToNearestCard();
-        }, 120);
+
+      // Only intercept vertical scroll if we're not at the edges or if scrolling in valid direction
+      const isAtLeft = el.scrollLeft <= 0;
+      const isAtRight = el.scrollLeft + el.clientWidth >= el.scrollWidth - 1;
+
+      // Allow normal vertical scrolling if at boundaries
+      if ((isAtLeft && e.deltaY < 0) || (isAtRight && e.deltaY > 0)) {
+        return; 
       }
+
+      e.preventDefault();
+      
+      // Add velocity for kinetic feel
+      const now = performance.now();
+      const dt = now - lastScrollTime;
+      lastScrollTime = now;
+      
+      // Simple physics
+      velocity = e.deltaY * 0.8;
+      el.scrollLeft += velocity;
+      
+      // Debounce snap
+      if (snapTimeout) clearTimeout(snapTimeout);
+      snapTimeout = setTimeout(snapToNearestCard, 150);
     };
 
-    el.addEventListener('mouseenter', handleMouseEnter);
-    el.addEventListener('mouseleave', handleMouseLeave);
-    window.addEventListener('wheel', handleWheel, { passive: false });
+    // Attach listeners
+    el.parentElement?.addEventListener('mouseenter', handleMouseEnter);
+    el.parentElement?.addEventListener('mouseleave', handleMouseLeave);
+    // Use non-passive listener to prevent default scroll
+    el.addEventListener('wheel', handleWheel, { passive: false });
 
     return () => {
-      el.removeEventListener('mouseenter', handleMouseEnter);
-      el.removeEventListener('mouseleave', handleMouseLeave);
-      window.removeEventListener('wheel', handleWheel);
+      el.parentElement?.removeEventListener('mouseenter', handleMouseEnter);
+      el.parentElement?.removeEventListener('mouseleave', handleMouseLeave);
+      el.removeEventListener('wheel', handleWheel);
       if (snapTimeout) clearTimeout(snapTimeout);
     };
   }, []);
 
   const scroll = (direction: 'left' | 'right') => {
-    if (!scrollRef.current) return;
-    const cardWidth = getCardWidth();
-    const targetIndex = direction === 'left' 
-      ? Math.max(0, activeIndex - 1) 
-      : Math.min(projects.length - 1, activeIndex + 1);
-    
-    scrollRef.current.style.scrollBehavior = 'smooth';
-    scrollRef.current.scrollLeft = targetIndex * cardWidth;
-    
-    setTimeout(() => {
-      if (scrollRef.current) {
-        scrollRef.current.style.scrollBehavior = 'auto';
-      }
-    }, 400);
+    if (scrollRef.current) {
+      const cardWidth = getCardWidth();
+      const targetScroll = scrollRef.current.scrollLeft + (direction === 'left' ? -cardWidth : cardWidth);
+      
+      scrollRef.current.style.scrollBehavior = 'smooth';
+      scrollRef.current.scrollLeft = targetScroll;
+      
+      // Reset behavior after animation
+      setTimeout(() => {
+        if (scrollRef.current) {
+          scrollRef.current.style.scrollBehavior = 'auto';
+        }
+      }, 400);
+    }
   };
 
   const scrollToIndex = (index: number) => {

@@ -63,10 +63,11 @@
         },
         {
             "id": "lead-2",
-            "title": "Team Member",
+            "title": "OSS Maintainer",
             "organization": "Open Source Developers Group (OSDG)",
             "duration": "March 2025 – Present",
             "highlights": [
+                "Maintaining Whispr — a privacy-first anonymous review platform for IIITH courses and professors with institutional authentication.",
                 "Contributing to the campus open-source ecosystem by organizing workshops and maintaining student-run projects."
             ]
         }

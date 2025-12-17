@@ -26,7 +26,7 @@
     ],
     "link": "https://github.com/shrey715/shAI",
     "year": "2025",
-    "featured": true
+    "featured": false
   },
   {
     "id": "project-3",
@@ -73,7 +73,8 @@
     ],
     "link": "https://github.com/shrey715/tradehub-ecommerce-website",
     "year": "2025",
-    "featured": true
+    "featured": false,
+    "deployment_link": "https://tradehub-ecommerce-website.vercel.app/"
   },
   {
     "id": "project-6",
@@ -91,7 +92,8 @@
     ],
     "link": "https://github.com/shrey715/utility_apps",
     "year": "2024",
-    "featured": false
+    "featured": false,
+    "deployment_link": "https://shrey715-utility-apps.vercel.app/"
   },
   {
     "id": "project-7",
@@ -106,7 +108,8 @@
     ],
     "link": "https://github.com/shrey715/project-y2k",
     "year": "2024",
-    "featured": false
+    "featured": false,
+    "deployment_link": "https://project-y2k.vercel.app/"
   },
   {
     "id": "project-8",

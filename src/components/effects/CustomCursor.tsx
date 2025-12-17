@@ -6,33 +6,13 @@ export default function CustomCursor() {
   const ringRef = useRef<HTMLDivElement>(null);
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [usingMouse, setUsingMouse] = useState(false);
   
   const pos = useRef({ x: 0, y: 0 });
   const dotPos = useRef({ x: 0, y: 0 });
   const ringPos = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
-    // Detect touch device
-    const checkTouchDevice = () => {
-      setIsTouchDevice(
-        'ontouchstart' in window || 
-        navigator.maxTouchPoints > 0 ||
-        window.matchMedia('(pointer: coarse)').matches
-      );
-    };
-    
-    checkTouchDevice();
-    window.addEventListener('resize', checkTouchDevice);
-    
-    // If touch device, restore default cursor and exit
-    if (isTouchDevice) {
-      document.body.style.cursor = 'auto';
-      return () => {
-        window.removeEventListener('resize', checkTouchDevice);
-      };
-    }
-    
     let animationId: number;
     
     const animate = () => {
@@ -55,6 +35,11 @@ export default function CustomCursor() {
     const handleMouseMove = (e: MouseEvent) => {
       pos.current = { x: e.clientX, y: e.clientY };
       setIsVisible(true);
+      // Mouse movement detected - show custom cursor
+      if (!usingMouse) {
+        setUsingMouse(true);
+        document.body.style.cursor = 'none';
+      }
       
       const target = e.target as HTMLElement;
       const isClickable = 
@@ -65,25 +50,36 @@ export default function CustomCursor() {
       setIsHovering(isClickable);
     };
 
+    const handleTouchStart = () => {
+      // Touch detected - hide custom cursor
+      setUsingMouse(false);
+      setIsVisible(false);
+      document.body.style.cursor = 'auto';
+    };
+
     const handleMouseLeave = () => setIsVisible(false);
-    const handleMouseEnter = () => setIsVisible(true);
+    const handleMouseEnter = () => {
+      if (usingMouse) setIsVisible(true);
+    };
 
     animationId = requestAnimationFrame(animate);
     window.addEventListener('mousemove', handleMouseMove);
+    window.addEventListener('touchstart', handleTouchStart, { passive: true });
     document.addEventListener('mouseleave', handleMouseLeave);
     document.addEventListener('mouseenter', handleMouseEnter);
 
     return () => {
       cancelAnimationFrame(animationId);
       window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('touchstart', handleTouchStart);
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('mouseenter', handleMouseEnter);
-      window.removeEventListener('resize', checkTouchDevice);
+      document.body.style.cursor = 'auto';
     };
-  }, [isTouchDevice]);
+  }, [usingMouse]);
 
-  // Don't render cursor elements on touch devices
-  if (isTouchDevice) {
+  // Don't render cursor elements if not using mouse
+  if (!usingMouse) {
     return null;
   }
 
@@ -92,7 +88,7 @@ export default function CustomCursor() {
       {/* Dot - uses mix-blend-mode for automatic color inversion */}
       <div
         ref={dotRef}
-        className="fixed top-0 left-0 pointer-events-none z-[9999] will-change-transform rounded-full mix-blend-difference"
+        className="fixed top-0 left-0 pointer-events-none z-[99999] will-change-transform rounded-full mix-blend-difference"
         style={{
           width: isHovering ? 16 : 10,
           height: isHovering ? 16 : 10,
@@ -104,7 +100,7 @@ export default function CustomCursor() {
       {/* Ring - uses mix-blend-mode for automatic color inversion */}
       <div
         ref={ringRef}
-        className="fixed top-0 left-0 pointer-events-none z-[9998] will-change-transform rounded-full mix-blend-difference"
+        className="fixed top-0 left-0 pointer-events-none z-[99998] will-change-transform rounded-full mix-blend-difference"
         style={{
           width: isHovering ? 60 : 44,
           height: isHovering ? 60 : 44,

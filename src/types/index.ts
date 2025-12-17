@@ -28,6 +28,7 @@ export interface Project {
     featured?: boolean;
     year?: string;
     status?: string;
+    deployment_link?: string;
 }
 
 // Skill types

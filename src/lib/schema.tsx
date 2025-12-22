@@ -18,6 +18,10 @@ export interface PersonSchema {
     '@type': 'EducationalOrganization';
     name: string;
   };
+  affiliation?: {
+    '@type': 'Organization';
+    name: string;
+  };
   sameAs?: string[];
   knowsAbout?: string[];
 }
@@ -38,9 +42,14 @@ export function generatePersonSchema(): PersonSchema {
       '@type': 'EducationalOrganization',
       name: 'International Institute of Information Technology, Hyderabad',
     },
+    affiliation: {
+      '@type': 'Organization',
+      name: 'International Institute of Information Technology, Hyderabad',
+    },
     sameAs: [
       'https://github.com/shrey715',
       'https://www.linkedin.com/in/shreyasdeb/',
+      'https://x.com/shrey_715'
     ],
     knowsAbout: [
       'Machine Learning',

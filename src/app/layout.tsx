@@ -38,6 +38,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "/",
   },
+  icons: {
+    icon: "/icon.png",
+  },
   openGraph: {
     title: "Shreyas Deb | Developer",
     description: "Developer crafting digital experiences. Dual Degree Student @ IIIT Hyderabad.",

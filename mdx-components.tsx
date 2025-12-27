@@ -1,5 +1,6 @@
 import type { MDXComponents } from 'mdx/types';
 import Image from 'next/image';
+import CodeBlock from '@/components/CodeBlock';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
@@ -46,11 +47,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </a>
     ),
-    // Code blocks
+    // Code blocks with copy button
     pre: ({ children }) => (
-      <pre className="bg-[#1a1a1a] text-[#f1efe7] rounded-lg p-4 overflow-x-auto my-6 text-sm">
-        {children}
-      </pre>
+      <CodeBlock>{children}</CodeBlock>
     ),
     code: ({ children }) => (
       <code className="font-mono text-sm">

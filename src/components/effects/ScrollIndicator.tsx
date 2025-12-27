@@ -2,34 +2,26 @@
 import { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 
-/**
- * Custom scroll indicator that uses mix-blend-mode to adapt colors
- * based on the background it's positioned over.
- */
 export default function ScrollIndicator() {
   const [isVisible, setIsVisible] = useState(false);
   const { scrollYProgress } = useScroll();
   const scaleY = useSpring(scrollYProgress, { stiffness: 200, damping: 30 });
 
   useEffect(() => {
+    let hideTimeout: NodeJS.Timeout;
+    
     const handleScroll = () => {
-      // Show indicator when user starts scrolling
       setIsVisible(true);
-    };
-
-    const handleScrollEnd = () => {
-      // Keep visible while scrolling, hide after idle
-      const timeout = setTimeout(() => setIsVisible(false), 1500);
-      return () => clearTimeout(timeout);
+      clearTimeout(hideTimeout);
+      hideTimeout = setTimeout(() => setIsVisible(false), 1500);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    
-    // Initial check
     if (window.scrollY > 0) setIsVisible(true);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      clearTimeout(hideTimeout);
     };
   }, []);
 
@@ -40,10 +32,7 @@ export default function ScrollIndicator() {
       animate={{ opacity: isVisible ? 1 : 0 }}
       transition={{ duration: 0.3 }}
     >
-      {/* Track (invisible) */}
       <div className="absolute inset-0 bg-transparent" />
-      
-      {/* Thumb with mix-blend-mode */}
       <motion.div
         className="absolute top-0 left-0 right-0 origin-top rounded-full"
         style={{

@@ -4,7 +4,6 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import type { Project } from '@/types';
 
-// Card dimensions - must match ProjectsCarousel.tsx constants
 export const CARD_WIDTH_MOBILE = 320;
 export const CARD_WIDTH_DESKTOP = 400;
 
@@ -82,7 +81,6 @@ export default function ProjectCard({ project, index, onOpenModal }: ProjectCard
         whileHover={{ y: -8, transition: { type: "spring", stiffness: 300, damping: 25 } }}
         className="h-full rounded-2xl bg-white border border-[#e8e8e8] shadow-[0_2px_16px_rgba(0,0,0,0.04)] overflow-hidden hover:shadow-[0_20px_60px_rgba(0,0,0,0.12)] transition-shadow duration-500 cursor-pointer group"
       >
-        {/* Project Preview */}
         <div className="h-48 bg-gray-100 flex items-center justify-center border-b border-[#e8e8e8] relative overflow-hidden">
           {imageUrl ? (
             <img 
@@ -122,7 +120,6 @@ export default function ProjectCard({ project, index, onOpenModal }: ProjectCard
           <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors duration-300" />
         </div>
         
-        {/* Content */}
         <div className="p-6">
           <div className="flex justify-between items-start gap-3 mb-3">
             <h3 className="text-xl font-bold text-[#1a1a1a] group-hover:text-black transition-colors line-clamp-1">

@@ -35,7 +35,6 @@ export default function CustomCursor() {
     const handleMouseMove = (e: MouseEvent) => {
       pos.current = { x: e.clientX, y: e.clientY };
       setIsVisible(true);
-      // Mouse movement detected - show custom cursor
       if (!usingMouse) {
         setUsingMouse(true);
         document.body.style.cursor = 'none';
@@ -51,7 +50,6 @@ export default function CustomCursor() {
     };
 
     const handleTouchStart = () => {
-      // Touch detected - hide custom cursor
       setUsingMouse(false);
       setIsVisible(false);
       document.body.style.cursor = 'auto';
@@ -78,14 +76,10 @@ export default function CustomCursor() {
     };
   }, [usingMouse]);
 
-  // Don't render cursor elements if not using mouse
-  if (!usingMouse) {
-    return null;
-  }
+  if (!usingMouse) return null;
 
   return (
     <>
-      {/* Dot - uses mix-blend-mode for automatic color inversion */}
       <div
         ref={dotRef}
         className="fixed top-0 left-0 pointer-events-none z-[99999] will-change-transform rounded-full mix-blend-difference"
@@ -97,7 +91,6 @@ export default function CustomCursor() {
           transition: 'width 0.2s, height 0.2s, opacity 0.2s',
         }}
       />
-      {/* Ring - uses mix-blend-mode for automatic color inversion */}
       <div
         ref={ringRef}
         className="fixed top-0 left-0 pointer-events-none z-[99998] will-change-transform rounded-full mix-blend-difference"

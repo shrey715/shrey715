@@ -4,7 +4,6 @@ import CodeBlock from '@/components/CodeBlock';
 
 export function useMDXComponents(components: MDXComponents): MDXComponents {
   return {
-    // Use Next.js Image for optimized images
     img: (props) => (
       <Image
         {...props}
@@ -16,7 +15,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         style={{ width: '100%', height: 'auto' }}
       />
     ),
-    // Styled headings
     h1: ({ children }) => (
       <h1 className="text-4xl font-bold mt-8 mb-4 text-[#1a1a1a]" style={{ fontFamily: 'var(--font-playfair)' }}>
         {children}
@@ -32,11 +30,9 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </h3>
     ),
-    // Paragraphs
     p: ({ children }) => (
       <p className="text-[#4a4a4a] leading-relaxed mb-4">{children}</p>
     ),
-    // Links
     a: ({ children, href }) => (
       <a 
         href={href} 
@@ -47,7 +43,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </a>
     ),
-    // Code blocks with copy button
     pre: ({ children }) => (
       <CodeBlock>{children}</CodeBlock>
     ),
@@ -56,20 +51,17 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
         {children}
       </code>
     ),
-    // Lists
     ul: ({ children }) => (
       <ul className="list-disc list-inside my-4 space-y-2 text-[#4a4a4a]">{children}</ul>
     ),
     ol: ({ children }) => (
       <ol className="list-decimal list-inside my-4 space-y-2 text-[#4a4a4a]">{children}</ol>
     ),
-    // Blockquote
     blockquote: ({ children }) => (
       <blockquote className="border-l-4 border-[#1a1a1a] pl-4 my-6 italic text-[#6b6b6b]">
         {children}
       </blockquote>
     ),
-    // Horizontal rule
     hr: () => <hr className="my-8 border-[#e8e8e8]" />,
     ...components,
   };

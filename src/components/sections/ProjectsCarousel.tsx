@@ -11,7 +11,6 @@ interface ProjectsCarouselProps {
   projects: Project[];
 }
 
-// Gap between cards (gap-6 = 24px)
 const CARD_GAP = 24;
 const MD_BREAKPOINT = 768;
 
@@ -23,17 +22,13 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   const [activeModalProject, setActiveModalProject] = useState<Project | null>(null);
   const [sidePadding, setSidePadding] = useState(16);
 
-  // Get card width based on screen size
   const getCardWidth = () => window.innerWidth >= MD_BREAKPOINT ? CARD_WIDTH_DESKTOP : CARD_WIDTH_MOBILE;
   const getGap = () => CARD_GAP;
 
-  // Calculate padding to center the first card
   const calculatePadding = () => {
     const cardWidth = getCardWidth();
     const viewportWidth = window.innerWidth;
-    // Center the card: (viewport / 2) - (card / 2)
-    const padding = Math.max(16, (viewportWidth / 2) - (cardWidth / 2));
-    setSidePadding(padding);
+    setSidePadding(Math.max(16, (viewportWidth / 2) - (cardWidth / 2)));
   };
 
   useEffect(() => {
@@ -62,7 +57,6 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
     }
   }, [projects.length]);
 
-  // Wheel-to-horizontal scroll
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
@@ -129,11 +123,9 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
 
   return (
     <section className="py-28 bg-[#f1efe7] relative overflow-visible">
-      {/* Ambient GlowOrbs */}
       <GlowOrb color="bg-amber-500/15" size="xl" blur="xl" position={{ top: '10%', left: '-8%' }} />
       <GlowOrb color="bg-orange-400/10" size="lg" blur="xl" position={{ bottom: '5%', right: '-5%' }} />
 
-      {/* Section Header */}
       <div className="max-w-5xl mx-auto px-4 mb-14">
         <FadeIn duration={0.6} className="flex items-end justify-between">
           <div>
@@ -179,7 +171,6 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
         </FadeIn>
       </div>
 
-      {/* Scroll Container */}
       <div 
         ref={scrollRef}
         className="flex gap-6 overflow-x-auto pb-6 relative"
@@ -200,19 +191,16 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
         ))}
       </div>
 
-      {/* Pagination */}
       <CarouselPagination 
         total={projects.length}
         activeIndex={activeIndex}
         onDotClick={scrollToIndex}
       />
 
-      {/* Mobile swipe hint */}
       <p className="text-center text-sm text-[#808080] mt-4 md:hidden">
         ← Swipe to explore →
       </p>
 
-      {/* Modal */}
       <ProjectModal 
         project={activeModalProject} 
         onClose={() => setActiveModalProject(null)} 

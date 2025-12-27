@@ -14,7 +14,6 @@ export default function CarouselPagination({
   onDotClick,
   maxVisible = 5 
 }: CarouselPaginationProps) {
-  // Sliding window calculation
   let windowStart: number;
   let windowEnd: number;
   
@@ -37,7 +36,6 @@ export default function CarouselPagination({
 
   return (
     <div className="flex justify-center items-center gap-1.5 mt-8">
-      {/* Left indicator */}
       {hasMoreLeft && (
         <motion.button
           onClick={() => onDotClick(windowStart - 1)}
@@ -50,7 +48,6 @@ export default function CarouselPagination({
         </motion.button>
       )}
       
-      {/* Visible dots */}
       {Array.from({ length: windowEnd - windowStart + 1 }, (_, i) => {
         const actualIndex = windowStart + i;
         return (
@@ -81,7 +78,6 @@ export default function CarouselPagination({
         );
       })}
       
-      {/* Right indicator */}
       {hasMoreRight && (
         <motion.button
           onClick={() => onDotClick(windowEnd + 1)}

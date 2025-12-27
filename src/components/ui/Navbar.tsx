@@ -25,7 +25,6 @@ export default function Navbar() {
           const sections = ['projects', 'skills', 'experience', 'about'];
           let maxVisibleHeight = 0;
           let currentBestSection = activeSection;
-
           const viewportHeight = window.innerHeight;
 
           for (const section of sections) {
@@ -33,7 +32,6 @@ export default function Navbar() {
             if (!el) continue;
 
             const rect = el.getBoundingClientRect();
-            // Calculate intersection with viewport [0, viewportHeight]
             const overlapStart = Math.max(rect.top, 0);
             const overlapEnd = Math.min(rect.bottom, viewportHeight);
             const visibleHeight = Math.max(0, overlapEnd - overlapStart);
@@ -56,11 +54,8 @@ export default function Navbar() {
   }, []);
 
   const scrollToSection = (href: string) => {
-    const id = href.replace('#', '');
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+    const el = document.getElementById(href.replace('#', ''));
+    el?.scrollIntoView({ behavior: 'smooth' });
   };
 
   return (
@@ -93,7 +88,6 @@ export default function Navbar() {
                   `}
                   title={link.label}
                 >
-                  {/* Icon on mobile, text on larger screens */}
                   <Icon className="sm:hidden" size={18} />
                   <span className="hidden sm:inline">{link.label}</span>
                 </motion.button>

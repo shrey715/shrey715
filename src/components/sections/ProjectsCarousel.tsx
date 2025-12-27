@@ -4,12 +4,16 @@ import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import FadeIn from '@/components/ui/FadeIn';
 import GlowOrb from '@/components/effects/GlowOrb';
-import { ProjectCard, ProjectModal, CarouselPagination } from '@/components/projects';
+import { ProjectCard, ProjectModal, CarouselPagination, CARD_WIDTH_MOBILE, CARD_WIDTH_DESKTOP } from '@/components/projects';
 import type { Project } from '@/types';
 
 interface ProjectsCarouselProps {
   projects: Project[];
 }
+
+// Gap between cards (gap-6 = 24px)
+const CARD_GAP = 24;
+const MD_BREAKPOINT = 768;
 
 export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -17,10 +21,26 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
   const [canScrollRight, setCanScrollRight] = useState(true);
   const [activeIndex, setActiveIndex] = useState(0);
   const [activeModalProject, setActiveModalProject] = useState<Project | null>(null);
+  const [sidePadding, setSidePadding] = useState(16);
 
-  // Card dimensions
-  const getCardWidth = () => window.innerWidth >= 768 ? 424 : 340;
-  const getGap = () => 24;
+  // Get card width based on screen size
+  const getCardWidth = () => window.innerWidth >= MD_BREAKPOINT ? CARD_WIDTH_DESKTOP : CARD_WIDTH_MOBILE;
+  const getGap = () => CARD_GAP;
+
+  // Calculate padding to center the first card
+  const calculatePadding = () => {
+    const cardWidth = getCardWidth();
+    const viewportWidth = window.innerWidth;
+    // Center the card: (viewport / 2) - (card / 2)
+    const padding = Math.max(16, (viewportWidth / 2) - (cardWidth / 2));
+    setSidePadding(padding);
+  };
+
+  useEffect(() => {
+    calculatePadding();
+    window.addEventListener('resize', calculatePadding);
+    return () => window.removeEventListener('resize', calculatePadding);
+  }, []);
 
   const checkScrollButtons = () => {
     if (!scrollRef.current) return;
@@ -162,12 +182,12 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
       {/* Scroll Container */}
       <div 
         ref={scrollRef}
-        className="flex gap-6 overflow-x-auto pb-6 relative scroll-snap-x scroll-snap-mandatory"
+        className="flex gap-6 overflow-x-auto pb-6 relative"
         style={{ 
           scrollbarWidth: 'none', 
           msOverflowStyle: 'none',
-          paddingLeft: 'max(1rem, calc(50vw - 160px))',
-          paddingRight: 'max(1rem, calc(50vw - 160px))',
+          paddingLeft: sidePadding,
+          paddingRight: sidePadding,
         }}
       >
         {projects.map((project, index) => (

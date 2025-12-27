@@ -4,6 +4,10 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import type { Project } from '@/types';
 
+// Card dimensions - must match ProjectsCarousel.tsx constants
+export const CARD_WIDTH_MOBILE = 320;
+export const CARD_WIDTH_DESKTOP = 400;
+
 interface ProjectCardProps {
   project: Project;
   index: number;

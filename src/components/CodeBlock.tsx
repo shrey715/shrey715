@@ -63,7 +63,7 @@ export default function CodeBlock({ children }: CodeBlockProps) {
       </button>
       <pre
         ref={preRef}
-        className="bg-[#1a1a1a] text-[#f1efe7] rounded-lg p-4 overflow-x-auto text-sm scrollbar-thin scrollbar-thumb-[#4a4a4a] scrollbar-track-transparent"
+        className="code-block bg-[#1a1a1a] text-[#f1efe7] rounded-lg p-4 overflow-x-auto text-sm whitespace-pre"
       >
         {children}
       </pre>

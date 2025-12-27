@@ -35,7 +35,7 @@ export default function ScrollIndicator() {
 
   return (
     <motion.div
-      className="fixed right-2 top-0 bottom-0 w-1 z-[9999] pointer-events-none"
+      className="fixed right-0 top-0 bottom-0 w-1 z-[9999] pointer-events-none"
       initial={{ opacity: 0 }}
       animate={{ opacity: isVisible ? 1 : 0 }}
       transition={{ duration: 0.3 }}

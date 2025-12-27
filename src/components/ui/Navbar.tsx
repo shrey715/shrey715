@@ -1,12 +1,13 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { User, Briefcase, Sparkles, FolderOpen } from 'lucide-react';
 
 const navLinks = [
-  { label: 'About', href: '#about' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Projects', href: '#projects' },
+  { label: 'About', href: '#about', icon: User },
+  { label: 'Experience', href: '#experience', icon: Briefcase },
+  { label: 'Skills', href: '#skills', icon: Sparkles },
+  { label: 'Projects', href: '#projects', icon: FolderOpen },
 ];
 
 export default function Navbar() {
@@ -73,23 +74,31 @@ export default function Navbar() {
           className="fixed top-5 left-1/2 -translate-x-1/2 z-50"
         >
           <div className="flex items-center gap-1 px-2 py-2 rounded-full bg-white/90 backdrop-blur-xl border border-[#e0e0e0] shadow-lg shadow-black/5">
-            {navLinks.map((link) => (
-              <motion.button
-                key={link.label}
-                onClick={() => scrollToSection(link.href)}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`
-                  px-5 py-2.5 rounded-full text-sm font-medium transition-all duration-200
-                  ${activeSection === link.href.replace('#', '') 
-                    ? 'bg-[#1a1a1a] text-[#f1efe7] shadow-md' 
-                    : 'text-[#4a4a4a] hover:text-[#1a1a1a] hover:bg-[#f5f5f5]'
-                  }
-                `}
-              >
-                {link.label}
-              </motion.button>
-            ))}
+            {navLinks.map((link) => {
+              const Icon = link.icon;
+              const isActive = activeSection === link.href.replace('#', '');
+              
+              return (
+                <motion.button
+                  key={link.label}
+                  onClick={() => scrollToSection(link.href)}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  className={`
+                    px-3 py-2.5 sm:px-5 rounded-full text-sm font-medium transition-all duration-200
+                    ${isActive 
+                      ? 'bg-[#1a1a1a] text-[#f1efe7] shadow-md' 
+                      : 'text-[#4a4a4a] hover:text-[#1a1a1a] hover:bg-[#f5f5f5]'
+                    }
+                  `}
+                  title={link.label}
+                >
+                  {/* Icon on mobile, text on larger screens */}
+                  <Icon className="sm:hidden" size={18} />
+                  <span className="hidden sm:inline">{link.label}</span>
+                </motion.button>
+              );
+            })}
           </div>
         </motion.nav>
       )}

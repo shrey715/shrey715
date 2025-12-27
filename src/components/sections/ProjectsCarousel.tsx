@@ -162,12 +162,14 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
       {/* Scroll Container */}
       <div 
         ref={scrollRef}
-        className="flex gap-6 overflow-x-auto px-4 md:px-8 pb-6 relative"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        className="flex gap-6 overflow-x-auto pb-6 relative scroll-snap-x scroll-snap-mandatory"
+        style={{ 
+          scrollbarWidth: 'none', 
+          msOverflowStyle: 'none',
+          paddingLeft: 'max(1rem, calc(50vw - 160px))',
+          paddingRight: 'max(1rem, calc(50vw - 160px))',
+        }}
       >
-        {/* Spacer to center first card - on mobile: (50vw - cardWidth/2), on desktop: (50vw - 220px) */}
-        <div className="flex-shrink-0 w-[calc(50vw-170px)] md:w-[calc(50vw-220px)]" />
-        
         {projects.map((project, index) => (
           <ProjectCard 
             key={project.id} 
@@ -176,8 +178,6 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
             onOpenModal={() => setActiveModalProject(project)}
           />
         ))}
-        
-        <div className="flex-shrink-0 w-[calc(50vw-170px)] md:w-[calc(50vw-220px)]" />
       </div>
 
       {/* Pagination */}

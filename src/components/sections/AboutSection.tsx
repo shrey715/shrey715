@@ -2,7 +2,7 @@
 import { motion } from 'framer-motion';
 import { FaGithub, FaLinkedin, FaGamepad } from 'react-icons/fa';
 import { HiOutlineNewspaper, HiOutlineDocumentText } from 'react-icons/hi';
-import { SiLinux } from 'react-icons/si';
+import { SiLinux, SiCodeforces } from 'react-icons/si';
 import { MdOutlineSportsBasketball } from 'react-icons/md';
 import { PiTelevisionSimpleBold } from 'react-icons/pi';
 import FadeIn from '@/components/ui/FadeIn';
@@ -11,6 +11,7 @@ import type { SocialLink, HobbyItem } from '@/types';
 const socialLinks: SocialLink[] = [
   { icon: FaGithub, href: "https://github.com/shrey715", label: "GitHub" },
   { icon: FaLinkedin, href: "https://www.linkedin.com/in/shreyasdeb/", label: "LinkedIn" },
+  { icon: SiCodeforces, href: "https://codeforces.com/profile/shrey715", label: "Codeforces" },
   { icon: HiOutlineDocumentText, href: "/assets/shreyas_deb_resume.pdf", label: "Resume" },
   { icon: HiOutlineNewspaper, href: "/blog", label: "Blog" },
 ];

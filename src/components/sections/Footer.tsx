@@ -8,7 +8,7 @@ import type { SocialLink } from '@/types';
 const socialLinks: SocialLink[] = [
   { icon: FaGithub, href: "https://github.com/shrey715", label: "GitHub" },
   { icon: FaLinkedin, href: "https://www.linkedin.com/in/shreyasdeb/", label: "LinkedIn" },
-  { icon: HiOutlineDocumentText, href: "/assets/shreyas_deb_resume.pdf", label: "Resume" },
+  // { icon: HiOutlineDocumentText, href: "/assets/shreyas_deb_resume.pdf", label: "Resume" },
   { icon: HiOutlineNewspaper, href: "/blog", label: "Blog" },
   { icon: FaEnvelope, href: "mailto:shreyas.deb@research.iiit.ac.in", label: "Email" },
 ];

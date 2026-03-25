@@ -12,7 +12,7 @@ const socialLinks: SocialLink[] = [
   { icon: FaGithub, href: "https://github.com/shrey715", label: "GitHub" },
   { icon: FaLinkedin, href: "https://www.linkedin.com/in/shreyasdeb/", label: "LinkedIn" },
   { icon: SiCodeforces, href: "https://codeforces.com/profile/shrey715", label: "Codeforces" },
-  { icon: HiOutlineDocumentText, href: "/assets/shreyas_deb_resume.pdf", label: "Resume" },
+  // { icon: HiOutlineDocumentText, href: "/assets/shreyas_deb_resume.pdf", label: "Resume" },
   { icon: HiOutlineNewspaper, href: "/blog", label: "Blog" },
 ];
 

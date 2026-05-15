@@ -55,7 +55,7 @@
             "id": "lead-1",
             "title": "Tech Team Head",
             "organization": "E-Cell IIIT Hyderabad",
-            "duration": "Aug 2024 – Present",
+            "duration": "Aug 2024 – April 2026",
             "highlights": [
                 "Spearheaded technical operations for the Entrepreneurship Cell, maintaining official server infrastructure and ensuring 98% uptime.",
                 "Managed the technical team for Megathon, the largest student-run hackathon in Hyderabad, overseeing registration portals and live event dashboards."
@@ -65,10 +65,19 @@
             "id": "lead-2",
             "title": "Project Manager and OSS Maintainer",
             "organization": "Open Source Developers Group (OSDG)",
-            "duration": "March 2025 – Present",
+            "duration": "March 2025 – April 2026",
             "highlights": [
                 "Maintain Whispr, a privacy-first review platform utilized by a campus of 1,000+ students to access anonymous feedback on 200+ courses and 100+ professors.",
                 "Drive the campus open-source ecosystem by organizing technical workshops and managing student-run repositories."
+            ]
+        },
+        {
+            "id": "lead-3",
+            "title": "Teaching Assistant",
+            "organization": "IIIT Hyderabad",
+            "duration": "Aug 2025 – May 2026",
+            "highlights": [
+                "Served as a Teaching Assistant for Automata Theory (Monsoon 2025 H1), Data and Applications (Monsoon 2025 H2), and Introduction to Software Systems (Spring 2026)."
             ]
         }
     ],
@@ -82,17 +91,17 @@
         },
         {
             "id": "ach-2",
-            "title": "Dean's List",
+            "title": "Dean's List III",
             "organization": "IIIT Hyderabad",
             "year": "2024",
-            "description": "Awarded Dean's List recognition for exceptional academic performance."
+            "description": "Awarded Dean's List III recognition for exceptional academic performance (top 15%)."
         },
         {
             "id": "ach-3",
             "title": "Merit List",
             "organization": "IIIT Hyderabad",
             "year": "2023",
-            "description": "Recognized on the Merit List for outstanding academic achievement."
+            "description": "Recognized on the Merit List for outstanding academic achievement (top 20%)."
         }
     ]
 }

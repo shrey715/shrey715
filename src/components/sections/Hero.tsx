@@ -2,6 +2,7 @@
 import Image from "next/image";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
+import { Send } from "lucide-react";
 import Marquee from "@/components/ui/Marquee";
 import { EASE_OUT as EASE } from "@/lib/constants";
 
@@ -90,15 +91,22 @@ export default function Hero() {
                 transition={{ duration: 0.9, ease: EASE, delay: 0.42 }}
               >
                 <span className="text-accent">DEB</span>
-                <motion.span
+                <motion.button
+                  type="button"
+                  onClick={() =>
+                    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
+                  }
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.6, delay: 1.1 }}
-                  className="text-ink"
-                  style={{ fontSize: "0.5em" }}
+                  whileHover={{ x: 5, y: -5, rotate: 8 }}
+                  whileTap={{ scale: 0.9 }}
+                  aria-label="Get in touch"
+                  data-cursor="SAY HI"
+                  className="text-ink shrink-0 self-center cursor-pointer"
                 >
-                  ↗
-                </motion.span>
+                  <Send className="w-9 h-9 sm:w-12 sm:h-12 lg:w-16 lg:h-16" strokeWidth={2} />
+                </motion.button>
               </motion.span>
             </span>
           </h1>

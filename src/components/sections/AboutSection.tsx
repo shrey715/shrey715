@@ -1,182 +1,163 @@
 "use client";
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin, FaGamepad } from "react-icons/fa";
-import { HiOutlineNewspaper, HiOutlineDocumentText } from "react-icons/hi";
+import { HiOutlineNewspaper } from "react-icons/hi";
 import { SiLinux, SiCodeforces } from "react-icons/si";
 import { MdOutlineSportsBasketball } from "react-icons/md";
 import { PiTelevisionSimpleBold } from "react-icons/pi";
-import FadeIn from "@/components/ui/FadeIn";
+import SectionHeader from "@/components/ui/SectionHeader";
+import Section, { Container } from "@/components/ui/Section";
 import type { SocialLink, HobbyItem } from "@/types";
 
 const socialLinks: SocialLink[] = [
   { icon: FaGithub, href: "https://github.com/shrey715", label: "GitHub" },
-  {
-    icon: FaLinkedin,
-    href: "https://www.linkedin.com/in/shreyasdeb/",
-    label: "LinkedIn",
-  },
-  {
-    icon: SiCodeforces,
-    href: "https://codeforces.com/profile/shrey715",
-    label: "Codeforces",
-  },
-  // { icon: HiOutlineDocumentText, href: "/assets/shreyas_deb_resume.pdf", label: "Resume" },
+  { icon: FaLinkedin, href: "https://www.linkedin.com/in/shreyasdeb/", label: "LinkedIn" },
+  { icon: SiCodeforces, href: "https://codeforces.com/profile/shrey715", label: "Codeforces" },
   { icon: HiOutlineNewspaper, href: "/blog", label: "Blog" },
 ];
 
 const hobbies: HobbyItem[] = [
-  { icon: FaGamepad, label: "Gaming", color: "text-emerald-400" },
-  { icon: PiTelevisionSimpleBold, label: "Anime", color: "text-pink-400" },
-  {
-    icon: MdOutlineSportsBasketball,
-    label: "Basketball",
-    color: "text-orange-400",
-  },
-  { icon: SiLinux, label: "Distro-hopping", color: "text-yellow-400" },
+  { icon: FaGamepad, label: "Gaming", color: "" },
+  { icon: PiTelevisionSimpleBold, label: "Anime", color: "" },
+  { icon: MdOutlineSportsBasketball, label: "Basketball", color: "" },
+  { icon: SiLinux, label: "Distro-hopping", color: "" },
 ];
 
-interface AboutContentSection {
+interface AboutBlock {
+  num: string;
   title: string;
-  color: string;
   content: React.ReactNode;
 }
 
+const blocks: AboutBlock[] = [
+  {
+    num: "01",
+    title: "The Academic",
+    content: (
+      <>
+        An <Mark>MS Dual Degree</Mark> student in{" "}
+        <Ink>Computational Natural Sciences</Ink> at IIIT Hyderabad, where my world
+        revolves around the beautiful chaos of computing. I work as an{" "}
+        <Mark>Undergraduate Researcher</Mark> under Professor Vinod P K, exploring
+        the intersection of <Ink>systems biology</Ink> and <Ink>deep learning</Ink>.
+      </>
+    ),
+  },
+  {
+    num: "02",
+    title: "The Engineer",
+    content: (
+      <>
+        A builder at heart. <Mark>Physics &amp; mathematics</Mark> are my playground.
+        My interests span the whole computing spectrum — from the low-level logic of{" "}
+        <Ink>kernels &amp; operating systems</Ink> to the high-dimensional latent
+        spaces of <Ink>deep learning</Ink>.
+      </>
+    ),
+  },
+  {
+    num: "03",
+    title: "The Human",
+    content: (
+      <>
+        When I&apos;m not debugging a segfault or training a model, you&apos;ll find me
+        gaming, watching anime, on the basketball court, or — inevitably —
+        hopping to yet another Linux distro.
+      </>
+    ),
+  },
+];
+
+function Mark({ children }: { children: React.ReactNode }) {
+  return <span className="bg-accent text-paper px-1">{children}</span>;
+}
+function Ink({ children }: { children: React.ReactNode }) {
+  return <span className="text-paper font-semibold underline decoration-accent decoration-2 underline-offset-4">{children}</span>;
+}
+
 export default function AboutSection() {
-  const contentSections: AboutContentSection[] = [
-    {
-      title: "The Academic",
-      color: "bg-purple-500/50",
-      content: (
-        <p>
-          I&apos;m a Senior at{" "}
-          <span className="text-[#f1efe7]">IIIT Hyderabad</span>, where my world
-          revolves around the beautiful chaos of Computer Science. Currently, I
-          work as an
-          <span className="text-[#f1efe7]"> Undergraduate Researcher</span>{" "}
-          under
-          <span className="text-[#f1efe7]"> Professor Vinod P K</span>,
-          exploring the fascinating intersection of
-          <span className="text-purple-300/80"> Systems Biology</span> and{" "}
-          <span className="text-purple-300/80">Deep Learning</span>.
-        </p>
-      ),
-    },
-    {
-      title: "The Engineer",
-      color: "bg-blue-500/50",
-      content: (
-        <p>
-          Beyond the theory, I am a builder at heart.{" "}
-          <span className="text-[#f1efe7]">Physics and Mathematics</span> are my
-          playground, and I find joy in understanding complex machinery from
-          first principles. My interests span the entire computing spectrum:
-          from the low-level logic of{" "}
-          <span className="text-[#f1efe7]">Kernels and Operating Systems</span>{" "}
-          to the high-dimensional latent spaces of{" "}
-          <span className="text-[#f1efe7]">Deep Learning and AI</span>.
-        </p>
-      ),
-    },
-    {
-      title: "The Human",
-      color: "bg-emerald-500/50",
-      content: (
-        <>
-          <p className="mb-4">
-            When I'm not debugging a segfault or training a model, you'll find
-            me:
-          </p>
-          <div className="grid grid-cols-2 gap-4">
-            {hobbies.map(({ icon: Icon, label, color }) => (
-              <div
-                key={label}
-                className="flex items-center gap-3 p-3 rounded-lg bg-white/5 border border-white/5 hover:border-white/10 transition-colors"
-              >
-                <Icon className={color} size={20} />
-                <span className="text-sm">{label}</span>
-              </div>
-            ))}
-          </div>
-        </>
-      ),
-    },
-  ];
-
   return (
-    <section
-      id="about"
-      className="py-32 px-6 bg-[#1a1a1a] text-[#f1efe7] grain-overlay relative"
-    >
-      {/* Floating glow orbs */}
-      <div className="absolute top-[10%] left-[-5%] w-[400px] h-[400px] rounded-full bg-purple-500/10 blur-[100px] pointer-events-none" />
-      <div className="absolute bottom-[15%] right-[-10%] w-[350px] h-[350px] rounded-full bg-blue-500/8 blur-[80px] pointer-events-none" />
+    <Section id="about" dark>
+      <Container>
+        <SectionHeader dark index="01" kicker="WHOAMI" title="ABOUT" className="mb-16" />
 
-      <div className="max-w-4xl mx-auto relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20">
-        {/* Left Column: Heading & Socials */}
-        <div className="lg:col-span-4 flex flex-col justify-between">
-          <div>
-            <FadeIn>
-              <h2
-                className="text-5xl md:text-6xl font-bold mb-6 leading-tight"
-                style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
-              >
-                About
-                <br />
-                <span className="text-[#808080]">Me.</span>
-              </h2>
-            </FadeIn>
-            <motion.div
-              initial={{ scaleX: 0 }}
-              whileInView={{ scaleX: 1 }}
+        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
+          {/* Left: intro + socials */}
+          <div className="lg:col-span-4">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="w-16 h-1 bg-[#f1efe7] origin-left mb-8"
-            />
-          </div>
+              transition={{ duration: 0.6 }}
+              className="text-xl font-medium leading-snug mb-8"
+            >
+              Always open to learning new stuff. If it&apos;s complex, I&apos;m interested.
+            </motion.p>
 
-          <FadeIn delay={0.2}>
-            <div className="flex flex-col gap-4">
-              {socialLinks.map((link) => (
+            <div className="grid grid-cols-2 gap-0 hard-border">
+              {socialLinks.map((link, i) => (
                 <a
                   key={link.label}
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-4 group"
+                  className={`group flex items-center gap-3 p-4 transition-colors hover:bg-accent hover:text-paper
+                    ${i % 2 === 0 ? "border-r-2" : ""} ${i < 2 ? "border-b-2" : ""} border-paper/30`}
                 >
-                  <div className="w-10 h-10 rounded-full border border-white/15 flex items-center justify-center text-[#a0a0a0] group-hover:text-[#1a1a1a] group-hover:bg-[#f1efe7] group-hover:border-transparent transition-all">
-                    <link.icon size={18} />
-                  </div>
-                  <span className="text-sm uppercase tracking-widest text-[#808080] group-hover:text-[#f1efe7] transition-colors">
-                    {link.label}
-                  </span>
+                  <link.icon size={20} />
+                  <span className="font-mono-label text-[11px]">{link.label}</span>
                 </a>
               ))}
             </div>
-          </FadeIn>
-        </div>
+          </div>
 
-        {/* Right Column: Content */}
-        <FadeIn
-          delay={0.1}
-          className="lg:col-span-8 space-y-8 text-lg text-[#b0b0b0] leading-relaxed font-light"
-        >
-          {contentSections.map((section) => (
-            <div key={section.title}>
-              <h3 className="text-[#f1efe7] text-xl font-medium mb-3 flex items-center gap-3">
-                <span className={`w-1 h-6 ${section.color} rounded-full`} />
-                {section.title}
-              </h3>
-              {section.content}
+          {/* Right: numbered blocks */}
+          <div className="lg:col-span-8">
+            {blocks.map((block, i) => (
+              <motion.div
+                key={block.num}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.6, delay: i * 0.1 }}
+                className="grid sm:grid-cols-12 gap-2 sm:gap-6 py-8 border-t-2 border-paper/15 last:border-b-2"
+              >
+                <div className="sm:col-span-4">
+                  <span className="font-display text-4xl text-accent mr-3">{block.num}</span>
+                  <span className="font-mono-label text-xs text-paper/60 align-middle">
+                    {block.title}
+                  </span>
+                </div>
+                <p className="sm:col-span-8 text-lg text-paper/75 leading-relaxed">
+                  {block.content}
+                </p>
+              </motion.div>
+            ))}
+
+            {/* Draggable hobby chips */}
+            <div className="mt-10 flex flex-wrap gap-3">
+              <span className="font-mono-label text-[11px] text-paper/40 w-full mb-1">
+                OFF THE CLOCK — DRAG ME ↓
+              </span>
+              {hobbies.map(({ icon: Icon, label }, i) => (
+                <motion.div
+                  key={label}
+                  drag
+                  dragConstraints={{ left: -40, right: 40, top: -40, bottom: 40 }}
+                  dragElastic={0.4}
+                  whileHover={{ y: -3 }}
+                  whileDrag={{ scale: 1.1, rotate: i % 2 ? 4 : -4 }}
+                  data-cursor="DRAG"
+                  className="flex items-center gap-2 px-4 py-2.5 bg-paper text-ink hard-border cursor-grab active:cursor-grabbing select-none"
+                >
+                  <Icon size={18} />
+                  <span className="font-mono-label text-[11px]">{label}</span>
+                </motion.div>
+              ))}
             </div>
-          ))}
-
-          <p className="text-[#808080] text-sm pt-4 border-t border-white/10 italic">
-            "Always open to learning new stuff. If it's complex, I'm
-            interested."
-          </p>
-        </FadeIn>
-      </div>
-    </section>
+          </div>
+        </div>
+      </Container>
+    </Section>
   );
 }

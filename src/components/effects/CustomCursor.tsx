@@ -7,6 +7,7 @@ export default function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [usingMouse, setUsingMouse] = useState(false);
+  const [label, setLabel] = useState('');
   
   const pos = useRef({ x: 0, y: 0 });
   const dotPos = useRef({ x: 0, y: 0 });
@@ -41,12 +42,15 @@ export default function CustomCursor() {
       }
       
       const target = e.target as HTMLElement;
-      const isClickable = 
-        target.tagName === 'A' || 
+      const isClickable =
+        target.tagName === 'A' ||
         target.tagName === 'BUTTON' ||
         target.closest('a') !== null ||
         target.closest('button') !== null;
       setIsHovering(isClickable);
+
+      const labelEl = target.closest('[data-cursor]');
+      setLabel(labelEl ? labelEl.getAttribute('data-cursor') || '' : '');
     };
 
     const handleTouchStart = () => {
@@ -87,22 +91,28 @@ export default function CustomCursor() {
           width: isHovering ? 16 : 10,
           height: isHovering ? 16 : 10,
           background: '#ffffff',
-          opacity: isVisible ? 1 : 0,
+          opacity: isVisible && !label ? 1 : 0,
           transition: 'width 0.2s, height 0.2s, opacity 0.2s',
         }}
       />
       <div
         ref={ringRef}
-        className="fixed top-0 left-0 pointer-events-none z-[99998] will-change-transform rounded-full mix-blend-difference"
+        className="fixed top-0 left-0 pointer-events-none z-[99998] will-change-transform rounded-full mix-blend-difference flex items-center justify-center"
         style={{
-          width: isHovering ? 60 : 44,
-          height: isHovering ? 60 : 44,
+          width: label ? 76 : isHovering ? 60 : 44,
+          height: label ? 76 : isHovering ? 60 : 44,
           border: '2px solid #ffffff',
-          background: isHovering ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
+          background: label ? '#ffffff' : isHovering ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
           opacity: isVisible ? 1 : 0,
-          transition: 'width 0.3s, height 0.3s, opacity 0.2s',
+          transition: 'width 0.3s, height 0.3s, opacity 0.2s, background 0.3s',
         }}
-      />
+      >
+        {label && (
+          <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-black">
+            {label}
+          </span>
+        )}
+      </div>
     </>
   );
 }

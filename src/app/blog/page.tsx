@@ -1,7 +1,8 @@
 import { getAllPosts, BlogPost } from '@/lib/blog';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Calendar, Clock, ArrowRight, Sparkles } from 'lucide-react';
+import { Calendar, Clock, ArrowRight, ArrowLeft } from 'lucide-react';
+import Marquee from '@/components/ui/Marquee';
 
 export const metadata = {
   title: 'Blogs | Shreyas Deb',
@@ -14,64 +15,55 @@ export default async function BlogPage() {
   const otherPosts = posts.slice(1);
 
   return (
-    <main className="min-h-screen bg-[#f1efe7]">
-      {/* Hero Header */}
-      <header className="relative py-24 px-6 overflow-hidden">
-        {/* Subtle gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-amber-50/50 via-transparent to-rose-50/30 pointer-events-none" />
-        <div 
-          className="absolute inset-0 pointer-events-none opacity-30"
-          style={{
-            backgroundImage: 'radial-gradient(circle, rgba(0,0,0,0.04) 1px, transparent 1px)',
-            backgroundSize: '20px 20px'
-          }}
-        />
-        
-        <div className="max-w-5xl mx-auto relative z-10">
-          <Link 
-            href="/" 
-            className="inline-flex items-center gap-2 mb-10 text-sm uppercase tracking-widest text-[#808080] hover:text-[#1a1a1a] transition-colors"
+    <main className="min-h-screen bg-paper text-ink grid-lines">
+      {/* Header */}
+      <header className="relative px-4 sm:px-6 pt-16 pb-12 border-b-2 border-ink">
+        <div className="max-w-[1500px] mx-auto">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 mb-10 font-mono-label text-[11px] text-ink/60 hover:text-accent transition-colors"
           >
-            ← Back to Home
+            <ArrowLeft size={14} /> BACK TO HOME
           </Link>
-          
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-full bg-[#1a1a1a] flex items-center justify-center">
-              <Sparkles size={18} className="text-[#f1efe7]" />
-            </div>
-            <span className="text-sm uppercase tracking-widest text-[#808080] font-medium">The Blog</span>
+
+          <div className="font-mono-label text-[11px] text-ink/60 mb-3 flex items-center gap-3">
+            <span className="text-accent">(00)</span> WRITING
+            <span className="flex-1 h-px bg-ink/20" />
           </div>
-          
-          <h1 
-            className="text-5xl md:text-7xl font-bold text-gradient-dark mb-6 leading-tight"
-            style={{ fontFamily: 'var(--font-playfair)' }}
-          >
-            Thoughts &<br />
-            <span className="text-[#808080]">Experiments</span>
+
+          <h1 className="font-display text-ink" style={{ fontSize: 'clamp(3rem, 13vw, 11rem)' }}>
+            THE BLOG
           </h1>
-          
-          <p className="text-lg md:text-xl text-[#6b6b6b] max-w-xl leading-relaxed">
-            A blend of systems deep-dives, AI explorations, gaming adventures, distro-hopping chronicles, and everything in between.
+
+          <p className="text-lg md:text-xl text-ink/70 max-w-xl leading-relaxed mt-6">
+            Systems deep-dives, AI explorations, gaming adventures, distro-hopping
+            chronicles, and everything in between.
           </p>
         </div>
       </header>
 
-      {/* Featured Post */}
+      {/* Accent marquee */}
+      <div className="bg-accent text-paper border-b-2 border-ink py-2.5 font-display text-xl sm:text-2xl">
+        <Marquee items={['SYSTEMS', 'AI', 'GAMING', 'ANIME', 'LINUX', 'EXPERIMENTS']} durationSec={24} separator="/" />
+      </div>
+
+      {/* Featured */}
       {featuredPost && (
-        <section className="max-w-5xl mx-auto px-6 pb-16">
+        <section className="max-w-[1500px] mx-auto px-4 sm:px-6 py-16">
+          <div className="font-mono-label text-[11px] text-ink/50 mb-5">// LATEST</div>
           <FeaturedPostCard post={featuredPost} />
         </section>
       )}
 
-      {/* Other Posts Grid */}
+      {/* Grid */}
       {otherPosts.length > 0 && (
-        <section className="max-w-5xl mx-auto px-6 pb-24">
-          <div className="flex items-center gap-3 mb-8">
-            <h2 className="text-sm uppercase tracking-widest text-[#808080] font-semibold">All Posts</h2>
-            <div className="flex-1 h-px bg-[#e8e8e8]" />
+        <section className="max-w-[1500px] mx-auto px-4 sm:px-6 pb-24">
+          <div className="flex items-center gap-4 mb-8">
+            <h2 className="font-mono-label text-[11px] text-ink/60">ALL POSTS</h2>
+            <span className="flex-1 h-0.5 bg-ink" />
           </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {otherPosts.map((post) => (
               <PostCard key={post.slug} post={post} />
             ))}
@@ -79,20 +71,20 @@ export default async function BlogPage() {
         </section>
       )}
 
-      {/* Empty State */}
+      {/* Empty state */}
       {posts.length === 0 && (
-        <section className="max-w-5xl mx-auto px-6 pb-24">
-          <div className="text-center py-20 rounded-2xl bg-white/50 border border-[#e8e8e8]">
-            <p className="text-[#808080] text-lg mb-2">No posts yet.</p>
-            <p className="text-[#a0a0a0] text-sm">Check back soon!</p>
+        <section className="max-w-[1500px] mx-auto px-4 sm:px-6 pb-24">
+          <div className="text-center py-20 hard-border">
+            <p className="text-ink/70 text-lg mb-2 font-mono-label">NO POSTS YET</p>
+            <p className="text-ink/40 text-sm">Check back soon.</p>
           </div>
         </section>
       )}
 
       {/* Footer */}
-      <footer className="py-12 text-center border-t border-[#e8e8e8]">
-        <Link href="/" className="text-sm text-[#808080] hover:text-[#1a1a1a] transition-colors">
-          shreyas.deb © {new Date().getFullYear()}
+      <footer className="py-10 text-center border-t-2 border-ink font-mono-label text-[10px] text-ink/50">
+        <Link href="/" className="hover:text-accent transition-colors">
+          SHREYAS DEB © {new Date().getFullYear()}
         </Link>
       </footer>
     </main>
@@ -102,65 +94,52 @@ export default async function BlogPage() {
 function FeaturedPostCard({ post }: { post: BlogPost }) {
   return (
     <Link href={`/blog/${post.slug}`} className="block group">
-      <article className="relative rounded-3xl overflow-hidden bg-white border border-[#e8e8e8] shadow-sm hover:shadow-2xl transition-all duration-500">
+      <article className="hard-border bg-paper hard-shadow transition-all duration-200 group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:shadow-[10px_10px_0_0_#ff3d00] grid md:grid-cols-2">
         {/* Image */}
-        <div className="relative h-64 md:h-80 bg-gradient-to-br from-[#1a1a1a] to-[#2a2a2a] overflow-hidden">
+        <div className="relative h-64 md:h-full min-h-[18rem] bg-ink border-b-2 md:border-b-0 md:border-r-2 border-ink overflow-hidden">
           {post.image ? (
             <Image
               src={post.image}
               alt={post.title}
               fill
-              className="object-cover opacity-90 group-hover:scale-105 transition-transform duration-700"
+              className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
             />
           ) : (
             <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-8xl opacity-20">✨</span>
+              <span className="font-display text-8xl text-paper/20">B</span>
             </div>
           )}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-          
-          {/* Featured Badge */}
-          <span className="absolute top-6 left-6 px-3 py-1.5 text-xs font-semibold uppercase tracking-wider rounded-full bg-white/90 text-[#1a1a1a] backdrop-blur-sm">
-            New
+          <span className="absolute top-4 left-4 px-3 py-1 bg-accent text-paper font-mono-label text-[10px]">
+            NEW
           </span>
         </div>
-        
+
         {/* Content */}
-        <div className="p-8">
-          <div className="flex items-center gap-4 text-xs text-[#808080] mb-4">
+        <div className="p-6 md:p-8 flex flex-col justify-center">
+          <div className="flex items-center gap-4 font-mono-label text-[10px] text-ink/50 mb-4">
             <span className="flex items-center gap-1.5">
               <Calendar size={12} />
-              {new Date(post.date).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              })}
+              {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
             </span>
             <span className="flex items-center gap-1.5">
               <Clock size={12} />
               {post.readingTime}
             </span>
           </div>
-          
-          <h2 className="text-2xl md:text-3xl font-bold text-[#1a1a1a] mb-3 group-hover:text-[#4a4a4a] transition-colors" style={{ fontFamily: 'var(--font-playfair)' }}>
-            {post.title}
-          </h2>
-          
-          <p className="text-[#6b6b6b] leading-relaxed mb-6 line-clamp-2">
-            {post.description}
-          </p>
-          
-          <div className="flex items-center justify-between">
+
+          <h2 className="text-2xl md:text-4xl font-bold leading-tight mb-3">{post.title}</h2>
+          <p className="text-ink/70 leading-relaxed mb-6 line-clamp-3">{post.description}</p>
+
+          <div className="flex items-center justify-between mt-auto">
             <div className="flex flex-wrap gap-2">
               {post.tags.slice(0, 3).map((tag) => (
-                <span key={tag} className="px-3 py-1 text-xs rounded-full bg-[#f5f5f5] text-[#6b6b6b] border border-[#e8e8e8]">
+                <span key={tag} className="px-2 py-1 font-mono-label text-[10px] border border-ink/40">
                   {tag}
                 </span>
               ))}
             </div>
-            
-            <span className="flex items-center gap-2 text-sm font-medium text-[#1a1a1a] group-hover:gap-3 transition-all">
-              Read Article <ArrowRight size={16} />
+            <span className="flex items-center gap-2 font-mono-label text-[11px] group-hover:gap-3 group-hover:text-accent transition-all">
+              READ <ArrowRight size={16} />
             </span>
           </div>
         </div>
@@ -171,46 +150,38 @@ function FeaturedPostCard({ post }: { post: BlogPost }) {
 
 function PostCard({ post }: { post: BlogPost }) {
   return (
-    <Link href={`/blog/${post.slug}`} className="block group">
-      <article className="h-full rounded-2xl overflow-hidden bg-white border border-[#e8e8e8] shadow-sm hover:shadow-lg hover:border-[#d0d0d0] transition-all duration-300">
-        {/* Image */}
-        <div className="relative h-48 bg-gradient-to-br from-[#f0f0f0] to-[#e8e8e8] overflow-hidden">
+    <Link href={`/blog/${post.slug}`} className="block group h-full">
+      <article className="h-full flex flex-col hard-border bg-paper hard-shadow-sm transition-all duration-200 group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_0_0_#ff3d00]">
+        <div className="relative h-44 bg-ink border-b-2 border-ink overflow-hidden">
           {post.image ? (
             <Image
               src={post.image}
               alt={post.title}
               fill
-              className="object-cover group-hover:scale-105 transition-transform duration-500"
+              className="object-cover grayscale group-hover:grayscale-0 transition-all duration-500"
             />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#1a1a1a] to-[#3a3a3a]">
-              <span className="text-5xl opacity-30">📝</span>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <span className="font-display text-6xl text-paper/20">✦</span>
             </div>
           )}
         </div>
-        
-        {/* Content */}
-        <div className="p-6">
-          <div className="flex items-center gap-3 text-xs text-[#808080] mb-3">
-            <span className="flex items-center gap-1">
-              <Calendar size={11} />
-              {new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
-            </span>
+
+        <div className="p-5 flex flex-col flex-1">
+          <div className="flex items-center gap-3 font-mono-label text-[10px] text-ink/50 mb-3">
+            <span>{new Date(post.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
             <span>·</span>
             <span>{post.readingTime}</span>
           </div>
-          
-          <h3 className="text-lg font-bold text-[#1a1a1a] mb-2 group-hover:text-[#4a4a4a] transition-colors line-clamp-2">
+
+          <h3 className="text-lg font-bold leading-tight mb-2 line-clamp-2 group-hover:text-accent transition-colors">
             {post.title}
           </h3>
-          
-          <p className="text-sm text-[#6b6b6b] leading-relaxed line-clamp-2 mb-4">
-            {post.description}
-          </p>
-          
-          <div className="flex flex-wrap gap-1.5">
+          <p className="text-sm text-ink/70 leading-relaxed line-clamp-2 mb-4">{post.description}</p>
+
+          <div className="flex flex-wrap gap-1.5 mt-auto">
             {post.tags.slice(0, 2).map((tag) => (
-              <span key={tag} className="px-2 py-0.5 text-xs rounded-full bg-[#f5f5f5] text-[#808080]">
+              <span key={tag} className="px-2 py-0.5 font-mono-label text-[10px] border border-ink/30">
                 {tag}
               </span>
             ))}

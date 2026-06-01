@@ -1,28 +1,30 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Playfair_Display, Inter, JetBrains_Mono } from "next/font/google";
+import { Anton, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/effects/CustomCursor";
 import ScrollIndicator from "@/components/effects/ScrollIndicator";
+import Preloader from "@/components/effects/Preloader";
 import { JsonLdScript } from "@/lib/schema";
 
-// Elegant serif for headings
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+// Massive condensed display face for hero + section megatype
+const anton = Anton({
+  variable: "--font-anton",
+  subsets: ["latin"],
+  weight: "400",
+  display: "swap",
+});
+
+// Techy grotesque for UI + body
+const spaceGrotesk = Space_Grotesk({
+  variable: "--font-space-grotesk",
   subsets: ["latin"],
   display: "swap",
 });
 
-// Clean sans-serif for body
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-// Monospace for code
+// Monospace for index numbers, labels, metadata, code
 const jetbrainsMono = JetBrains_Mono({
-  variable: "--font-mono",
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   display: "swap",
 });
@@ -109,8 +111,9 @@ export default function RootLayout({
         </Script>
       </head>
       <body
-        className={`${playfair.variable} ${inter.variable} ${jetbrainsMono.variable} font-sans antialiased bg-[#f1efe7] text-[#1a1a1a]`}
+        className={`${anton.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased bg-paper text-ink`}
       >
+        <Preloader />
         <CustomCursor />
         <ScrollIndicator />
         {children}

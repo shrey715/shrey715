@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, Briefcase, Sparkles, FolderOpen } from 'lucide-react';
+import Magnetic from '@/components/ui/Magnetic';
 
 const navLinks = [
   { label: 'About', href: '#about', icon: User },
@@ -66,31 +67,32 @@ export default function Navbar() {
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: -80, opacity: 0 }}
           transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-          className="fixed top-5 left-1/2 -translate-x-1/2 z-50"
+          className="fixed top-4 left-1/2 -translate-x-1/2 z-50"
         >
-          <div className="flex items-center gap-1 px-2 py-2 rounded-full bg-white/90 backdrop-blur-xl border border-[#e0e0e0] shadow-lg shadow-black/5">
-            {navLinks.map((link) => {
+          <div className="flex items-center bg-paper hard-border hard-shadow-sm">
+            {navLinks.map((link, idx) => {
               const Icon = link.icon;
               const isActive = activeSection === link.href.replace('#', '');
-              
+
               return (
-                <motion.button
-                  key={link.label}
-                  onClick={() => scrollToSection(link.href)}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  className={`
-                    px-3 py-2.5 sm:px-5 rounded-full text-sm font-medium transition-all duration-200
-                    ${isActive 
-                      ? 'bg-[#1a1a1a] text-[#f1efe7] shadow-md' 
-                      : 'text-[#4a4a4a] hover:text-[#1a1a1a] hover:bg-[#f5f5f5]'
-                    }
-                  `}
-                  title={link.label}
-                >
-                  <Icon className="sm:hidden" size={18} />
-                  <span className="hidden sm:inline">{link.label}</span>
-                </motion.button>
+                <Magnetic key={link.label} strength={0.3}>
+                  <motion.button
+                    onClick={() => scrollToSection(link.href)}
+                    whileTap={{ scale: 0.96 }}
+                    className={`
+                      px-3 py-3 sm:px-5 font-mono-label text-[11px] transition-colors duration-200
+                      ${idx !== 0 ? 'border-l-2 border-ink' : ''}
+                      ${isActive
+                        ? 'bg-accent text-paper'
+                        : 'text-ink hover:bg-ink hover:text-paper'
+                      }
+                    `}
+                    title={link.label}
+                  >
+                    <Icon className="sm:hidden" size={18} />
+                    <span className="hidden sm:inline">{link.label}</span>
+                  </motion.button>
+                </Magnetic>
               );
             })}
           </div>

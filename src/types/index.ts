@@ -32,15 +32,9 @@ export interface Project {
 }
 
 // Skill types
-export interface Skill {
-    name: string;
-    icon: string;
-    color: string;
-}
-
 export interface SkillCategory {
     title: string;
-    skills: Skill[];
+    skills: string[];
 }
 
 // Social & UI types

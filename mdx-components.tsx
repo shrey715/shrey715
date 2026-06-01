@@ -16,12 +16,12 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       />
     ),
     h1: ({ children }) => (
-      <h1 className="text-4xl font-bold mt-8 mb-4 text-[#1a1a1a]" style={{ fontFamily: 'var(--font-playfair)' }}>
+      <h1 className="text-4xl font-bold mt-8 mb-4 text-[#1a1a1a]" style={{ fontFamily: 'var(--font-display)' }}>
         {children}
       </h1>
     ),
     h2: ({ children }) => (
-      <h2 className="text-2xl font-bold mt-8 mb-3 text-[#1a1a1a]" style={{ fontFamily: 'var(--font-playfair)' }}>
+      <h2 className="text-2xl font-bold mt-8 mb-3 text-[#1a1a1a]" style={{ fontFamily: 'var(--font-display)' }}>
         {children}
       </h2>
     ),
@@ -58,11 +58,11 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
       <ol className="list-decimal list-inside my-4 space-y-2 text-[#4a4a4a]">{children}</ol>
     ),
     blockquote: ({ children }) => (
-      <blockquote className="border-l-4 border-[#1a1a1a] pl-4 my-6 italic text-[#6b6b6b]">
+      <blockquote className="border-l-4 border-accent pl-4 my-6 italic text-[#4a4a4a]">
         {children}
       </blockquote>
     ),
-    hr: () => <hr className="my-8 border-[#e8e8e8]" />,
+    hr: () => <hr className="my-8 border-t-2 border-ink/15" />,
     ...components,
   };
 }

@@ -1,114 +1,36 @@
 {
     "categories": [
         {
-            "title": "Core Languages",
-            "skills": [
-                {
-                    "name": "Rust",
-                    "icon": "SiRust",
-                    "color": "#CE422B"
-                },
-                {
-                    "name": "C",
-                    "icon": "SiC",
-                    "color": "#A8B9CC"
-                },
-                {
-                    "name": "C++",
-                    "icon": "SiCplusplus",
-                    "color": "#00599C"
-                },
-                {
-                    "name": "Python",
-                    "icon": "SiPython",
-                    "color": "#3776AB"
-                },
-                {
-                    "name": "R",
-                    "icon": "SiR",
-                    "color": "#276DC3"
-                }
-            ]
+            "title": "Languages",
+            "skills": ["C", "C++", "Python", "Rust", "Go", "TypeScript", "JavaScript", "SQL", "Bash"]
         },
         {
-            "title": "Machine Learning & AI",
-            "skills": [
-                {
-                    "name": "PyTorch",
-                    "icon": "SiPytorch",
-                    "color": "#EE4C2C"
-                },
-                {
-                    "name": "TensorFlow",
-                    "icon": "SiTensorflow",
-                    "color": "#FF6F00"
-                },
-                {
-                    "name": "LangChain",
-                    "icon": "SiLangchain",
-                    "color": "#1C3C3C"
-                },
-                {
-                    "name": "Hugging Face",
-                    "icon": "SiHuggingface",
-                    "color": "#FFD21E"
-                }
-            ]
+            "title": "Systems & Low-Level",
+            "skills": ["POSIX APIs", "Socket Programming", "Multithreading", "Lock-free Structures", "Memory Management", "TCP/IP", "Linux Kernel", "x86 / RISC-V Asm"]
         },
         {
-            "title": "Systems & Cloud",
-            "skills": [
-                {
-                    "name": "Linux",
-                    "icon": "SiLinux",
-                    "color": "#FCC624"
-                },
-                {
-                    "name": "Docker",
-                    "icon": "SiDocker",
-                    "color": "#2496ED"
-                },
-                {
-                    "name": "AWS",
-                    "icon": "SiAmazon",
-                    "color": "#FF9900"
-                },
-                {
-                    "name": "Azure",
-                    "icon": "SiMicrosoftazure",
-                    "color": "#0078D4"
-                },
-                {
-                    "name": "Git",
-                    "icon": "SiGit",
-                    "color": "#F05032"
-                }
-            ]
+            "title": "Backend",
+            "skills": ["FastAPI", "Flask", "Node.js", "Express.js", "GraphQL", "REST APIs", "Supabase"]
         },
         {
-            "title": "Web Technologies",
-            "skills": [
-                {
-                    "name": "Next.js",
-                    "icon": "SiNextdotjs",
-                    "color": "#ffffff"
-                },
-                {
-                    "name": "React",
-                    "icon": "SiReact",
-                    "color": "#61DAFB"
-                },
-                {
-                    "name": "TypeScript",
-                    "icon": "SiTypescript",
-                    "color": "#3178C6"
-                },
-                {
-                    "name": "Tailwind",
-                    "icon": "SiTailwindcss",
-                    "color": "#06B6D4"
-                }
-            ]
+            "title": "Frontend",
+            "skills": ["React", "Next.js", "Svelte", "Tailwind CSS", "Framer Motion", "Vite"]
+        },
+        {
+            "title": "Databases",
+            "skills": ["PostgreSQL", "MySQL", "MongoDB", "Redis", "Neo4j", "DynamoDB"]
+        },
+        {
+            "title": "AI / ML & Data",
+            "skills": ["PyTorch", "TensorFlow", "scikit-learn", "NumPy", "Pandas", "LangChain", "RAG / GraphRAG", "Vector DBs", "Ollama"]
+        },
+        {
+            "title": "Cloud & DevOps",
+            "skills": ["AWS", "Azure", "Docker", "Kubernetes", "Git", "GitHub Actions"]
+        },
+        {
+            "title": "Foundations",
+            "skills": ["Operating Systems", "Computer Networks", "Distributed Systems", "Data Structures & Algorithms", "Computer Architecture", "System Design", "Statistical Methods in AI", "Linear Algebra", "Probability"]
         }
     ]
 }

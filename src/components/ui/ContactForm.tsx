@@ -1,31 +1,33 @@
 'use client';
 import { motion } from 'framer-motion';
-import { Mail, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
+import { ACCENT } from '@/lib/constants';
 
 export default function ContactForm() {
   return (
-    <div className="w-full max-w-md mx-auto relative">
-      <div className="p-8 rounded-2xl bg-[#252525] border border-white/10 shadow-2xl text-center">
-        <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-white/5 flex items-center justify-center text-[#f1efe7]">
-          <Mail size={32} />
-        </div>
-        
-        <h3 className="text-2xl font-bold mb-3 text-[#f1efe7]">
-          Get in Touch
-        </h3>
-        
-        <p className="text-[#808080] mb-8 leading-relaxed">
-          Whether you have a question, a project idea, or just want to discuss something interesting - my inbox is always open!
+    <div className="w-full hard-border border-paper/40 bg-paper text-ink">
+      <div className="border-b-2 border-ink px-5 py-3 font-mono-label text-[11px] flex items-center justify-between">
+        <span>DIRECT LINE</span>
+        <span className="flex items-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-accent animate-pulse" /> INBOX OPEN
+        </span>
+      </div>
+
+      <div className="p-6 sm:p-8">
+        <h3 className="text-2xl font-bold mb-3">Get in touch.</h3>
+        <p className="text-ink/70 mb-8 leading-relaxed">
+          Got a question, a project idea, or just want to discuss something
+          interesting? My inbox is always open.
         </p>
 
         <motion.a
           href="mailto:shreyas.deb@research.iiit.ac.in"
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="w-full py-4 rounded-xl font-semibold text-lg tracking-wide flex items-center justify-center gap-3 bg-[#f1efe7] text-[#1a1a1a] hover:bg-white hover:shadow-lg hover:shadow-white/10 transition-all duration-300"
+          whileHover={{ x: -3, y: -3, boxShadow: `6px 6px 0 0 ${ACCENT}` }}
+          whileTap={{ scale: 0.99 }}
+          className="w-full py-4 px-5 font-mono-label text-sm flex items-center justify-between gap-3 bg-ink text-paper hard-border"
         >
-          <span>Say Hello</span>
-          <ArrowRight size={20} />
+          <span>SAY HELLO</span>
+          <ArrowRight size={18} />
         </motion.a>
       </div>
     </div>

@@ -1,201 +1,124 @@
 "use client";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import {
-  SiTypescript,
-  SiPython,
-  SiRust,
-  SiCplusplus,
-  SiC,
-  SiR,
-  SiReact,
-  SiNextdotjs,
-  SiTailwindcss,
-  SiNodedotjs,
-  SiGit,
-  SiDocker,
-  SiLinux,
-  SiFigma,
-  SiPytorch,
-  SiTensorflow,
-  SiPostgresql,
-  SiMongodb,
-  SiGo,
-  SiJavascript,
-  SiHtml5,
-  SiCss3,
-  SiAmazon,
-  SiKubernetes,
-  SiRedis,
-  SiHuggingface,
-  SiLangchain,
-} from "react-icons/si";
-import { VscAzure } from "react-icons/vsc";
-import { useRef } from "react";
-import { IconType } from "react-icons";
-import FadeIn from "@/components/ui/FadeIn";
-import type { Skill, SkillCategory } from "@/types";
-
-// Icon mapping for JSON data
-const iconMap: Record<string, IconType> = {
-  SiTypescript,
-  SiPython,
-  SiRust,
-  SiCplusplus,
-  SiC,
-  SiR,
-  SiReact,
-  SiNextdotjs,
-  SiTailwindcss,
-  SiNodedotjs,
-  SiGit,
-  SiDocker,
-  SiLinux,
-  SiFigma,
-  SiPytorch,
-  SiTensorflow,
-  SiPostgresql,
-  SiMongodb,
-  SiGo,
-  SiJavascript,
-  SiHtml5,
-  SiCss3,
-  SiAmazon,
-  SiMicrosoftazure: VscAzure,
-  SiKubernetes,
-  SiRedis,
-  SiHuggingface,
-  SiLangchain,
-};
+import { motion } from "framer-motion";
+import SectionHeader from "@/components/ui/SectionHeader";
+import Section, { Container } from "@/components/ui/Section";
+import type { SkillCategory } from "@/types";
 
 interface SkillsSectionProps {
   categories: SkillCategory[];
 }
 
-export default function SkillsSection({ categories }: SkillsSectionProps) {
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start end", "end start"],
-  });
+// Column spans (lg, 12-col) tuned to the data order so the bento tiles cleanly:
+// [7+5] [6+6] [5+7] [5+7]
+const SPANS = [
+  "lg:col-span-7",
+  "lg:col-span-5",
+  "lg:col-span-6",
+  "lg:col-span-6",
+  "lg:col-span-5",
+  "lg:col-span-7",
+  "lg:col-span-5",
+  "lg:col-span-7",
+];
 
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-  });
-  const y = useTransform(smoothProgress, [0, 1], [60, -60]);
-  const opacity = useTransform(
-    scrollYProgress,
-    [0, 0.15, 0.85, 1],
-    [0, 1, 1, 0],
-  );
+// Set to a category index to make that panel an accent-inverted focal block.
+// -1 = no permanent accent (accent only shows on index numbers + chip hover).
+const ACCENT_INDEX = -1;
+
+export default function SkillsSection({ categories }: SkillsSectionProps) {
+  const total = categories.reduce((n, c) => n + c.skills.length, 0);
 
   return (
-    <section
-      ref={sectionRef}
-      id="skills"
-      className="py-28 px-4 bg-[#1a1a1a] text-[#f1efe7] grain-overlay relative"
-    >
-      {/* Floating glow orbs */}
-      <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] rounded-full bg-cyan-500/10 blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-[20%] left-[-10%] w-[300px] h-[300px] rounded-full bg-blue-600/8 blur-[80px] pointer-events-none" />
+    <Section id="skills" dark>
+      <Container>
+        <SectionHeader dark index="03" kicker="THE STACK" title="ARSENAL" className="mb-6" />
 
-      <motion.div
-        style={{ y, opacity }}
-        className="max-w-6xl mx-auto relative z-10"
-      >
-        <FadeIn duration={0.8} className="text-center mb-20">
-          <h2
-            className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-b from-[#f1efe7] to-[#808080] bg-clip-text text-transparent"
-            style={{ fontFamily: "var(--font-playfair), Georgia, serif" }}
-          >
-            Technical Arsenal
-          </h2>
-          <p className="text-[#808080] text-lg max-w-lg mx-auto font-light">
-            Tools I use to bridge the gap between abstract algorithms and robust
-            systems
-          </p>
-        </FadeIn>
+        <p className="font-mono-label text-[11px] text-paper/50 mb-10 flex flex-wrap items-center gap-x-4 gap-y-1">
+          <span>FROM KERNELS TO MODELS — THE WHOLE STACK</span>
+          <span className="text-accent">
+            {String(categories.length).padStart(2, "0")} DOMAINS / {total}+ TOOLS
+          </span>
+        </p>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          {categories.map((category, catIndex) => (
-            <SkillCategoryCard
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3">
+          {categories.map((category, i) => (
+            <SkillPanel
               key={category.title}
               category={category}
-              catIndex={catIndex}
-              iconMap={iconMap}
+              index={i}
+              span={SPANS[i] ?? "lg:col-span-6"}
+              accent={i === ACCENT_INDEX}
             />
           ))}
         </div>
-      </motion.div>
-    </section>
+      </Container>
+    </Section>
   );
 }
 
-// Extracted sub-component for skill categories
-interface SkillCategoryCardProps {
-  category: SkillCategory;
-  catIndex: number;
-  iconMap: Record<string, IconType>;
-}
-
-function SkillCategoryCard({
+function SkillPanel({
   category,
-  catIndex,
-  iconMap,
-}: SkillCategoryCardProps) {
+  index,
+  span,
+  accent,
+}: {
+  category: SkillCategory;
+  index: number;
+  span: string;
+  accent: boolean;
+}) {
+  const num = String(index + 1).padStart(2, "0");
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, delay: catIndex * 0.15 }}
-      whileHover={{ y: -5 }}
-      className="p-6 rounded-2xl bg-gradient-to-br from-white/8 to-white/3 backdrop-blur-xl border border-white/10 group h-full flex flex-col"
+      viewport={{ once: true, margin: "-40px" }}
+      transition={{ duration: 0.5, delay: index * 0.06 }}
+      className={`relative overflow-hidden p-5 sm:p-6 min-h-[190px] flex flex-col ${span} ${
+        accent
+          ? "bg-accent text-paper border-2 border-accent"
+          : "bg-ink text-paper border-2 border-paper/35 hover:border-accent transition-colors"
+      }`}
     >
-      <h3 className="text-xs font-semibold text-[#808080] uppercase tracking-widest mb-6 text-center border-b border-white/10 pb-4">
-        {category.title}
-      </h3>
-      <div className="flex flex-wrap gap-3 justify-center">
-        {category.skills.map((skill, skillIndex) => (
-          <SkillItem
-            key={skill.name}
-            skill={skill}
-            catIndex={catIndex}
-            skillIndex={skillIndex}
-            iconMap={iconMap}
-          />
-        ))}
+      {/* Oversized faded watermark index, fully contained in the top-right */}
+      <span
+        className="font-display absolute top-2 right-3 leading-none select-none pointer-events-none"
+        style={{
+          fontSize: "clamp(3.5rem, 7vw, 6rem)",
+          color: accent ? "rgba(255,255,255,0.18)" : "rgba(237,232,220,0.07)",
+        }}
+        aria-hidden="true"
+      >
+        {num}
+      </span>
+
+      <div className="relative z-10 flex flex-col h-full">
+        <div className="flex items-baseline gap-3 mb-5">
+          <span className={`font-mono-label text-[11px] ${accent ? "text-paper/80" : "text-accent"}`}>
+            {num}
+          </span>
+          <h3 className="font-display text-2xl sm:text-3xl leading-none">{category.title}</h3>
+          <span className={`font-mono-label text-[10px] ml-auto ${accent ? "text-paper/70" : "text-paper/40"}`}>
+            [{String(category.skills.length).padStart(2, "0")}]
+          </span>
+        </div>
+
+        <div className="flex flex-wrap gap-2 mt-auto">
+          {category.skills.map((skill) => (
+            <span
+              key={skill}
+              className={`px-3 py-1.5 font-mono text-xs transition-colors ${
+                accent
+                  ? "border border-paper/50 text-paper hover:bg-paper hover:text-accent"
+                  : "border border-paper/25 text-paper/85 hover:bg-accent hover:border-accent hover:text-paper"
+              }`}
+            >
+              {skill}
+            </span>
+          ))}
+        </div>
       </div>
-    </motion.div>
-  );
-}
-
-// Extracted sub-component for individual skills
-interface SkillItemProps {
-  skill: Skill;
-  catIndex: number;
-  skillIndex: number;
-  iconMap: Record<string, IconType>;
-}
-
-function SkillItem({ skill, catIndex, skillIndex, iconMap }: SkillItemProps) {
-  const IconComponent = iconMap[skill.icon];
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, scale: 0.8 }}
-      whileInView={{ opacity: 1, scale: 1 }}
-      viewport={{ once: true }}
-      transition={{ delay: catIndex * 0.1 + skillIndex * 0.05 }}
-      whileHover={{ scale: 1.05, backgroundColor: "rgba(255,255,255,0.1)" }}
-      className="flex items-center gap-2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 transition-all cursor-default w-full"
-    >
-      <div className="p-1.5 rounded-md bg-[#1a1a1a]/50">
-        {IconComponent && (
-          <IconComponent size={16} style={{ color: skill.color }} />
-        )}
-      </div>
-      <span className="text-sm font-medium text-[#c0c0c0]">{skill.name}</span>
     </motion.div>
   );
 }

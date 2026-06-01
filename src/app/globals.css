@@ -1,10 +1,22 @@
 @import "tailwindcss";
 
+/* ===== DESIGN TOKENS (Tailwind v4 @theme -> utilities) ===== */
+@theme {
+  --color-paper: #ede8dc;
+  --color-paper-dim: #e3ddcd;
+  --color-ink: #0e0e0e;
+  --color-ink-soft: #2a2a2a;
+  --color-accent: #ff3d00;
+  --color-accent-dim: #d63300;
+
+  --font-sans: var(--font-space-grotesk), system-ui, -apple-system, sans-serif;
+  --font-display: var(--font-anton), "Arial Narrow", Impact, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
 :root {
-  --background: #f1efe7;
-  --foreground: #1a1a1a;
-  --text-muted: #4a4a4a;
-  --text-subtle: #6b6b6b;
+  --background: #ede8dc;
+  --foreground: #0e0e0e;
 }
 
 /* Hide cursor only on devices with fine pointer (mouse) */
@@ -21,7 +33,7 @@ html {
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans);
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -38,31 +50,88 @@ body {
   scrollbar-width: none;
 }
 
-/* ===== GLASS EFFECTS ===== */
-.glass-cake {
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
-}
-
-/* ===== TEXT GRADIENT ===== */
-.text-gradient-dark {
-  background: linear-gradient(180deg, #1a1a1a 0%, #4a4a4a 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  padding-bottom: 0.1em;
-}
-
 /* ===== SELECTION ===== */
 ::selection {
-  background: rgba(26, 26, 26, 0.9);
+  background: var(--color-accent);
   color: #ffffff;
 }
 
-/* ===== TEXTURE OVERLAYS ===== */
+/* ===== DISPLAY TYPE HELPERS ===== */
+.font-display {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  line-height: 0.85;
+}
+
+.font-mono-label {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+}
+
+/* Outlined / stroked display text for layered headlines */
+.text-stroke {
+  -webkit-text-stroke: 2px var(--color-ink);
+  color: transparent;
+}
+
+.text-stroke-accent {
+  -webkit-text-stroke: 2px var(--color-accent);
+  color: transparent;
+}
+
+/* ===== BRUTALIST SURFACES ===== */
+.hard-border {
+  border: 2px solid var(--color-ink);
+}
+
+.hard-shadow {
+  box-shadow: 6px 6px 0 0 var(--color-ink);
+}
+
+.hard-shadow-accent {
+  box-shadow: 6px 6px 0 0 var(--color-accent);
+}
+
+.hard-shadow-sm {
+  box-shadow: 4px 4px 0 0 var(--color-ink);
+}
+
+/* ===== EXPOSED GRID BACKGROUND ===== */
+.grid-lines {
+  background-image:
+    linear-gradient(to right, rgba(14, 14, 14, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(14, 14, 14, 0.06) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.grid-lines-dark {
+  background-image:
+    linear-gradient(to right, rgba(237, 232, 220, 0.07) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(237, 232, 220, 0.07) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* ===== MARQUEE ===== */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee-scroll var(--marquee-duration, 30s) linear infinite;
+}
+
+.animate-marquee-reverse {
+  animation: marquee-scroll var(--marquee-duration, 30s) linear infinite reverse;
+}
+
+/* ===== GRAIN TEXTURE (kept, subtle) ===== */
 .grain-overlay {
   position: relative;
 }
@@ -74,44 +143,18 @@ body {
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
   pointer-events: none;
   z-index: 1;
-  opacity: 0.4;
+  opacity: 0.5;
   mix-blend-mode: overlay;
 }
 
-/* ===== RADIAL GLOW (Dark sections) ===== */
-.radial-glow {
-  position: relative;
+/* ===== BACKWARD-COMPAT SHIMS (blog + leftover usages) ===== */
+.text-gradient-dark {
+  color: var(--color-ink);
 }
 
-.radial-glow::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 100%;
-  height: 100%;
-  transform: translate(-50%, -50%);
-  background: radial-gradient(ellipse at center, rgba(255, 255, 255, 0.03) 0%, transparent 70%);
-  pointer-events: none;
-  z-index: 0;
-}
-
-/* ===== DIAGONAL LINES (Subtle texture) ===== */
-.diagonal-lines {
-  position: relative;
-}
-
-.diagonal-lines::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: repeating-linear-gradient(45deg,
-      transparent,
-      transparent 40px,
-      rgba(255, 255, 255, 0.01) 40px,
-      rgba(255, 255, 255, 0.01) 80px);
-  pointer-events: none;
-  z-index: 0;
+.glass-cake {
+  background: var(--color-paper);
+  border: 2px solid var(--color-ink);
 }
 
 /* ===== UTILITIES ===== */
@@ -146,14 +189,15 @@ button:focus-visible,
 a:focus-visible,
 input:focus-visible,
 textarea:focus-visible {
-  outline: 2px solid rgba(26, 26, 26, 0.5);
-  outline-offset: 4px;
-  border-radius: 4px;
+  outline: 3px solid var(--color-accent);
+  outline-offset: 3px;
 }
 
 /* ===== REDUCED MOTION ===== */
 @media (prefers-reduced-motion: reduce) {
-  * {
+  *,
+  .animate-marquee,
+  .animate-marquee-reverse {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -165,16 +209,15 @@ textarea:focus-visible {
 }
 
 /* ===== MDX CODE STYLING ===== */
-/* Only style inline code, leave code blocks (inside pre) alone */
-:not(pre)>code {
-  background-color: #e8e8e8;
-  color: #1a1a1a;
+:not(pre) > code {
+  background-color: var(--color-ink);
+  color: var(--color-paper);
   padding: 0.2rem 0.4rem;
-  border-radius: 0.25rem;
+  border-radius: 0;
+  font-family: var(--font-mono);
 }
 
 /* ===== CODE BLOCK SCROLLBAR ===== */
-/* Override hidden scrollbar for code blocks */
 pre.code-block {
   scrollbar-width: thin;
   scrollbar-color: #4a4a4a transparent;
@@ -188,12 +231,10 @@ pre.code-block::-webkit-scrollbar {
 
 pre.code-block::-webkit-scrollbar-track {
   background: transparent;
-  border-radius: 4px;
 }
 
 pre.code-block::-webkit-scrollbar-thumb {
   background-color: #4a4a4a;
-  border-radius: 4px;
 }
 
 pre.code-block::-webkit-scrollbar-thumb:hover {

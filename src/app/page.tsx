@@ -7,10 +7,9 @@ import SkillsSection from '@/components/sections/SkillsSection';
 import ProjectsCarousel from '@/components/sections/ProjectsCarousel';
 import Footer from '@/components/sections/Footer';
 import Navbar from '@/components/ui/Navbar';
-import ParallaxBackground from '@/components/effects/ParallaxBackground';
-import WaveDivider from '@/components/effects/WaveDivider';
+import Marquee from '@/components/ui/Marquee';
 
-import type { Project, Skill, SkillCategory, Experience, Achievement } from '@/types';
+import type { Project, SkillCategory, Experience, Achievement } from '@/types';
 
 interface SkillsData {
   categories: SkillCategory[];
@@ -41,63 +40,43 @@ async function getExperience(): Promise<ExperienceData> {
   return JSON.parse(jsonData);
 }
 
+// Full-bleed accent strip used between sections
+function AccentStrip({ items, reverse }: { items: string[]; reverse?: boolean }) {
+  return (
+    <div className="bg-accent text-paper border-y-2 border-ink py-2.5 font-display text-xl sm:text-2xl">
+      <Marquee items={items} reverse={reverse} durationSec={24} separator="/" />
+    </div>
+  );
+}
+
 export default async function Home() {
   const projects = await getProjects();
   const skillCategories = await getSkills();
   const experienceData = await getExperience();
 
   return (
-    <main className="relative overflow-x-hidden">
-      {/* Parallax Glass Background */}
-      <div className="absolute inset-0 h-screen">
-        <ParallaxBackground />
-      </div>
-
+    <main className="relative overflow-x-hidden bg-paper">
       <Navbar />
 
-      {/* Hero - sticky so content scrolls over */}
-      <div className="sticky top-0 z-0">
-        <Hero />
-      </div>
-      
-      {/* Wave OVERLAYS the hero image */}
-      <div className="relative z-20 -mt-24">
-        <WaveDivider fromColor="transparent" toColor="#1a1a1a" />
-      </div>
-      
-      {/* Content */}
-      <div className="relative z-20 bg-[#1a1a1a]">
-        <AboutSection />
-        <WaveDivider fromColor="#1a1a1a" toColor="#f1efe7" />
-      </div>
+      <Hero />
 
-      {/* Experience Section - Creamy Background */}
-      <div className="relative z-20 bg-[#f1efe7]">
-        <ExperienceSection 
-          workExperience={experienceData.workExperience} 
-          leadership={experienceData.leadership}
-          achievements={experienceData.achievements}
-        />
-        <WaveDivider fromColor="#f1efe7" toColor="#1a1a1a" />
-      </div>
+      <AboutSection />
 
-      {/* Skills Section - Dark Background */}
-      <div className="relative z-20 bg-[#1a1a1a]">
-        <SkillsSection categories={skillCategories} />
-        <WaveDivider fromColor="#1a1a1a" toColor="#f1efe7" />
-      </div>
+      <AccentStrip items={['SELECTED WORK', 'EXPERIENCE', 'RESEARCH', 'LEADERSHIP']} />
 
-      {/* Projects Section */}
-      <section id="projects" className="relative z-20 bg-[#f1efe7]">
-        <ProjectsCarousel projects={projects} />
-        <WaveDivider fromColor="#f1efe7" toColor="#1a1a1a" />
-      </section>
+      <ExperienceSection
+        workExperience={experienceData.workExperience}
+        leadership={experienceData.leadership}
+        achievements={experienceData.achievements}
+      />
 
-      {/* Footer */}
-      <div className="relative z-20">
-        <Footer />
-      </div>
+      <SkillsSection categories={skillCategories} />
+
+      <AccentStrip items={['BUILT WITH', 'SHIPPED', 'CODE', 'CRAFT']} reverse />
+
+      <ProjectsCarousel projects={projects} />
+
+      <Footer />
     </main>
   );
 }
-

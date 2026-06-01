@@ -3,6 +3,9 @@ import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
 
+// Required for `output: export` (static HTML export for the college-forum mirror).
+export const dynamic = 'force-static'
+
 const BASE_URL = 'https://shrey715.vercel.app'
 
 function getBlogPosts(): { slug: string; lastModified: Date }[] {

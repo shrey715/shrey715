@@ -27,19 +27,18 @@ export default function ScrollIndicator() {
 
   return (
     <motion.div
-      className="fixed right-0 top-0 bottom-0 w-1 z-[9999] pointer-events-none"
+      className="fixed right-0 top-0 bottom-0 w-1.5 z-[9999] pointer-events-none"
       initial={{ opacity: 0 }}
       animate={{ opacity: isVisible ? 1 : 0 }}
       transition={{ duration: 0.3 }}
     >
       <div className="absolute inset-0 bg-transparent" />
       <motion.div
-        className="absolute top-0 left-0 right-0 origin-top rounded-full"
+        className="absolute top-0 left-0 right-0 origin-top"
         style={{
           scaleY,
           height: '100%',
-          background: 'gray',
-          mixBlendMode: 'difference',
+          background: 'var(--color-accent)',
         }}
       />
     </motion.div>

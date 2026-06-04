@@ -28,9 +28,8 @@ export default function Footer() {
         </div>
 
         <h2 className="font-display leading-[0.82]" style={{ fontSize: 'clamp(3rem, 12vw, 10rem)' }}>
-          <RevealText text="LET'S BUILD" />
-          <br />
-          <span className="text-accent"><RevealText text="SOMETHING" /></span>
+          <RevealText text="SAY" />
+          <span className="text-accent"><RevealText text="HELLO" /></span>
         </h2>
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 mt-14 items-start">

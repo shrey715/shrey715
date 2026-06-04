@@ -1,55 +1,58 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 
+/**
+ * Brutalist cursor: a single solid square that inverts whatever sits beneath it
+ * (mix-blend-difference) and grows into a block over interactive elements, plus
+ * a solid accent tag surfacing the hovered element's `data-cursor` label.
+ * Hidden until a mouse is used (touch devices keep the native cursor).
+ */
 export default function CustomCursor() {
-  const dotRef = useRef<HTMLDivElement>(null);
-  const ringRef = useRef<HTMLDivElement>(null);
+  const blockRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLDivElement>(null);
+
   const [isHovering, setIsHovering] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const [usingMouse, setUsingMouse] = useState(false);
   const [label, setLabel] = useState('');
-  
-  const pos = useRef({ x: 0, y: 0 });
-  const dotPos = useRef({ x: 0, y: 0 });
-  const ringPos = useRef({ x: 0, y: 0 });
+
+  const target = useRef({ x: 0, y: 0 });
+  const current = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     let animationId: number;
-    
+
     const animate = () => {
-      dotPos.current.x += (pos.current.x - dotPos.current.x) * 0.35;
-      dotPos.current.y += (pos.current.y - dotPos.current.y) * 0.35;
-      
-      ringPos.current.x += (pos.current.x - ringPos.current.x) * 0.15;
-      ringPos.current.y += (pos.current.y - ringPos.current.y) * 0.15;
-      
-      if (dotRef.current) {
-        dotRef.current.style.transform = `translate(${dotPos.current.x}px, ${dotPos.current.y}px) translate(-50%, -50%)`;
+      current.current.x += (target.current.x - current.current.x) * 0.3;
+      current.current.y += (target.current.y - current.current.y) * 0.3;
+
+      if (blockRef.current) {
+        blockRef.current.style.transform = `translate(${current.current.x}px, ${current.current.y}px) translate(-50%, -50%)`;
       }
-      if (ringRef.current) {
-        ringRef.current.style.transform = `translate(${ringPos.current.x}px, ${ringPos.current.y}px) translate(-50%, -50%)`;
+      if (labelRef.current) {
+        labelRef.current.style.transform = `translate(${current.current.x + 22}px, ${current.current.y + 16}px)`;
       }
-      
+
       animationId = requestAnimationFrame(animate);
     };
 
     const handleMouseMove = (e: MouseEvent) => {
-      pos.current = { x: e.clientX, y: e.clientY };
+      target.current = { x: e.clientX, y: e.clientY };
       setIsVisible(true);
       if (!usingMouse) {
         setUsingMouse(true);
         document.body.style.cursor = 'none';
       }
-      
-      const target = e.target as HTMLElement;
-      const isClickable =
-        target.tagName === 'A' ||
-        target.tagName === 'BUTTON' ||
-        target.closest('a') !== null ||
-        target.closest('button') !== null;
-      setIsHovering(isClickable);
 
-      const labelEl = target.closest('[data-cursor]');
+      const el = e.target as HTMLElement;
+      setIsHovering(
+        el.tagName === 'A' ||
+          el.tagName === 'BUTTON' ||
+          el.closest('a') !== null ||
+          el.closest('button') !== null,
+      );
+
+      const labelEl = el.closest('[data-cursor]');
       setLabel(labelEl ? labelEl.getAttribute('data-cursor') || '' : '');
     };
 
@@ -82,37 +85,34 @@ export default function CustomCursor() {
 
   if (!usingMouse) return null;
 
+  const size = isHovering || label ? 44 : 12;
+
   return (
     <>
+      {/* Solid inverting block */}
       <div
-        ref={dotRef}
-        className="fixed top-0 left-0 pointer-events-none z-[99999] will-change-transform rounded-full mix-blend-difference"
+        ref={blockRef}
+        className="fixed top-0 left-0 z-[99999] pointer-events-none mix-blend-difference will-change-transform bg-white"
         style={{
-          width: isHovering ? 16 : 10,
-          height: isHovering ? 16 : 10,
-          background: '#ffffff',
-          opacity: isVisible && !label ? 1 : 0,
-          transition: 'width 0.2s, height 0.2s, opacity 0.2s',
+          width: size,
+          height: size,
+          opacity: isVisible ? 1 : 0,
+          transition: 'width 0.2s ease, height 0.2s ease, opacity 0.2s',
         }}
       />
-      <div
-        ref={ringRef}
-        className="fixed top-0 left-0 pointer-events-none z-[99998] will-change-transform rounded-full mix-blend-difference flex items-center justify-center"
-        style={{
-          width: label ? 76 : isHovering ? 60 : 44,
-          height: label ? 76 : isHovering ? 60 : 44,
-          border: '2px solid #ffffff',
-          background: label ? '#ffffff' : isHovering ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
-          opacity: isVisible ? 1 : 0,
-          transition: 'width 0.3s, height 0.3s, opacity 0.2s, background 0.3s',
-        }}
-      >
-        {label && (
-          <span className="text-[10px] font-semibold uppercase tracking-[0.15em] text-black">
+
+      {/* Contextual label tag (solid accent, no blend) */}
+      {label && (
+        <div
+          ref={labelRef}
+          className="fixed top-0 left-0 z-[100000] pointer-events-none will-change-transform"
+          style={{ opacity: isVisible ? 1 : 0, transition: 'opacity 0.15s' }}
+        >
+          <span className="block bg-accent text-paper font-mono-label text-[10px] px-2 py-1 whitespace-nowrap">
             {label}
           </span>
-        )}
-      </div>
+        </div>
+      )}
     </>
   );
 }

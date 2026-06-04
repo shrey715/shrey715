@@ -42,11 +42,6 @@ export default async function BlogPage() {
         </div>
       </header>
 
-      {/* Accent marquee */}
-      <div className="bg-accent text-paper border-b-2 border-ink py-2.5 font-display text-xl sm:text-2xl">
-        <Marquee items={['SYSTEMS', 'AI', 'GAMING', 'ANIME', 'LINUX', 'EXPERIMENTS']} durationSec={24} separator="/" />
-      </div>
-
       {/* Featured */}
       {featuredPost && (
         <section className="max-w-[1500px] mx-auto px-4 sm:px-6 py-16">

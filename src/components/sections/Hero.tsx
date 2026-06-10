@@ -3,19 +3,9 @@ import Image from "next/image";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 import { Send } from "lucide-react";
-import Marquee from "@/components/ui/Marquee";
 import { EASE_OUT as EASE } from "@/lib/constants";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
-
-const marqueeItems = [
-  "BUILDER",
-  "RESEARCHER",
-  "READER",
-  "ANIME ENTHUSIAST",
-  "LEARNER",
-  "COMPETITIVE PROGRAMMER",
-];
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -167,15 +157,6 @@ export default function Hero() {
         </div>
       </motion.div>
 
-      {/* Bottom marquee strip */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.9 }}
-        className="w-full border-t-2 border-ink bg-ink text-paper py-3 font-display text-2xl sm:text-3xl"
-      >
-        <Marquee items={marqueeItems} durationSec={32} />
-      </motion.div>
     </section>
   );
 }

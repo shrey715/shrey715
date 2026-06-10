@@ -113,24 +113,6 @@ body {
   background-size: 64px 64px;
 }
 
-/* ===== MARQUEE ===== */
-@keyframes marquee-scroll {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
-
-.animate-marquee {
-  animation: marquee-scroll var(--marquee-duration, 30s) linear infinite;
-}
-
-.animate-marquee-reverse {
-  animation: marquee-scroll var(--marquee-duration, 30s) linear infinite reverse;
-}
-
 /* ===== GRAIN TEXTURE (kept, subtle) ===== */
 .grain-overlay {
   position: relative;
@@ -195,9 +177,7 @@ textarea:focus-visible {
 
 /* ===== REDUCED MOTION ===== */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  .animate-marquee,
-  .animate-marquee-reverse {
+  * {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

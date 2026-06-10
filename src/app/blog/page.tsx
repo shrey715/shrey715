@@ -2,7 +2,6 @@ import { getAllPosts, BlogPost } from '@/lib/blog';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Calendar, Clock, ArrowRight, ArrowLeft } from 'lucide-react';
-import Marquee from '@/components/ui/Marquee';
 
 export const metadata = {
   title: 'Blogs | Shreyas Deb',

@@ -26,7 +26,7 @@ export default function ContactForm() {
           whileTap={{ scale: 0.99 }}
           className="w-full py-4 px-5 font-mono-label text-sm flex items-center justify-between gap-3 bg-ink text-paper hard-border"
         >
-          <span>SAY HELLO</span>
+          <span>Contact me!</span>
           <ArrowRight size={18} />
         </motion.a>
       </div>

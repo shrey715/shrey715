@@ -1,5 +1,19 @@
 [
   {
+    "id": "project-10",
+    "title": "Cuffka — Kafka with Raft",
+    "description": "A ground-up reimplementation of Apache Kafka in Go: a distributed pub-sub message broker backed by a Raft-based controller quorum (KRaft-inspired) with automatic leader election, append-only partitioned commit logs, and consumer-group coordination. Ships a full admin CLI for topic management, producing, and consuming — built directly from the original Kafka and Raft papers.",
+    "tech": [
+      "Go",
+      "Raft",
+      "Distributed Systems",
+      "Pub/Sub"
+    ],
+    "link": "https://github.com/shrey715/cuffka",
+    "year": "2026",
+    "featured": true
+  },
+  {
     "id": "project-1",
     "title": "Network File System (Docs++)",
     "description": "Distributed file system called \"Docs++\" with Google Docs-like functionality, featuring concurrent editing with sentence-level locking, hierarchical folder structure, checkpoint-based version control, access control with request/approval workflow, and comprehensive logging. Architecture includes Name Server (central coordinator), Storage Servers (file storage nodes), and Client components with 12+ file operations.",

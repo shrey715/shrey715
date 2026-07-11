@@ -1,5 +1,49 @@
 [
   {
+    "id": "project-13",
+    "title": "Pairs Trader",
+    "description": "Modular statistical arbitrage engine for NSE equities. Cointegration-based pair selection (Engle-Granger plus PCA/DBSCAN clustering), a rolling-OLS or Kalman-filter spread model, z-score or XGBoost-gated signals, and a bar-by-bar backtester with transaction costs — exposed via CLI, an interactive TUI, and a set of guided notebooks, backed by 112 tests.",
+    "tech": [
+      "Python",
+      "Cointegration",
+      "Kalman Filter",
+      "XGBoost",
+      "Statistical Arbitrage"
+    ],
+    "link": "https://github.com/shrey715/pairs-trader",
+    "year": "2026",
+    "featured": true
+  },
+  {
+    "id": "project-12",
+    "title": "StockSeqCompare",
+    "description": "Head-to-head benchmark of six PyTorch sequence architectures — LSTM, GRU, Transformer, BiLSTM, LSTM+Attention, CNN-LSTM — on next-day stock return prediction. A naive OHLCV baseline isolates raw architecture performance, while a second causal, look-ahead-free feature-engineered pipeline backtests each model as a long/short strategy against buy-and-hold.",
+    "tech": [
+      "Python",
+      "PyTorch",
+      "Time Series",
+      "Deep Learning"
+    ],
+    "link": "https://github.com/shrey715/StockSeqCompare",
+    "year": "2026",
+    "featured": false
+  },
+  {
+    "id": "project-11",
+    "title": "Strat Backtester",
+    "description": "Pluggable options backtesting engine for NSE index derivatives (NIFTY, BANKNIFTY) built on a month of tick data. Ships a Streamlit dashboard, PDF tearsheet export, and a full risk-metrics suite — Sharpe with bootstrap confidence intervals, VaR/CVaR, drawdown analysis, and more — with strategies plugging into a common BaseStrategy interface.",
+    "tech": [
+      "Python",
+      "Streamlit",
+      "Pandas",
+      "Quantitative Finance",
+      "Backtesting"
+    ],
+    "link": "https://github.com/shrey715/strat-backtester",
+    "year": "2026",
+    "featured": true
+  },
+  {
     "id": "project-10",
     "title": "Cuffka — Kafka with Raft",
     "description": "A ground-up reimplementation of Apache Kafka in Go: a distributed pub-sub message broker backed by a Raft-based controller quorum (KRaft-inspired) with automatic leader election, append-only partitioned commit logs, and consumer-group coordination. Ships a full admin CLI for topic management, producing, and consuming — built directly from the original Kafka and Raft papers.",
@@ -26,6 +70,22 @@
     "link": "https://github.com/shrey715/network-file-system",
     "year": "2025",
     "featured": false
+  },
+  {
+    "id": "project-14",
+    "title": "Saathi",
+    "description": "Multi-agent AI mental wellness companion: an active-listening agent for empathetic conversation, a guided-coping agent for mindfulness techniques, and a multi-disciplinary advisory agent for holistic insight. Adds guided journaling and a crisis-mode escalation flow on top of a full-stack Next.js app.",
+    "tech": [
+      "TypeScript",
+      "Next.js",
+      "Python",
+      "Multi-Agent",
+      "LLM"
+    ],
+    "link": "https://github.com/shrey715/saathi",
+    "year": "2025",
+    "featured": false,
+    "deployment_link": "https://saathi-eight.vercel.app"
   },
   {
     "id": "project-2",

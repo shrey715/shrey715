@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { useRef } from "react";
 import { Send } from "lucide-react";
 import { EASE_OUT as EASE } from "@/lib/constants";
+import RegistrationMarks from "@/components/ui/RegistrationMarks";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
@@ -26,6 +27,7 @@ export default function Hero() {
       ref={sectionRef}
       className="min-h-screen relative bg-paper text-ink grid-lines overflow-hidden flex flex-col"
     >
+      <RegistrationMarks />
       {/* Top metadata bar */}
       <motion.div
         initial={{ opacity: 0 }}

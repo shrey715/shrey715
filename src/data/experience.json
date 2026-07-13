@@ -83,6 +83,13 @@
     ],
     "achievements": [
         {
+            "id": "ach-4",
+            "title": "Atlassian FastTrack Winner",
+            "organization": "Atlassian",
+            "year": "2026",
+            "description": "Selected as a winner among 300+ eligible candidates and received a Pre-Placement Interview (PPI) offer."
+        },
+        {
             "id": "ach-1",
             "title": "Action Plan Finalist",
             "organization": "IIT Bombay",
@@ -90,17 +97,24 @@
             "description": "Selected as Top 25 finalist from 3000+ entries at Action Plan — the flagship social entrepreneurship event of Abhyuday, IIT Bombay's Advitya Social Fest."
         },
         {
+            "id": "ach-5",
+            "title": "Most Impactful Award",
+            "organization": "HackIIIT",
+            "year": "2025",
+            "description": "Won the Most Impactful award at HackIIIT 2025 for Saathi, an AI-powered mental wellness platform."
+        },
+        {
             "id": "ach-2",
             "title": "Dean's List III",
             "organization": "IIIT Hyderabad",
-            "year": "2024",
+            "year": "Monsoon 2024",
             "description": "Awarded Dean's List III recognition for exceptional academic performance (top 15%)."
         },
         {
             "id": "ach-3",
             "title": "Merit List",
             "organization": "IIIT Hyderabad",
-            "year": "2023",
+            "year": "Monsoon 2024",
             "description": "Recognized on the Merit List for outstanding academic achievement (top 20%)."
         }
     ]

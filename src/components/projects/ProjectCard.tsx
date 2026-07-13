@@ -50,8 +50,7 @@ function ProjectCard({ project, index, onOpen }: ProjectCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-50px' }}
       transition={{ duration: 0.5, delay: Math.min(index * 0.1, 0.4) }}
-      className="flex-shrink-0 w-[320px] md:w-[400px] py-2"
-      style={{ scrollSnapAlign: 'start' }}
+      className="h-full py-2"
     >
       <motion.div
         onClick={handleCardClick}

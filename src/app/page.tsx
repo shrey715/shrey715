@@ -4,11 +4,12 @@ import Hero from '@/components/sections/Hero';
 import AboutSection from '@/components/sections/AboutSection';
 import ExperienceSection from '@/components/sections/ExperienceSection';
 import SkillsSection from '@/components/sections/SkillsSection';
-import ProjectsCarousel from '@/components/sections/ProjectsCarousel';
+import ProjectsTeaser from '@/components/sections/ProjectsTeaser';
 import Footer from '@/components/sections/Footer';
 import Navbar from '@/components/ui/Navbar';
+import { getProjects } from '@/lib/projects';
 
-import type { Project, SkillCategory, Experience, Achievement } from '@/types';
+import type { SkillCategory, Experience, Achievement } from '@/types';
 
 interface SkillsData {
   categories: SkillCategory[];
@@ -18,12 +19,6 @@ interface ExperienceData {
   workExperience: Experience[];
   leadership: Experience[];
   achievements: Achievement[];
-}
-
-async function getProjects(): Promise<Project[]> {
-  const filePath = path.join(process.cwd(), 'src/data/projects.json');
-  const jsonData = await fs.readFile(filePath, 'utf-8');
-  return JSON.parse(jsonData);
 }
 
 async function getSkills(): Promise<SkillCategory[]> {
@@ -60,7 +55,7 @@ export default async function Home() {
 
       <SkillsSection categories={skillCategories} />
 
-      <ProjectsCarousel projects={projects} />
+      <ProjectsTeaser projects={projects} />
 
       <Footer />
     </main>

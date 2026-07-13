@@ -28,7 +28,20 @@ export default function SectionHeader({
   const titleColor = dark ? 'text-paper' : 'text-ink';
 
   return (
-    <div className={className}>
+    <div className={`relative ${className}`}>
+      {/* Bleeding outline numeral — sits behind the title, cropped by the section. */}
+      <span
+        className="hidden md:block absolute -z-10 top-[-0.42em] right-[-0.04em] font-display leading-none select-none"
+        style={{
+          fontSize: 'clamp(9rem, 24vw, 20rem)',
+          WebkitTextStroke: `1.5px ${dark ? 'rgba(237,232,220,0.16)' : 'rgba(14,14,14,0.1)'}`,
+          color: 'transparent',
+        }}
+        aria-hidden="true"
+      >
+        {index}
+      </span>
+
       <div className={`flex items-center gap-4 mb-3 font-mono-label text-[11px] ${metaColor}`}>
         <span className="text-accent">({index})</span>
         {kicker && <span>{kicker}</span>}

@@ -109,7 +109,7 @@ export default function ExperienceSection({ workExperience, leadership, achievem
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: i * 0.08 }}
               whileHover={{ x: -3, y: -3 }}
-              className="p-6 hard-border bg-paper transition-shadow hover:shadow-[6px_6px_0_0_#ff3d00]"
+              className="p-6 hard-border bg-paper transition-shadow hover:shadow-[6px_6px_0_0_var(--color-accent)]"
             >
               <div className="flex items-center justify-between mb-3">
                 <span className="font-display text-3xl text-accent">★</span>

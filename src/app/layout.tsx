@@ -4,6 +4,7 @@ import { Anton, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/effects/CustomCursor";
 import ScrollIndicator from "@/components/effects/ScrollIndicator";
+import StatusReadout from "@/components/effects/StatusReadout";
 import Preloader from "@/components/effects/Preloader";
 import { JsonLdScript } from "@/lib/schema";
 
@@ -116,6 +117,7 @@ export default function RootLayout({
         <Preloader />
         <CustomCursor />
         <ScrollIndicator />
+        <StatusReadout />
         {children}
       </body>
     </html>

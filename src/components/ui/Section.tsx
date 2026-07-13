@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import RegistrationMarks from './RegistrationMarks';
 
 /** Shared inner column: centred, max-width, responsive horizontal padding. */
 export const CONTAINER = 'w-full max-w-[1500px] mx-auto px-4 sm:px-6';
@@ -36,6 +37,7 @@ export default function Section({ id, dark = false, className, children }: Secti
         className,
       )}
     >
+      <RegistrationMarks dark={dark} />
       {children}
     </section>
   );

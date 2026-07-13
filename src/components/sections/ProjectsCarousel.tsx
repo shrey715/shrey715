@@ -111,7 +111,10 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
     const d = drag.current;
     if (!d.active) return;
     const dx = e.clientX - d.startX;
-    if (Math.abs(dx) > 4) d.moved = true;
+    // Real clicks carry a few px of pointer jitter (mouse/trackpad) between
+    // down and up — a tight threshold here was swallowing genuine clicks as
+    // drags. A real drag-to-scroll covers a card width, so this stays safe.
+    if (Math.abs(dx) > 10) d.moved = true;
     const el = scrollRef.current;
     if (el) el.scrollLeft = d.startScroll - dx;
   };
@@ -123,7 +126,12 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
     const el = scrollRef.current;
     if (!el) return;
     el.style.scrollSnapType = ''; // restore mandatory snap -> lands on a card
-    scrollToIndex(Math.round(el.scrollLeft / getStep()));
+    // Only re-snap if an actual drag happened — calling scrollTo() here
+    // unconditionally (even a no-op, same-position one) was enough for the
+    // browser to suppress the click event that follows a plain click.
+    if (d.moved) {
+      scrollToIndex(Math.round(el.scrollLeft / getStep()));
+    }
   };
 
   // Swallow the click that ends a drag so it doesn't open a project.
@@ -190,7 +198,13 @@ export default function ProjectsCarousel({ projects }: ProjectsCarouselProps) {
         }}
       >
         {projects.map((project, index) => (
-          <ProjectCard key={project.id} project={project} index={index} onOpen={setActiveProject} />
+          <div
+            key={project.id}
+            className="flex-shrink-0 w-[320px] md:w-[400px]"
+            style={{ scrollSnapAlign: 'start' }}
+          >
+            <ProjectCard project={project} index={index} onOpen={setActiveProject} />
+          </div>
         ))}
       </div>
 

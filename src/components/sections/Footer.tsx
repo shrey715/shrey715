@@ -6,6 +6,7 @@ import { ArrowUp } from 'lucide-react';
 import ContactForm from '@/components/ui/ContactForm';
 import RevealText from '@/components/ui/RevealText';
 import { Container } from '@/components/ui/Section';
+import RegistrationMarks from '@/components/ui/RegistrationMarks';
 import { ACCENT } from '@/lib/constants';
 import type { SocialLink } from '@/types';
 
@@ -21,6 +22,7 @@ export default function Footer() {
 
   return (
     <footer id="contact" className="relative bg-ink text-paper grid-lines-dark pt-24 border-t-2 border-ink overflow-hidden">
+      <RegistrationMarks dark />
       <Container>
         <div className="font-mono-label text-[11px] text-paper/50 mb-4 flex items-center gap-3">
           <span className="text-accent">(05)</span> CONTACT

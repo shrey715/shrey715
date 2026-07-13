@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { User, Briefcase, Sparkles, FolderOpen } from 'lucide-react';
 import Magnetic from '@/components/ui/Magnetic';
+import { useSectionNav } from '@/hooks/useSectionNav';
 
 const navLinks = [
   { label: 'About', href: '#about', icon: User },
@@ -12,6 +13,7 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const { goToSection } = useSectionNav();
   const [isVisible, setIsVisible] = useState(false);
   const [activeSection, setActiveSection] = useState('');
 
@@ -54,11 +56,6 @@ export default function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const scrollToSection = (href: string) => {
-    const el = document.getElementById(href.replace('#', ''));
-    el?.scrollIntoView({ behavior: 'smooth' });
-  };
-
   return (
     <AnimatePresence>
       {isVisible && (
@@ -77,7 +74,7 @@ export default function Navbar() {
               return (
                 <Magnetic key={link.label} strength={0.3}>
                   <motion.button
-                    onClick={() => scrollToSection(link.href)}
+                    onClick={() => goToSection(link.href.replace('#', ''))}
                     whileTap={{ scale: 0.96 }}
                     className={`
                       px-3 py-3 sm:px-5 font-mono-label text-[11px] transition-colors duration-200

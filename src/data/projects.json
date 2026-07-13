@@ -1,5 +1,32 @@
 [
   {
+    "id": "project-16",
+    "title": "Natsuki",
+    "description": "Hybrid BM25 + dense retrieval search engine built from scratch (no IR library dependency), with a LambdaMART learned reranker and LLM query expansion on top. Validated end-to-end on BEIR/SciFact against real relevance judgments — each stage (bm25 < dense < hybrid < rerank) shows a clean, honestly-measured improvement, including an A/B test where query expansion was found to hurt more than it helped.",
+    "tech": [
+      "Python",
+      "Information Retrieval"
+    ],
+    "link": "https://github.com/shrey715/natsuki",
+    "year": "2026",
+    "featured": false
+  },
+  {
+    "id": "project-15",
+    "title": "Apollo",
+    "description": "Event-driven, temporal enterprise knowledge graph with an agentic workspace on top. Watches an issue tracker and wiki via webhooks, extracts entities with an LLM, resolves them against a canonical graph, and writes bi-temporal facts to Neo4j — every edge knows both when it became true and when Apollo learned it. An MCP server enforces an unbypassable permission filter over every graph query.",
+    "tech": [
+      "Python",
+      "Neo4j",
+      "LangGraph",
+      "MCP",
+      "Knowledge Graph"
+    ],
+    "link": "https://github.com/shrey715/apollo",
+    "year": "2026",
+    "featured": false
+  },
+  {
     "id": "project-13",
     "title": "Pairs Trader",
     "description": "Modular statistical arbitrage engine for NSE equities. Cointegration-based pair selection (Engle-Granger plus PCA/DBSCAN clustering), a rolling-OLS or Kalman-filter spread model, z-score or XGBoost-gated signals, and a bar-by-bar backtester with transaction costs — exposed via CLI, an interactive TUI, and a set of guided notebooks, backed by 112 tests.",
@@ -12,7 +39,7 @@
     ],
     "link": "https://github.com/shrey715/pairs-trader",
     "year": "2026",
-    "featured": true
+    "featured": false
   },
   {
     "id": "project-12",

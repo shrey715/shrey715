@@ -112,7 +112,7 @@ Goal was to combine both disks into one usable pool rather than treating them as
 wget -O - https://github.com/OpenMediaVault-Plugin-Developers/packages/raw/master/install | bash
 ```
 
-Then, from **Storage → mergerfs** in the OMV UI: select both underlying filesystems as branches, policy set to `mfs` (most-free-space), which spreads writes toward whichever disk has more room rather than filling one before touching the other.
+Then, from **Storage -> mergerfs** in the OMV UI: select both underlying filesystems as branches, policy set to `mfs` (most-free-space), which spreads writes toward whichever disk has more room rather than filling one before touching the other.
 
 One wrinkle: OMV doesn't expose the root/OS filesystem as poolable by default. The `openmediavault-sharerootfs` plugin fixes that by making root-filesystem paths selectable as OMV shared-folder targets, which in turn makes them usable as mergerfs branches — useful if you want to reclaim free space sitting on the OS disk instead of leaving it stranded.
 
@@ -126,9 +126,9 @@ minfreespace=20G
 
 Three private folders, each scoped to one user, plus standard SMB/CIFS shares layered on top:
 
-- **Storage → Shared Folders** — one folder per person, sitting on the mergerfs pool
-- **Storage → Shared Folders → Permissions** — owner gets read/write, everyone else gets nothing
-- **Services → SMB/CIFS** — enabled, one share per folder
+- **Storage -> Shared Folders** — one folder per person, sitting on the mergerfs pool
+- **Storage -> Shared Folders -> Permissions** — owner gets read/write, everyone else gets nothing
+- **Services -> SMB/CIFS** — enabled, one share per folder
 
 Connecting from client machines is the standard SMB path:
 

@@ -1,7 +1,7 @@
 "use client";
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin, FaGamepad } from "react-icons/fa";
-import { HiOutlineNewspaper } from "react-icons/hi";
+import { HiOutlineNewspaper, HiOutlineDocumentText } from "react-icons/hi";
 import { SiLinux } from "react-icons/si";
 import { MdOutlineSportsBasketball } from "react-icons/md";
 import { PiTelevisionSimpleBold } from "react-icons/pi";
@@ -10,9 +10,15 @@ import Section, { Container } from "@/components/ui/Section";
 import type { SocialLink, HobbyItem } from "@/types";
 
 const socialLinks: SocialLink[] = [
-  { icon: FaGithub, href: "https://github.com/shrey715", label: "GitHub" },
-  { icon: FaLinkedin, href: "https://www.linkedin.com/in/shreyasdeb/", label: "LinkedIn" },
-  { icon: HiOutlineNewspaper, href: "/blog", label: "Blog" },
+  { icon: FaGithub, href: "https://github.com/shrey715", label: "GitHub", external: true },
+  { icon: FaLinkedin, href: "https://www.linkedin.com/in/shreyasdeb/", label: "LinkedIn", external: true },
+  { icon: HiOutlineNewspaper, href: "/blog", label: "Blog", external: false },
+  {
+    icon: HiOutlineDocumentText,
+    href: `${process.env.NEXT_PUBLIC_BASE_PATH || ""}/assets/shreyas_deb_resume.pdf`,
+    label: "Resume",
+    external: true,
+  },
 ];
 
 const hobbies: HobbyItem[] = [
@@ -98,9 +104,9 @@ export default function AboutSection() {
                 <a
                   key={link.label}
                   href={link.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`group flex items-center gap-3 p-4 transition-colors hover:bg-accent hover:text-paper
+                  target={link.external ? "_blank" : undefined}
+                  rel={link.external ? "noopener noreferrer" : undefined}
+                  className={`group flex items-center gap-3 p-4 transition hover:bg-accent hover:text-paper active:scale-[0.97]
                     ${i % 2 === 0 ? "border-r-2" : ""} ${i < 2 ? "border-b-2" : ""} border-paper/30`}
                 >
                   <link.icon size={20} />

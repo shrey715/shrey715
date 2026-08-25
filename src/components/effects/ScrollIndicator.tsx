@@ -1,9 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 export default function ScrollIndicator() {
   const [isVisible, setIsVisible] = useState(false);
+  const prefersReducedMotion = useReducedMotion();
   const { scrollYProgress } = useScroll();
   const scaleY = useSpring(scrollYProgress, { stiffness: 200, damping: 30 });
 
@@ -25,9 +27,12 @@ export default function ScrollIndicator() {
     };
   }, []);
 
+  if (prefersReducedMotion) return null;
+
   return (
     <motion.div
-      className="fixed right-0 top-0 bottom-0 w-1.5 z-[9999] pointer-events-none"
+      aria-hidden="true"
+      className="fixed right-0 top-0 bottom-0 w-1.5 z-[9999] pointer-events-none print:hidden"
       initial={{ opacity: 0 }}
       animate={{ opacity: isVisible ? 1 : 0 }}
       transition={{ duration: 0.3 }}

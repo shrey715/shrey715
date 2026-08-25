@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useLenis } from 'lenis/react';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { EASE_OUT } from '@/lib/constants';
 
@@ -18,6 +19,7 @@ const HOLD_AFTER = 350; // ms to hold at 100 before the curtain lifts
  */
 export default function Preloader() {
   const prefersReducedMotion = useReducedMotion();
+  const lenis = useLenis();
   const [visible, setVisible] = useState(true);
   const [count, setCount] = useState(0);
 
@@ -32,6 +34,7 @@ export default function Preloader() {
     }
 
     document.body.style.overflow = 'hidden';
+    lenis?.stop();
 
     const start = performance.now();
     let raf = 0;
@@ -53,12 +56,14 @@ export default function Preloader() {
       cancelAnimationFrame(raf);
       clearTimeout(exitTimer);
       document.body.style.overflow = '';
+      lenis?.start();
     };
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, lenis]);
 
   // Restore scroll once the curtain has lifted.
   const handleExitComplete = () => {
     document.body.style.overflow = '';
+    lenis?.start();
     sessionStorage.setItem('preloaded', '1');
   };
 
@@ -67,7 +72,7 @@ export default function Preloader() {
       {visible && (
         <motion.div
           key="preloader"
-          className="fixed inset-0 z-[100000] flex flex-col items-center justify-center bg-paper grid-lines text-ink"
+          className="fixed inset-0 z-[100000] flex flex-col items-center justify-center bg-paper grid-lines text-ink print:hidden"
           exit={{ y: '-100%' }}
           transition={{ duration: 0.9, ease: [0.76, 0, 0.24, 1] }}
         >

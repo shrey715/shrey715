@@ -42,6 +42,8 @@ export interface SocialLink {
     icon: React.ComponentType<{ size?: number; className?: string }>;
     href: string;
     label: string;
+    /** Opens in a new tab. Defaults to true — set false for internal routes. */
+    external?: boolean;
 }
 
 export interface HobbyItem {

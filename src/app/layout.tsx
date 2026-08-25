@@ -6,6 +6,8 @@ import CustomCursor from "@/components/effects/CustomCursor";
 import ScrollIndicator from "@/components/effects/ScrollIndicator";
 import StatusReadout from "@/components/effects/StatusReadout";
 import Preloader from "@/components/effects/Preloader";
+import LenisProvider from "@/components/effects/LenisProvider";
+import Navbar from "@/components/ui/Navbar";
 import { JsonLdScript } from "@/lib/schema";
 
 // Massive condensed display face for hero + section megatype
@@ -94,7 +96,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="scroll-smooth">
+    <html lang="en">
       <head>
         <JsonLdScript />
         {/* Google Analytics */}
@@ -114,11 +116,20 @@ export default function RootLayout({
       <body
         className={`${anton.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased bg-paper text-ink`}
       >
-        <Preloader />
-        <CustomCursor />
-        <ScrollIndicator />
-        <StatusReadout />
-        {children}
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100001] focus:bg-accent focus:text-paper focus:font-mono-label focus:text-xs focus:px-3 focus:py-2"
+        >
+          SKIP TO CONTENT
+        </a>
+        <LenisProvider>
+          <Preloader />
+          <CustomCursor />
+          <ScrollIndicator />
+          <StatusReadout />
+          <Navbar />
+          {children}
+        </LenisProvider>
       </body>
     </html>
   );

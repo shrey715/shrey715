@@ -63,7 +63,7 @@ export default function ProjectsPageClient({ projects }: ProjectsPageClientProps
         <SectionHeader index="ALL" kicker="FULL INDEX" title="PROJECTS" className="mb-10" />
 
         {/* Search */}
-        <div className="flex items-center gap-3 hard-border bg-paper px-4 py-3.5">
+        <div className="flex items-center gap-3 hard-border bg-paper px-4 py-3.5 transition-[border-color,box-shadow] focus-within:border-accent focus-within:shadow-[4px_4px_0_0_var(--color-accent)]">
           <Search size={18} className="text-ink/40 shrink-0" />
           <input
             type="text"
@@ -72,6 +72,10 @@ export default function ProjectsPageClient({ projects }: ProjectsPageClientProps
             placeholder="SEARCH BY NAME, TECH, OR DESCRIPTION..."
             className="w-full bg-transparent outline-none font-mono-label text-xs sm:text-sm placeholder:text-ink/35"
           />
+          <span className="shrink-0 font-mono-label text-[11px] tabular-nums whitespace-nowrap">
+            <span className="text-accent">{String(results.length).padStart(3, '0')}</span>
+            <span className="text-ink/40">/{String(projects.length).padStart(3, '0')}</span>
+          </span>
           {query && (
             <button
               onClick={() => setQuery('')}
@@ -82,12 +86,6 @@ export default function ProjectsPageClient({ projects }: ProjectsPageClientProps
             </button>
           )}
         </div>
-
-        <p className="font-mono-label text-[11px] text-ink/45 mt-4">
-          <span className="text-accent">{String(results.length).padStart(3, '0')}</span>
-          {' / '}
-          {String(projects.length).padStart(3, '0')} MATCHES
-        </p>
       </Container>
 
       <Container className="pb-24 sm:pb-32">

@@ -6,7 +6,7 @@ import ExperienceSection from '@/components/sections/ExperienceSection';
 import SkillsSection from '@/components/sections/SkillsSection';
 import ProjectsTeaser from '@/components/sections/ProjectsTeaser';
 import Footer from '@/components/sections/Footer';
-import Navbar from '@/components/ui/Navbar';
+import SectionDivider from '@/components/ui/SectionDivider';
 import { getProjects } from '@/lib/projects';
 
 import type { SkillCategory, Experience, Achievement } from '@/types';
@@ -40,23 +40,26 @@ export default async function Home() {
   const experienceData = await getExperience();
 
   return (
-    <main className="relative overflow-x-hidden bg-paper">
-      <Navbar />
-
+    <main id="main" className="relative overflow-x-hidden bg-paper">
       <Hero />
 
+      <SectionDivider />
       <AboutSection />
 
+      <SectionDivider />
       <ExperienceSection
         workExperience={experienceData.workExperience}
         leadership={experienceData.leadership}
         achievements={experienceData.achievements}
       />
 
+      <SectionDivider />
       <SkillsSection categories={skillCategories} />
 
+      <SectionDivider />
       <ProjectsTeaser projects={projects} />
 
+      <SectionDivider />
       <Footer />
     </main>
   );

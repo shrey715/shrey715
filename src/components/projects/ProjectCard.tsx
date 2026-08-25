@@ -57,17 +57,18 @@ function ProjectCard({ project, index, onOpen }: ProjectCardProps) {
         data-cursor={hasDeploymentLink ? 'View' : 'Open'}
         initial={{ boxShadow: '6px 6px 0 0 #0e0e0e' }}
         whileHover={{ x: -4, y: -4, boxShadow: `12px 12px 0 0 ${ACCENT}` }}
+        whileTap={{ x: -2, y: -2, scale: 0.99 }}
         transition={{ type: 'spring', stiffness: 400, damping: 28 }}
         className="h-full bg-paper hard-border overflow-hidden cursor-pointer group"
       >
         {/* Index + meta bar */}
         <div className="flex items-stretch justify-between border-b-2 border-ink font-mono-label text-[10px]">
-          <span className="px-3 py-2 border-r-2 border-ink">
+          <span className="px-3 py-2 border-r-2 border-ink tabular-nums">
             {String(index + 1).padStart(2, '0')}
           </span>
-          <span className="px-3 py-2 flex-1 flex items-center text-ink/50">
+          <data className="px-3 py-2 flex-1 flex items-center text-ink/50 tabular-nums">
             {project.year || '—'}
-          </span>
+          </data>
           {hasDeploymentLink ? (
             <span className="px-3 py-2 bg-accent text-paper flex items-center">LIVE</span>
           ) : project.status ? (
@@ -88,6 +89,7 @@ function ProjectCard({ project, index, onOpen }: ProjectCardProps) {
           ) : (
             <span className="text-6xl select-none grayscale">🚀</span>
           )}
+          <span className="halftone-overlay" aria-hidden="true" />
         </div>
 
         {/* Body */}

@@ -32,7 +32,7 @@ export default function Section({ id, dark = false, className, children }: Secti
     <section
       id={id}
       className={cn(
-        'relative min-h-screen flex flex-col justify-center py-24 sm:py-32 overflow-hidden border-t-2 border-ink',
+        'relative min-h-dvh flex flex-col justify-center py-24 sm:py-32 overflow-clip border-t-2 border-ink',
         dark ? 'bg-ink text-paper grid-lines-dark' : 'bg-paper text-ink grid-lines',
         className,
       )}

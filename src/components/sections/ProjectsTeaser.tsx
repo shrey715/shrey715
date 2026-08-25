@@ -17,7 +17,6 @@ const SPANS = ['lg:col-span-7', 'lg:col-span-5', 'lg:col-span-4', 'lg:col-span-4
 
 export default function ProjectsTeaser({ projects }: ProjectsTeaserProps) {
   const featured = projects.filter((p) => p.featured);
-  const total = projects.length;
 
   return (
     <Section id="projects">
@@ -25,13 +24,6 @@ export default function ProjectsTeaser({ projects }: ProjectsTeaserProps) {
         <SectionHeader index="04" kicker="SELECTED" title="PROJECTS" className="mb-10" />
 
         <div className="max-w-2xl mb-12">
-          <p className="text-lg sm:text-xl font-medium leading-snug mb-8">
-            <span className="text-accent font-bold">{String(total).padStart(2, '0')+" "}</span> shipped
-            builds spanning distributed systems, quant research, and applied ML — the
-            full index lives on its own page, with search that actually understands
-            what you&apos;re looking for.
-          </p>
-
           <Link href="/projects" data-cursor="Browse">
             <motion.span
               whileHover={{ x: -3, y: -3, boxShadow: `8px 8px 0 0 ${ACCENT}` }}
@@ -66,6 +58,7 @@ function FeaturedPanel({ project, index, span }: { project: Project; index: numb
         viewport={{ once: true, margin: '-40px' }}
         transition={{ duration: 0.5, delay: index * 0.07 }}
         whileHover={{ x: -4, y: -4, boxShadow: `8px 8px 0 0 ${ACCENT}` }}
+        whileTap={{ x: -2, y: -2, scale: 0.99 }}
         className="relative overflow-hidden p-6 min-h-[190px] h-full flex flex-col bg-paper text-ink hard-border cursor-pointer group"
       >
         {/* Oversized faded watermark index, fully contained in the top-right */}

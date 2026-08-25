@@ -47,7 +47,7 @@ export default async function BlogPostPage({ params }: Props) {
   const components = useMDXComponents({});
 
   return (
-    <main className="min-h-screen bg-paper text-ink grid-lines">
+    <main id="main" className="min-h-dvh bg-paper text-ink grid-lines">
       {/* Top nav bar */}
       <div className="px-4 sm:px-6 py-4 border-b-2 border-ink">
         <div className="max-w-3xl mx-auto">

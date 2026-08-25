@@ -1,15 +1,22 @@
 "use client";
 import Image from "next/image";
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
 import { useRef } from "react";
 import { Send } from "lucide-react";
+import { useLenis } from "lenis/react";
 import { EASE_OUT as EASE } from "@/lib/constants";
 import RegistrationMarks from "@/components/ui/RegistrationMarks";
+import ScrambleText from "@/components/ui/ScrambleText";
+import Magnetic from "@/components/ui/Magnetic";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
+  const lenis = useLenis();
+  const prefersReducedMotion = useReducedMotion();
+
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
@@ -22,10 +29,44 @@ export default function Hero() {
   const imageY = useTransform(smoothProgress, [0, 1], [0, 80]);
   const contentY = useTransform(smoothProgress, [0, 1], [0, -40]);
 
+  // Cursor-tracked tilt for the portrait (springs keep it weighty, not twitchy).
+  const tiltX = useMotionValue(0.5);
+  const tiltY = useMotionValue(0.5);
+  const rotateX = useSpring(useTransform(tiltY, [0, 1], [7, -7]), {
+    stiffness: 140,
+    damping: 18,
+  });
+  const rotateY = useSpring(useTransform(tiltX, [0, 1], [-7, 7]), {
+    stiffness: 140,
+    damping: 18,
+  });
+
+  const handleTilt = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (prefersReducedMotion) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    tiltX.set((e.clientX - rect.left) / rect.width);
+    tiltY.set((e.clientY - rect.top) / rect.height);
+  };
+
+  const resetTilt = () => {
+    tiltX.set(0.5);
+    tiltY.set(0.5);
+  };
+
+  const scrollToContact = () => {
+    const el = document.getElementById("contact");
+    if (!el) return;
+    if (lenis) {
+      lenis.scrollTo(el, { duration: 1.6 });
+    } else {
+      el.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <section
       ref={sectionRef}
-      className="min-h-screen relative bg-paper text-ink grid-lines overflow-hidden flex flex-col"
+      className="min-h-dvh relative bg-paper text-ink grid-lines overflow-hidden flex flex-col"
     >
       <RegistrationMarks />
       {/* Top metadata bar */}
@@ -38,13 +79,9 @@ export default function Hero() {
         <span className="px-4 py-2.5 border-r-2 border-ink hidden sm:block">
           IIIT&nbsp;HYDERABAD
         </span>
-        <span className="px-4 py-2.5 flex-1 hidden md:flex items-center">
+        <data className="px-4 py-2.5 flex-1 hidden md:flex items-center tabular-nums">
           17.45°N&nbsp;/&nbsp;78.35°E
-        </span>
-        <span className="px-4 py-2.5 border-l-2 border-ink flex items-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-          CURRENTLY&nbsp;BUILDING
-        </span>
+        </data>
       </motion.div>
 
       {/* Main composition */}
@@ -60,7 +97,10 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.5 }}
             className="font-mono-label text-xs text-ink/60 mb-4 flex items-center gap-3"
           >
-            <span className="text-accent">{"// HELLO_WORLD"}</span>
+            <span className="text-accent">
+              {"// "}
+              <ScrambleText text="HELLO_WORLD" duration={1100} delay={700} />
+            </span>
             <span className="hidden sm:inline">I&apos;M</span>
           </motion.p>
 
@@ -83,22 +123,22 @@ export default function Hero() {
                 transition={{ duration: 0.9, ease: EASE, delay: 0.42 }}
               >
                 <span className="text-accent">DEB</span>
-                <motion.button
-                  type="button"
-                  onClick={() =>
-                    document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" })
-                  }
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.6, delay: 1.1 }}
-                  whileHover={{ x: 5, y: -5, rotate: 8 }}
-                  whileTap={{ scale: 0.9 }}
-                  aria-label="Get in touch"
-                  data-cursor="SAY HI"
-                  className="text-ink shrink-0 self-center cursor-pointer"
-                >
-                  <Send className="w-9 h-9 sm:w-12 sm:h-12 lg:w-16 lg:h-16" strokeWidth={2} />
-                </motion.button>
+                <Magnetic strength={0.45} className="shrink-0 self-center">
+                  <motion.button
+                    type="button"
+                    onClick={scrollToContact}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.6, delay: 1.1 }}
+                    whileHover={{ x: 5, y: -5, rotate: 8 }}
+                    whileTap={{ scale: 0.9 }}
+                    aria-label="Get in touch"
+                    data-cursor="SAY HI"
+                    className="text-ink cursor-pointer active:scale-90 transition-transform"
+                  >
+                    <Send className="w-9 h-9 sm:w-12 sm:h-12 lg:w-16 lg:h-16" strokeWidth={2} />
+                  </motion.button>
+                </Magnetic>
               </motion.span>
             </span>
           </h1>
@@ -136,24 +176,53 @@ export default function Hero() {
           >
             {/* Accent block behind */}
             <div className="absolute -inset-3 sm:-inset-5 bg-accent translate-x-3 translate-y-3" />
-            {/* Framed duotone portrait */}
+            {/* Framed duotone portrait — cursor-tracked tilt + RGB-split glitch on hover */}
             <motion.div
-              style={{ y: imageY }}
-              className="relative hard-border bg-paper-dim overflow-hidden w-[75vw] max-w-[460px] aspect-[4/5]"
+              onMouseMove={handleTilt}
+              onMouseLeave={resetTilt}
+              style={{
+                rotateX: prefersReducedMotion ? 0 : rotateX,
+                rotateY: prefersReducedMotion ? 0 : rotateY,
+                transformPerspective: 900,
+              }}
+              data-cursor="FIG.01"
+              className="relative"
             >
-              <Image
-                src={`${basePath}/shreyas_cropped.png`}
-                alt="Shreyas Deb"
-                fill
-                className="object-cover object-top grayscale contrast-125"
-                priority
-                sizes="(max-width: 1024px) 75vw, 460px"
-              />
-              <div className="absolute inset-0 bg-accent/15 mix-blend-multiply pointer-events-none" />
-              <div className="absolute bottom-0 left-0 right-0 px-3 py-2 bg-ink text-paper font-mono-label text-[10px] flex justify-between">
-                <span>FIG.01</span>
-                <span>THE&nbsp;ME</span>
-              </div>
+              <motion.div
+                style={{ y: imageY }}
+                className="relative hard-border bg-paper-dim overflow-hidden w-[75vw] max-w-[460px] aspect-[4/5] group"
+              >
+                <Image
+                  src={`${basePath}/shreyas_cropped.png`}
+                  alt="Shreyas Deb"
+                  fill
+                  className="object-cover object-top grayscale contrast-125"
+                  priority
+                  sizes="(max-width: 1024px) 75vw, 460px"
+                />
+                {/* RGB-split glitch layers (hover only) */}
+                <Image
+                  src={`${basePath}/shreyas_cropped.png`}
+                  alt=""
+                  aria-hidden="true"
+                  fill
+                  className="glitch-layer glitch-layer-a object-cover object-top sepia saturate-[8] hue-rotate-[-50deg] contrast-125"
+                  sizes="(max-width: 1024px) 75vw, 460px"
+                />
+                <Image
+                  src={`${basePath}/shreyas_cropped.png`}
+                  alt=""
+                  aria-hidden="true"
+                  fill
+                  className="glitch-layer glitch-layer-b object-cover object-top sepia saturate-[8] hue-rotate-[150deg] contrast-125"
+                  sizes="(max-width: 1024px) 75vw, 460px"
+                />
+                <div className="absolute inset-0 bg-accent/15 mix-blend-multiply pointer-events-none" />
+                <div className="absolute bottom-0 left-0 right-0 px-3 py-2 bg-ink text-paper font-mono-label text-[10px] flex justify-between">
+                  <span>FIG.01</span>
+                  <span>THE&nbsp;ME</span>
+                </div>
+              </motion.div>
             </motion.div>
           </motion.div>
         </div>
@@ -162,4 +231,3 @@ export default function Hero() {
     </section>
   );
 }
-

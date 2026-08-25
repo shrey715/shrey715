@@ -1,14 +1,14 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /**
- * Fixed HUD tag: a live clock + scroll-depth percentage, styled like an
- * exposed technical stamp on a spec sheet. Desktop only — too tight for
- * mobile chrome, and the ScrollIndicator already covers scroll feedback there.
+ * Fixed HUD tag: a live clock plus a live cursor-coordinate readout, styled
+ * like an exposed technical stamp on a spec sheet. Desktop only — too tight
+ * for mobile chrome.
  */
 export default function StatusReadout() {
   const [time, setTime] = useState('');
-  const [scrollPct, setScrollPct] = useState(0);
+  const coordsRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     const updateTime = () =>
@@ -20,38 +20,32 @@ export default function StatusReadout() {
       );
     updateTime();
     const timer = setInterval(updateTime, 1000);
+    return () => clearInterval(timer);
+  }, []);
 
-    let ticking = false;
-    const updateScroll = () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const el = document.documentElement;
-        const max = el.scrollHeight - el.clientHeight;
-        setScrollPct(max > 0 ? Math.round((el.scrollTop / max) * 100) : 0);
-        ticking = false;
-      });
+  useEffect(() => {
+    // Written directly to the DOM (not useState) — mousemove fires far too
+    // often to route through React without re-render thrashing, same
+    // reasoning as the cursor block in CustomCursor.tsx.
+    const handleMouseMove = (e: MouseEvent) => {
+      if (coordsRef.current) {
+        coordsRef.current.textContent = `X:${String(e.clientX).padStart(4, '0')} Y:${String(e.clientY).padStart(4, '0')}`;
+      }
     };
-    updateScroll();
-    window.addEventListener('scroll', updateScroll, { passive: true });
-
-    return () => {
-      clearInterval(timer);
-      window.removeEventListener('scroll', updateScroll);
-    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
   return (
     <div
-      className="fixed bottom-4 left-4 z-[9998] hidden lg:flex items-stretch hard-border bg-paper font-mono-label text-[10px] text-ink/70 pointer-events-none select-none"
+      className="fixed bottom-4 left-4 z-[9998] hidden lg:flex items-stretch hard-border bg-paper font-mono-label text-[10px] text-ink/70 pointer-events-none select-none print:hidden"
       aria-hidden="true"
     >
-      <span className="px-2.5 py-1.5 border-r-2 border-ink tabular-nums">
+      <span className="px-2.5 py-1.5 tabular-nums border-r-2 border-ink">
         {time || '--:--:--'}&nbsp;IST
       </span>
-      <span className="px-2.5 py-1.5 flex items-center gap-1.5 tabular-nums">
-        SCROLL
-        <span className="text-accent">{String(scrollPct).padStart(3, '0')}%</span>
+      <span ref={coordsRef} className="px-2.5 py-1.5 tabular-nums">
+        X:---- Y:----
       </span>
     </div>
   );

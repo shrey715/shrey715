@@ -13,6 +13,19 @@
             ]
         },
         {
+            "id": "exp-5",
+            "title": "Software Development Intern",
+            "organization": "CloudNuro.ai",
+            "location": "Hyderabad, Telangana",
+            "duration": "Jun 2026 – Jul 2026",
+            "type": "industry",
+            "highlights": [
+                "Contributed to a multi-tenant LLM Inference Gateway enabling secure BYOK deployments across multiple LLM providers, with observability pipelines built on OpenTelemetry and Langfuse for distributed tracing and latency monitoring.",
+                "Built a LangGraph-based multi-agent software development suite that ingested sprint transcripts and repositories to automate requirements extraction, ticket generation, UX generation, and code generation, with human-in-the-loop refinement at each phase.",
+                "Integrated configurable design systems and reusable skills to generate responsive UX frames, achieving 70-80% visual alignment with the company's design system against historical sprints."
+            ]
+        },
+        {
             "id": "exp-2",
             "title": "AI/ML Engineering Intern",
             "organization": "MontyCloud",
@@ -75,43 +88,43 @@
             "id": "lead-3",
             "title": "Teaching Assistant",
             "organization": "IIIT Hyderabad",
-            "duration": "Aug 2025 – May 2026",
+            "duration": "Aug 2025 – Dec 2026",
             "highlights": [
-                "Served as a Teaching Assistant for Automata Theory (Monsoon 2025 H1), Data and Applications (Monsoon 2025 H2), and Introduction to Software Systems (Spring 2026)."
+                "Served as a Teaching Assistant for Automata Theory (Monsoon 2025 H1), Data and Applications (Monsoon 2025 H2), Introduction to Software Systems (Spring 2026), and Science 1 (SC1.110) under Professor Prabhakar Bhimalapuram (Monsoon 2026)."
             ]
         }
     ],
     "achievements": [
         {
-            "id": "ach-4",
+            "id": "ach-1",
             "title": "Atlassian FastTrack Winner",
             "organization": "Atlassian",
             "year": "2026",
             "description": "Selected as a winner among 300+ eligible candidates and received a Pre-Placement Interview (PPI) offer."
         },
         {
-            "id": "ach-1",
+            "id": "ach-2",
             "title": "Action Plan Finalist",
             "organization": "IIT Bombay",
             "year": "2025",
             "description": "Selected as Top 25 finalist from 3000+ entries at Action Plan — the flagship social entrepreneurship event of Abhyuday, IIT Bombay's Advitya Social Fest."
         },
         {
-            "id": "ach-5",
+            "id": "ach-3",
             "title": "Most Impactful Award",
             "organization": "HackIIIT",
             "year": "2025",
             "description": "Won the Most Impactful award at HackIIIT 2025 for Saathi, an AI-powered mental wellness platform."
         },
         {
-            "id": "ach-2",
+            "id": "ach-4",
             "title": "Dean's List III",
             "organization": "IIIT Hyderabad",
             "year": "Monsoon 2024",
             "description": "Awarded Dean's List III recognition for exceptional academic performance (top 15%)."
         },
         {
-            "id": "ach-3",
+            "id": "ach-5",
             "title": "Merit List",
             "organization": "IIIT Hyderabad",
             "year": "Monsoon 2024",

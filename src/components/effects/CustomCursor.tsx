@@ -15,9 +15,14 @@ export default function CustomCursor() {
   const [isVisible, setIsVisible] = useState(false);
   const [usingMouse, setUsingMouse] = useState(false);
   const [label, setLabel] = useState('');
+  const [ripple, setRipple] = useState<{ id: number; x: number; y: number } | null>(null);
 
   const target = useRef({ x: 0, y: 0 });
   const current = useRef({ x: 0, y: 0 });
+  const rippleTimer = useRef<ReturnType<typeof setTimeout>>(null);
+  // Mobile browsers fire a synthetic mousemove after every tap; without this
+  // guard the desktop cursor block would ghost onto touch screens.
+  const lastTouchAt = useRef(0);
 
   useEffect(() => {
     let animationId: number;
@@ -37,6 +42,7 @@ export default function CustomCursor() {
     };
 
     const handleMouseMove = (e: MouseEvent) => {
+      if (Date.now() - lastTouchAt.current < 600) return;
       target.current = { x: e.clientX, y: e.clientY };
       setIsVisible(true);
       if (!usingMouse) {
@@ -56,10 +62,20 @@ export default function CustomCursor() {
       setLabel(labelEl ? labelEl.getAttribute('data-cursor') || '' : '');
     };
 
-    const handleTouchStart = () => {
+    const handleTouchStart = (e: TouchEvent) => {
+      lastTouchAt.current = Date.now();
       setUsingMouse(false);
       setIsVisible(false);
       document.body.style.cursor = 'auto';
+
+      // Touch feedback: a quick expanding accent block at the tap point,
+      // standing in for the desktop cursor.
+      const t = e.touches[0];
+      if (t) {
+        setRipple({ id: performance.now(), x: t.clientX, y: t.clientY });
+        if (rippleTimer.current) clearTimeout(rippleTimer.current);
+        rippleTimer.current = setTimeout(() => setRipple(null), 500);
+      }
     };
 
     const handleMouseLeave = () => setIsVisible(false);
@@ -80,10 +96,20 @@ export default function CustomCursor() {
       document.removeEventListener('mouseleave', handleMouseLeave);
       document.removeEventListener('mouseenter', handleMouseEnter);
       document.body.style.cursor = 'auto';
+      if (rippleTimer.current) clearTimeout(rippleTimer.current);
     };
   }, [usingMouse]);
 
-  if (!usingMouse) return null;
+  if (!usingMouse) {
+    return ripple ? (
+      <div
+        key={ripple.id}
+        aria-hidden="true"
+        className="touch-ripple"
+        style={{ left: ripple.x, top: ripple.y }}
+      />
+    ) : null;
+  }
 
   const size = isHovering || label ? 44 : 12;
 
@@ -92,7 +118,7 @@ export default function CustomCursor() {
       {/* Solid inverting block */}
       <div
         ref={blockRef}
-        className="fixed top-0 left-0 z-[99999] pointer-events-none mix-blend-difference will-change-transform bg-white"
+        className="fixed top-0 left-0 z-[999998] pointer-events-none mix-blend-difference will-change-transform bg-white print:hidden"
         style={{
           width: size,
           height: size,
@@ -105,7 +131,7 @@ export default function CustomCursor() {
       {label && (
         <div
           ref={labelRef}
-          className="fixed top-0 left-0 z-[100000] pointer-events-none will-change-transform"
+          className="fixed top-0 left-0 z-[999999] pointer-events-none will-change-transform print:hidden"
           style={{ opacity: isVisible ? 1 : 0, transition: 'opacity 0.15s' }}
         >
           <span className="block bg-accent text-paper font-mono-label text-[10px] px-2 py-1 whitespace-nowrap">

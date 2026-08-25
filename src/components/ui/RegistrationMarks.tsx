@@ -17,7 +17,7 @@ export default function RegistrationMarks({ dark = false }: RegistrationMarksPro
       {corners.map((pos) => (
         <span
           key={pos}
-          className={`absolute ${pos} w-3 h-3 pointer-events-none select-none z-10 hidden sm:block`}
+          className={`absolute ${pos} w-3 h-3 pointer-events-none select-none z-10 hidden sm:block print:hidden`}
           aria-hidden="true"
         >
           <span className={`absolute left-1/2 top-0 -translate-x-1/2 w-px h-full ${color}`} />

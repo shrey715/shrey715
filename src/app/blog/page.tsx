@@ -2,6 +2,7 @@ import { getAllPosts, BlogPost } from '@/lib/blog';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Calendar, Clock, ArrowRight, ArrowLeft } from 'lucide-react';
+import DisplayTitle from '@/components/ui/DisplayTitle';
 
 export const metadata = {
   title: 'Blogs | Shreyas Deb',
@@ -14,7 +15,7 @@ export default async function BlogPage() {
   const otherPosts = posts.slice(1);
 
   return (
-    <main className="min-h-screen bg-paper text-ink grid-lines">
+    <main id="main" className="min-h-dvh bg-paper text-ink grid-lines">
       {/* Header */}
       <header className="relative px-4 sm:px-6 pt-16 pb-12 border-b-2 border-ink">
         <div className="max-w-[1500px] mx-auto">
@@ -31,7 +32,7 @@ export default async function BlogPage() {
           </div>
 
           <h1 className="font-display text-ink" style={{ fontSize: 'clamp(3rem, 13vw, 11rem)' }}>
-            THE BLOG
+            <DisplayTitle text="THE BLOG" />
           </h1>
 
           <p className="text-lg md:text-xl text-ink/70 max-w-xl leading-relaxed mt-6">
@@ -88,7 +89,7 @@ export default async function BlogPage() {
 function FeaturedPostCard({ post }: { post: BlogPost }) {
   return (
     <Link href={`/blog/${post.slug}`} className="block group">
-      <article className="hard-border bg-paper hard-shadow transition-all duration-200 group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:shadow-[10px_10px_0_0_#ff3d00] grid md:grid-cols-2">
+      <article className="hard-border bg-paper hard-shadow transition-all duration-200 group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:shadow-[10px_10px_0_0_#ff3d00] group-active:translate-x-0 group-active:translate-y-0 grid md:grid-cols-2">
         {/* Image */}
         <div className="relative h-64 md:h-full min-h-[18rem] bg-ink border-b-2 md:border-b-0 md:border-r-2 border-ink overflow-hidden">
           {post.image ? (
@@ -145,7 +146,7 @@ function FeaturedPostCard({ post }: { post: BlogPost }) {
 function PostCard({ post }: { post: BlogPost }) {
   return (
     <Link href={`/blog/${post.slug}`} className="block group h-full">
-      <article className="h-full flex flex-col hard-border bg-paper hard-shadow-sm transition-all duration-200 group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_0_0_#ff3d00]">
+      <article className="h-full flex flex-col hard-border bg-paper hard-shadow-sm transition-all duration-200 group-hover:-translate-x-1 group-hover:-translate-y-1 group-hover:shadow-[8px_8px_0_0_#ff3d00] group-active:translate-x-0 group-active:translate-y-0">
         <div className="relative h-44 bg-ink border-b-2 border-ink overflow-hidden">
           {post.image ? (
             <Image

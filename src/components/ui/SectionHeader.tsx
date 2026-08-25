@@ -1,5 +1,6 @@
 'use client';
-import RevealText from '@/components/ui/RevealText';
+import DisplayTitle from '@/components/ui/DisplayTitle';
+import ScrambleText from '@/components/ui/ScrambleText';
 
 interface SectionHeaderProps {
   /** Two-digit index, e.g. "01". */
@@ -13,8 +14,8 @@ interface SectionHeaderProps {
 }
 
 /**
- * Editorial section header: a mono index row with a rule, then a huge
- * display-type title that reveals word-by-word.
+ * Editorial section header: a mono index row (with a decoding kicker) and a
+ * huge display-type title that starts as an outline and fills in word-by-word.
  */
 export default function SectionHeader({
   index,
@@ -44,14 +45,14 @@ export default function SectionHeader({
 
       <div className={`flex items-center gap-4 mb-3 font-mono-label text-[11px] ${metaColor}`}>
         <span className="text-accent">({index})</span>
-        {kicker && <span>{kicker}</span>}
+        {kicker && <ScrambleText text={`[ ${kicker} ]`} duration={800} />}
         <span className={`flex-1 h-px ${ruleColor}`} />
       </div>
       <h2
         className={`font-display ${titleColor}`}
         style={{ fontSize: 'clamp(3rem, 11vw, 9rem)' }}
       >
-        <RevealText text={title} />
+        <DisplayTitle text={title} dark={dark} />
       </h2>
     </div>
   );

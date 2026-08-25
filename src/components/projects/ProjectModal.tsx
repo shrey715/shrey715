@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ExternalLink } from 'lucide-react';
@@ -13,6 +13,7 @@ interface ProjectModalProps {
 
 export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   const [mounted, setMounted] = useState(false);
+  const firstLinkRef = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -21,6 +22,7 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
   useEffect(() => {
     if (project) {
       document.body.style.overflow = 'hidden';
+      firstLinkRef.current?.focus();
     } else {
       document.body.style.overflow = '';
     }
@@ -28,6 +30,15 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
       document.body.style.overflow = '';
     };
   }, [project]);
+
+  useEffect(() => {
+    if (!project) return;
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose();
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [project, onClose]);
 
   if (!mounted) return null;
 
@@ -45,6 +56,9 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           />
 
           <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="project-modal-title"
             initial={{ opacity: 0, scale: 0.92, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -54,13 +68,14 @@ export default function ProjectModal({ project, onClose }: ProjectModalProps) {
           >
             <div className="px-5 py-4 border-b-2 border-ink flex items-start justify-between gap-3">
               <div>
-                <h4 className="text-lg font-bold text-ink line-clamp-1">{project.title}</h4>
+                <h4 id="project-modal-title" className="text-lg font-bold text-ink line-clamp-1">{project.title}</h4>
                 <p className="font-mono-label text-[10px] text-ink/50 mt-1">CHOOSE A DESTINATION</p>
               </div>
             </div>
 
             <div className="p-5 space-y-3">
               <a
+                ref={firstLinkRef}
                 href={project.link}
                 target="_blank"
                 rel="noopener noreferrer"

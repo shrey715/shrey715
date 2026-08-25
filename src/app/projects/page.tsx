@@ -1,5 +1,4 @@
 import type { Metadata } from 'next';
-import Navbar from '@/components/ui/Navbar';
 import Footer from '@/components/sections/Footer';
 import ProjectsPageClient from '@/components/projects/ProjectsPageClient';
 import { getProjects } from '@/lib/projects';
@@ -17,7 +16,6 @@ export default async function ProjectsPage() {
 
   return (
     <main className="relative overflow-x-hidden bg-paper">
-      <Navbar />
       <ProjectsPageClient projects={projects} />
       <Footer />
     </main>

@@ -35,7 +35,7 @@ export default function SkillsSection({ categories }: SkillsSectionProps) {
 
         <p className="font-mono-label text-[11px] text-paper/50 mb-10 flex flex-wrap items-center gap-x-4 gap-y-1">
           <span>FROM KERNELS TO MODELS — THE WHOLE STACK</span>
-          <span className="text-accent">
+          <span className="text-accent tabular-nums">
             {String(categories.length).padStart(2, "0")} DOMAINS / {total}+ TOOLS
           </span>
         </p>
@@ -95,11 +95,11 @@ function SkillPanel({
 
       <div className="relative z-10 flex flex-col h-full">
         <div className="flex items-baseline gap-3 mb-5">
-          <span className={`font-mono-label text-[11px] ${accent ? "text-paper/80" : "text-accent"}`}>
+          <span className={`font-mono-label text-[11px] tabular-nums ${accent ? "text-paper/80" : "text-accent"}`}>
             {num}
           </span>
           <h3 className="font-display text-2xl sm:text-3xl leading-none">{category.title}</h3>
-          <span className={`font-mono-label text-[10px] ml-auto ${accent ? "text-paper/70" : "text-paper/40"}`}>
+          <span className={`font-mono-label text-[10px] tabular-nums ml-auto ${accent ? "text-paper/70" : "text-paper/40"}`}>
             [{String(category.skills.length).padStart(2, "0")}]
           </span>
         </div>

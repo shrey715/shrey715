@@ -1,11 +1,13 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 
 export default function ScrollIndicator() {
   const [isVisible, setIsVisible] = useState(false);
   const prefersReducedMotion = useReducedMotion();
+  const pathname = usePathname();
   const { scrollYProgress } = useScroll();
   const scaleY = useSpring(scrollYProgress, { stiffness: 200, damping: 30 });
 
@@ -27,7 +29,9 @@ export default function ScrollIndicator() {
     };
   }, []);
 
-  if (prefersReducedMotion) return null;
+  // Blog posts carry their own reading-progress bar (components/blog/ReadingProgress).
+  const isPost = pathname.startsWith('/blog/');
+  if (prefersReducedMotion || isPost) return null;
 
   return (
     <motion.div

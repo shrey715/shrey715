@@ -15,7 +15,7 @@ export default async function ProjectsPage() {
   const projects = await getProjects();
 
   return (
-    <main className="relative overflow-x-hidden bg-paper">
+    <main className="relative overflow-x-clip bg-paper">
       <ProjectsPageClient projects={projects} />
       <Footer />
     </main>

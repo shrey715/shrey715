@@ -7,6 +7,8 @@ import { MdOutlineSportsBasketball } from "react-icons/md";
 import { PiTelevisionSimpleBold } from "react-icons/pi";
 import SectionHeader from "@/components/ui/SectionHeader";
 import Section, { Container } from "@/components/ui/Section";
+import Portrait from "@/components/ui/Portrait";
+import ScrollFillText from "@/components/ui/ScrollFillText";
 import type { SocialLink, HobbyItem } from "@/types";
 
 const socialLinks: SocialLink[] = [
@@ -84,40 +86,60 @@ export default function AboutSection() {
   return (
     <Section id="about" dark>
       <Container>
-        <SectionHeader dark index="01" kicker="WHOAMI" title="ABOUT" className="mb-16" />
+        <SectionHeader dark index="01" kicker="WHOAMI" title="ABOUT" className="mb-14" />
 
-        <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
-          {/* Left: intro + socials */}
-          <div className="lg:col-span-4">
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-xl font-medium leading-snug mb-8"
+        <div className="grid lg:grid-cols-12 gap-14 lg:gap-16">
+          {/* Left: tall portrait + socials */}
+          <div className="lg:col-span-5 xl:col-span-4">
+            {/* The observed wrapper stays unclipped — IntersectionObserver
+                ignores fully clipped targets, so the wipe lives on the child. */}
+            <motion.div
+              initial="hidden"
+              whileInView="show"
+              viewport={{ once: true, margin: "-80px" }}
+              className="max-w-[420px] lg:max-w-none mx-auto lg:mx-0 mb-12 px-3"
             >
-              Always open to learning new stuff. If it&apos;s complex, I&apos;m interested.
-            </motion.p>
+              <motion.div
+                variants={{
+                  hidden: { y: 40, clipPath: "inset(100% 0% 0% 0%)" },
+                  show: { y: 0, clipPath: "inset(-10% -10% -10% -10%)" },
+                }}
+                transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <Portrait aspect="aspect-[3/4] lg:aspect-[2/3]" />
+              </motion.div>
+            </motion.div>
 
-            <div className="grid grid-cols-2 gap-0 hard-border">
+            <div className="grid grid-cols-2 gap-0 hard-border border-paper/40">
               {socialLinks.map((link, i) => (
                 <a
                   key={link.label}
                   href={link.href}
                   target={link.external ? "_blank" : undefined}
                   rel={link.external ? "noopener noreferrer" : undefined}
-                  className={`group flex items-center gap-3 p-4 transition hover:bg-accent hover:text-paper active:scale-[0.97]
+                  className={`group relative overflow-hidden flex items-center gap-3 p-4 active:scale-[0.97] transition-transform
                     ${i % 2 === 0 ? "border-r-2" : ""} ${i < 2 ? "border-b-2" : ""} border-paper/30`}
                 >
-                  <link.icon size={20} />
-                  <span className="font-mono-label text-[11px]">{link.label}</span>
+                  {/* Accent wipe from the left on hover */}
+                  <span
+                    aria-hidden="true"
+                    className="absolute inset-0 bg-accent origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                  />
+                  <link.icon size={20} className="relative" />
+                  <span className="relative font-mono-label text-[11px]">{link.label}</span>
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Right: numbered blocks */}
-          <div className="lg:col-span-8">
+          {/* Right: statement + numbered blocks, indented beside the portrait */}
+          <div className="lg:col-span-7 xl:col-span-8 lg:pt-2">
+            <ScrollFillText
+              text="Always open to learning new stuff. If it's complex, I'm interested."
+              accentWords={["complex,", "interested."]}
+              className="text-[clamp(2rem,4.2vw,4rem)] font-medium tracking-tight leading-[1.05] max-w-[17ch] mb-14 sm:mb-16 text-balance"
+            />
+
             {blocks.map((block, i) => (
               <motion.div
                 key={block.num}
@@ -125,17 +147,13 @@ export default function AboutSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-60px" }}
                 transition={{ duration: 0.6, delay: i * 0.1 }}
-                className="grid sm:grid-cols-12 gap-2 sm:gap-6 py-8 border-t-2 border-paper/15 last:border-b-2"
+                className="py-7 border-t-2 border-paper/15 last:border-b-2"
               >
-                <div className="sm:col-span-4">
-                  <span className="font-display text-4xl text-accent mr-3">{block.num}</span>
-                  <span className="font-mono-label text-xs text-paper/60 align-middle">
-                    {block.title}
-                  </span>
+                <div className="flex items-baseline gap-3 mb-3">
+                  <span className="font-display text-4xl text-accent">{block.num}</span>
+                  <span className="font-mono-label text-xs text-paper/60">{block.title}</span>
                 </div>
-                <p className="sm:col-span-8 text-lg text-paper/75 leading-relaxed">
-                  {block.content}
-                </p>
+                <p className="text-lg text-paper/75 leading-relaxed max-w-[62ch] text-pretty">{block.content}</p>
               </motion.div>
             ))}
 

@@ -96,7 +96,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    // Font variables live on <html> so the :root-level Tailwind @theme tokens
+    // (--font-display: var(--font-anton) …) can actually resolve them.
+    <html lang="en" className={`${anton.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
       <head>
         <JsonLdScript />
         {/* Google Analytics */}
@@ -114,7 +116,7 @@ export default function RootLayout({
         </Script>
       </head>
       <body
-        className={`${anton.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased bg-paper text-ink`}
+        className="font-sans antialiased bg-paper text-ink"
       >
         <a
           href="#main"

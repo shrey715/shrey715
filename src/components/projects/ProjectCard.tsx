@@ -3,6 +3,7 @@ import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { ACCENT } from '@/lib/constants';
+import { previewImage } from '@/lib/projectMeta';
 import type { Project } from '@/types';
 
 export const CARD_WIDTH_MOBILE = 320;
@@ -15,24 +16,8 @@ interface ProjectCardProps {
   onOpen: (project: Project) => void;
 }
 
-const getRepoInfo = (url: string) => {
-  try {
-    const urlObj = new URL(url);
-    const parts = urlObj.pathname.split('/').filter(Boolean);
-    if (parts.length >= 2) {
-      return { user: parts[0], repo: parts[1] };
-    }
-  } catch {
-    return null;
-  }
-  return null;
-};
-
 function ProjectCard({ project, index, onOpen }: ProjectCardProps) {
-  const repoInfo = getRepoInfo(project.link);
-  const imageUrl = repoInfo
-    ? `https://opengraph.githubassets.com/1/${repoInfo.user}/${repoInfo.repo}`
-    : project.image;
+  const imageUrl = previewImage(project);
 
   const hasDeploymentLink = !!project.deployment_link;
 

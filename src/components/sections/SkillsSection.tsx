@@ -1,5 +1,5 @@
 "use client";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 import SectionHeader from "@/components/ui/SectionHeader";
 import Section, { Container } from "@/components/ui/Section";
 import type { SkillCategory } from "@/types";
@@ -24,6 +24,22 @@ const SPANS = [
 // Set to a category index to make that panel an accent-inverted focal block.
 // -1 = no permanent accent (accent only shows on index numbers + chip hover).
 const ACCENT_INDEX = -1;
+
+const chipList: Variants = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.035, delayChildren: 0.15 } },
+};
+const chip: Variants = {
+  hidden: { opacity: 0, y: 10, scale: 0.9 },
+  show: { opacity: 1, y: 0, scale: 1, transition: { type: "spring", stiffness: 420, damping: 26 } },
+};
+
+// Cursor position as CSS vars, consumed by the spotlight gradient below.
+function trackSpotlight(e: React.MouseEvent<HTMLElement>) {
+  const r = e.currentTarget.getBoundingClientRect();
+  e.currentTarget.style.setProperty("--mx", `${e.clientX - r.left}px`);
+  e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
+}
 
 export default function SkillsSection({ categories }: SkillsSectionProps) {
   const total = categories.reduce((n, c) => n + c.skills.length, 0);
@@ -75,12 +91,37 @@ function SkillPanel({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, delay: index * 0.06 }}
-      className={`relative overflow-hidden p-5 sm:p-6 min-h-[190px] flex flex-col ${span} ${
+      onMouseMove={trackSpotlight}
+      className={`group relative overflow-hidden p-5 sm:p-6 min-h-[190px] flex flex-col ${span} ${
         accent
           ? "bg-accent text-paper border-2 border-accent"
-          : "bg-ink text-paper border-2 border-paper/35 hover:border-accent transition-colors"
+          : "bg-ink text-paper border-2 border-paper/35 transition-colors"
       }`}
     >
+      {/* Cursor spotlight: warm glow + lit border that follow the pointer */}
+      {!accent && (
+        <>
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={{
+              background:
+                "radial-gradient(340px circle at var(--mx, 50%) var(--my, 50%), rgba(255,61,0,0.16), transparent 65%)",
+            }}
+          />
+          <span
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+            style={{
+              padding: 2,
+              background:
+                "radial-gradient(220px circle at var(--mx, 50%) var(--my, 50%), #ff3d00, transparent 70%)",
+              mask: "linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0)",
+            }}
+          />
+        </>
+      )}
+
       {/* Oversized faded watermark index, fully contained in the top-right */}
       <span
         className="font-display absolute top-2 right-3 leading-none select-none pointer-events-none"
@@ -104,10 +145,17 @@ function SkillPanel({
           </span>
         </div>
 
-        <div className="flex flex-wrap gap-2 mt-auto">
+        <motion.div
+          variants={chipList}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-40px" }}
+          className="flex flex-wrap gap-2 mt-auto"
+        >
           {category.skills.map((skill) => (
-            <span
+            <motion.span
               key={skill}
+              variants={chip}
               className={`px-3 py-1.5 font-mono text-xs transition-colors ${
                 accent
                   ? "border border-paper/50 text-paper hover:bg-paper hover:text-accent"
@@ -115,9 +163,9 @@ function SkillPanel({
               }`}
             >
               {skill}
-            </span>
+            </motion.span>
           ))}
-        </div>
+        </motion.div>
       </div>
     </motion.div>
   );

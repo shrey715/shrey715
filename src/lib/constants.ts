@@ -8,3 +8,6 @@ export const ACCENT = '#ff3d00';
 
 /** Max content width for the centred page columns. */
 export const CONTENT_MAX_WIDTH = 1500;
+
+/** Fired on window the moment the Preloader's curtain starts lifting. */
+export const INTRO_EVENT = 'preloader:lift';

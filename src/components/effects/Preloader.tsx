@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useLenis } from 'lenis/react';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { EASE_OUT } from '@/lib/constants';
+import { EASE_OUT, INTRO_EVENT } from '@/lib/constants';
 
 const COUNT_DURATION = 1500; // ms for 0 -> 100
 const HOLD_AFTER = 350; // ms to hold at 100 before the curtain lifts
@@ -47,7 +47,11 @@ export default function Preloader() {
       if (p < 1) {
         raf = requestAnimationFrame(tick);
       } else {
-        exitTimer = setTimeout(() => setVisible(false), HOLD_AFTER);
+        exitTimer = setTimeout(() => {
+          setVisible(false);
+          // Lets WebGL scenes start assembling while the curtain lifts.
+          window.dispatchEvent(new Event(INTRO_EVENT));
+        }, HOLD_AFTER);
       }
     };
     raf = requestAnimationFrame(tick);

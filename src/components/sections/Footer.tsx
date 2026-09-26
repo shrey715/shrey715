@@ -9,6 +9,7 @@ import DisplayTitle from '@/components/ui/DisplayTitle';
 import ScrambleText from '@/components/ui/ScrambleText';
 import { Container } from '@/components/ui/Section';
 import RegistrationMarks from '@/components/ui/RegistrationMarks';
+import Wordmark from '@/components/ui/Wordmark';
 import { ACCENT } from '@/lib/constants';
 import type { SocialLink } from '@/types';
 
@@ -91,6 +92,11 @@ export default function Footer() {
             BACK TO TOP <ArrowUp size={14} />
           </button>
         </div>
+      </Container>
+
+      {/* Ghosted sign-off, fitted to the content column */}
+      <Container className="pt-2 pb-6">
+        <Wordmark first="KIZU" last="MORPH" joined />
       </Container>
     </footer>
   );

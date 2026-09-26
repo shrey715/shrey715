@@ -7,6 +7,7 @@ import SkillsSection from '@/components/sections/SkillsSection';
 import ProjectsTeaser from '@/components/sections/ProjectsTeaser';
 import Footer from '@/components/sections/Footer';
 import SectionDivider from '@/components/ui/SectionDivider';
+import VelocityMarquee from '@/components/ui/VelocityMarquee';
 import { getProjects } from '@/lib/projects';
 
 import type { SkillCategory, Experience, Achievement } from '@/types';
@@ -40,10 +41,13 @@ export default async function Home() {
   const experienceData = await getExperience();
 
   return (
-    <main id="main" className="relative overflow-x-hidden bg-paper">
+    <main id="main" className="relative overflow-x-clip bg-paper">
       <Hero />
 
-      <SectionDivider />
+      <VelocityMarquee
+        top={['RESEARCHER', 'DEVELOPER', 'SYSTEMS NERD', 'ML ENGINEER', 'DISTRO HOPPER']}
+        bottom={['ATTACK ON TITAN', 'RE:ZERO', 'MINECRAFT', 'BASKETBALL']}
+      />
       <AboutSection />
 
       <SectionDivider />

@@ -1,7 +1,7 @@
 "use client";
-import Image from "next/image";
-import { motion, useScroll, useTransform, useSpring, useMotionValue } from "framer-motion";
-import { useRef } from "react";
+import dynamic from "next/dynamic";
+import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Send } from "lucide-react";
 import { useLenis } from "lenis/react";
 import { EASE_OUT as EASE } from "@/lib/constants";
@@ -9,49 +9,47 @@ import RegistrationMarks from "@/components/ui/RegistrationMarks";
 import ScrambleText from "@/components/ui/ScrambleText";
 import Magnetic from "@/components/ui/Magnetic";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
+import { useIntroReady } from "@/hooks/useIntroReady";
+import { FORMATIONS } from "@/components/three/formations";
 
-const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+// three.js stays out of the server bundle and off the critical path.
+const HeroScene = dynamic(() => import("@/components/three/HeroScene"), { ssr: false });
+
+const CYCLE_MS = 7000;
 
 export default function Hero() {
   const sectionRef = useRef<HTMLElement>(null);
   const lenis = useLenis();
   const prefersReducedMotion = useReducedMotion();
+  const introReady = useIntroReady();
+
+  const [specimen, setSpecimen] = useState(0);
+  const [cycleKey, setCycleKey] = useState(0);
+  const scatter = useRef(0);
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start start", "end start"],
   });
+  const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
+  const contentY = useTransform(smoothProgress, [0, 1], [0, -90]);
+  const contentOpacity = useTransform(smoothProgress, [0, 0.75], [1, 0]);
 
-  const smoothProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-  });
-  const imageY = useTransform(smoothProgress, [0, 1], [0, 80]);
-  const contentY = useTransform(smoothProgress, [0, 1], [0, -40]);
-
-  // Cursor-tracked tilt for the portrait (springs keep it weighty, not twitchy).
-  const tiltX = useMotionValue(0.5);
-  const tiltY = useMotionValue(0.5);
-  const rotateX = useSpring(useTransform(tiltY, [0, 1], [7, -7]), {
-    stiffness: 140,
-    damping: 18,
-  });
-  const rotateY = useSpring(useTransform(tiltX, [0, 1], [-7, 7]), {
-    stiffness: 140,
-    damping: 18,
+  useMotionValueEvent(scrollYProgress, "change", (v) => {
+    scatter.current = Math.pow(Math.min(v * 1.3, 1), 1.4);
   });
 
-  const handleTilt = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (prefersReducedMotion) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    tiltX.set((e.clientX - rect.left) / rect.width);
-    tiltY.set((e.clientY - rect.top) / rect.height);
-  };
+  const next = useCallback(() => {
+    setSpecimen((i) => (i + 1) % FORMATIONS.length);
+    setCycleKey((k) => k + 1); // restart the auto-advance timer on manual mutate
+  }, []);
 
-  const resetTilt = () => {
-    tiltX.set(0.5);
-    tiltY.set(0.5);
-  };
+  // Auto-cycle the specimen once the intro has played.
+  useEffect(() => {
+    if (prefersReducedMotion || !introReady) return;
+    const t = setTimeout(next, CYCLE_MS);
+    return () => clearTimeout(t);
+  }, [prefersReducedMotion, introReady, cycleKey, next]);
 
   const scrollToContact = () => {
     const el = document.getElementById("contact");
@@ -69,28 +67,44 @@ export default function Hero() {
       className="min-h-dvh relative bg-paper text-ink grid-lines overflow-hidden flex flex-col"
     >
       <RegistrationMarks />
+
+      <HeroScene
+        index={specimen}
+        started={introReady}
+        still={prefersReducedMotion}
+        scatter={scatter}
+        className="absolute inset-0 z-0"
+      />
+
+      {/* Click target over the sculpture — morphs it to the next shape */}
+      <button
+        type="button"
+        onClick={next}
+        aria-label="Morph the figure into its next shape"
+        className="absolute z-10 left-0 right-0 top-12 h-[34vh] lg:h-auto lg:left-auto lg:top-12 lg:bottom-28 lg:w-[40%] focus-visible:outline-offset-[-6px]"
+      />
+
       {/* Top metadata bar */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.2 }}
-        className="w-full border-b-2 border-ink flex items-stretch justify-between font-mono-label text-[10px] sm:text-[11px]"
+        className="relative z-20 w-full border-b-2 border-ink flex items-stretch justify-between font-mono-label text-[10px] sm:text-[11px] bg-paper/70 backdrop-blur-[2px]"
       >
         <span className="px-4 py-2.5 border-r-2 border-ink hidden sm:block">
           IIIT&nbsp;HYDERABAD
         </span>
-        <data className="px-4 py-2.5 flex-1 hidden md:flex items-center tabular-nums">
+        <data className="px-4 py-2.5 flex-1 hidden md:flex items-center tabular-nums mr-16 sm:mr-20">
           17.45°N&nbsp;/&nbsp;78.35°E
         </data>
       </motion.div>
 
       {/* Main composition */}
       <motion.div
-        style={{ y: contentY }}
-        className="flex-1 max-w-[1500px] w-full mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 items-center gap-14 lg:gap-8 py-10"
+        style={{ y: contentY, opacity: contentOpacity }}
+        className="relative z-20 flex-1 max-w-[1500px] w-full mx-auto px-4 sm:px-6 grid grid-cols-1 lg:grid-cols-12 items-end lg:items-center gap-8 pt-[34vh] pb-6 lg:py-10 pointer-events-none"
       >
-        {/* Name + role */}
-        <div className="lg:col-span-7 relative z-20 order-2 lg:order-1">
+        <div className="lg:col-span-7 pointer-events-auto">
           <motion.p
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
@@ -104,7 +118,7 @@ export default function Hero() {
             <span className="hidden sm:inline">I&apos;M</span>
           </motion.p>
 
-          <h1 className="font-display leading-[0.82] text-ink" style={{ fontSize: "clamp(3rem, 11.5vw, 11rem)" }}>
+          <h1 className="font-display leading-[0.82] text-ink" style={{ fontSize: "clamp(3.4rem, 12vw, 11.5rem)" }}>
             <span className="block overflow-hidden pr-[0.18em]">
               <motion.span
                 className="block pr-[0.12em]"
@@ -134,7 +148,7 @@ export default function Hero() {
                     whileTap={{ scale: 0.9 }}
                     aria-label="Get in touch"
                     data-cursor="SAY HI"
-                    className="text-ink cursor-pointer active:scale-90 transition-transform"
+                    className="text-ink cursor-pointer"
                   >
                     <Send className="w-9 h-9 sm:w-12 sm:h-12 lg:w-16 lg:h-16" strokeWidth={2} />
                   </motion.button>
@@ -149,7 +163,7 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.7 }}
             className="mt-8 max-w-md"
           >
-            <p className="text-lg sm:text-xl font-medium leading-snug">
+            <p className="text-lg sm:text-xl font-medium leading-snug text-pretty">
               Undergraduate researcher &amp; developer working across{" "}
               <span className="bg-accent text-paper px-1.5">AI</span>,{" "}
               <span className="bg-ink text-paper px-1.5">systems biology</span> and the{" "}
@@ -159,75 +173,35 @@ export default function Hero() {
               of computers.
             </p>
             <p className="font-mono-label text-[11px] text-ink/50 mt-5 leading-relaxed">
-              MS&nbsp;DUAL&nbsp;DEGREE&nbsp;·&nbsp;COMPUTATIONAL&nbsp;NATURAL&nbsp;SCIENCES
+              MS&nbsp;DUAL&nbsp;DEGREE · COMPUTATIONAL&nbsp;NATURAL&nbsp;SCIENCES
               <br />
-              FOURTH&nbsp;YEAR&nbsp;·&nbsp;IIIT&nbsp;HYDERABAD
+              FOURTH&nbsp;YEAR · IIIT&nbsp;HYDERABAD
             </p>
-          </motion.div>
-        </div>
-
-        {/* Portrait */}
-        <div className="lg:col-span-5 relative order-1 lg:order-2 flex justify-center lg:justify-end">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1, delay: 0.55, ease: EASE }}
-            className="relative"
-          >
-            {/* Accent block behind */}
-            <div className="absolute -inset-3 sm:-inset-5 bg-accent translate-x-3 translate-y-3" />
-            {/* Framed duotone portrait — cursor-tracked tilt + RGB-split glitch on hover */}
-            <motion.div
-              onMouseMove={handleTilt}
-              onMouseLeave={resetTilt}
-              style={{
-                rotateX: prefersReducedMotion ? 0 : rotateX,
-                rotateY: prefersReducedMotion ? 0 : rotateY,
-                transformPerspective: 900,
-              }}
-              data-cursor="FIG.01"
-              className="relative"
-            >
-              <motion.div
-                style={{ y: imageY }}
-                className="relative hard-border bg-paper-dim overflow-hidden w-[75vw] max-w-[460px] aspect-[4/5] group"
-              >
-                <Image
-                  src={`${basePath}/shreyas_cropped.png`}
-                  alt="Shreyas Deb"
-                  fill
-                  className="object-cover object-top grayscale contrast-125"
-                  priority
-                  sizes="(max-width: 1024px) 75vw, 460px"
-                />
-                {/* RGB-split glitch layers (hover only) */}
-                <Image
-                  src={`${basePath}/shreyas_cropped.png`}
-                  alt=""
-                  aria-hidden="true"
-                  fill
-                  className="glitch-layer glitch-layer-a object-cover object-top sepia saturate-[8] hue-rotate-[-50deg] contrast-125"
-                  sizes="(max-width: 1024px) 75vw, 460px"
-                />
-                <Image
-                  src={`${basePath}/shreyas_cropped.png`}
-                  alt=""
-                  aria-hidden="true"
-                  fill
-                  className="glitch-layer glitch-layer-b object-cover object-top sepia saturate-[8] hue-rotate-[150deg] contrast-125"
-                  sizes="(max-width: 1024px) 75vw, 460px"
-                />
-                <div className="absolute inset-0 bg-accent/15 mix-blend-multiply pointer-events-none" />
-                <div className="absolute bottom-0 left-0 right-0 px-3 py-2 bg-ink text-paper font-mono-label text-[10px] flex justify-between">
-                  <span>FIG.01</span>
-                  <span>THE&nbsp;ME</span>
-                </div>
-              </motion.div>
-            </motion.div>
           </motion.div>
         </div>
       </motion.div>
 
+      {/* Bottom rail: scroll cue */}
+      <motion.div style={{ opacity: contentOpacity }} className="relative z-20 max-w-[1500px] w-full mx-auto px-4 sm:px-6 pb-6">
+      <motion.div
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, delay: 1 }}
+        className="flex items-end justify-between gap-4"
+      >
+        <div className="hidden sm:flex items-center gap-3 font-mono-label text-[10px] text-ink/50">
+          <span className="relative block w-px h-10 bg-ink/15 overflow-hidden" aria-hidden="true">
+            <motion.span
+              className="absolute left-0 top-0 w-px h-1/2 bg-accent"
+              animate={prefersReducedMotion ? undefined : { y: ["-100%", "200%"] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </span>
+          SCROLL
+        </div>
+
+      </motion.div>
+      </motion.div>
     </section>
   );
 }

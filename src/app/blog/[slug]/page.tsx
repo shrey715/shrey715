@@ -1,10 +1,17 @@
-import { getPostBySlug, getAllPostSlugs } from '@/lib/blog';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Clock, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import { MDXRemote } from 'next-mdx-remote/rsc';
-import { useMDXComponents } from '../../../../mdx-components';
+import { getPostBySlug, getAllPostSlugs, getAllPosts, getHeadings } from '@/lib/blog';
+import { mdxComponents } from '../../../../mdx-components';
+import Section, { Container } from '@/components/ui/Section';
+import RevealText from '@/components/ui/RevealText';
+import Footer from '@/components/sections/Footer';
+import ReadingProgress from '@/components/blog/ReadingProgress';
+import Toc from '@/components/blog/Toc';
+import PostLedger from '@/components/blog/PostLedger';
+import { formatDate } from '@/components/blog/format';
 import ShareButton from './ShareButton';
 
 interface Props {
@@ -19,7 +26,7 @@ export async function generateStaticParams() {
 export async function generateMetadata({ params }: Props) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
-  
+
   if (!post) {
     return { title: 'Post Not Found' };
   }
@@ -44,99 +51,94 @@ export default async function BlogPostPage({ params }: Props) {
     notFound();
   }
 
-  const components = useMDXComponents({});
+  const headings = getHeadings(post.content);
+  const others = (await getAllPosts()).filter((p) => p.slug !== slug).slice(0, 3);
 
   return (
-    <main id="main" className="min-h-dvh bg-paper text-ink grid-lines">
-      {/* Top nav bar */}
-      <div className="px-4 sm:px-6 py-4 border-b-2 border-ink">
-        <div className="max-w-3xl mx-auto">
+    <main id="main" className="relative overflow-x-clip bg-paper">
+      <ReadingProgress targetId="article-body" />
+
+      <Section className="justify-start min-h-0 pt-28 sm:pt-36 pb-20 sm:pb-28">
+        <Container>
           <Link
             href="/blog"
-            className="inline-flex items-center gap-2 font-mono-label text-[11px] text-ink/60 hover:text-accent transition-colors"
+            className="inline-flex items-center gap-2 font-mono-label text-[11px] text-ink/60 hover:text-accent transition-colors mb-12"
           >
-            <ArrowLeft size={14} /> BACK TO BLOG
+            <ArrowLeft size={14} /> ALL POSTS
           </Link>
-        </div>
-      </div>
 
-      {/* Article header — headline first, editorial style */}
-      <header className="max-w-3xl mx-auto px-4 sm:px-6 pt-14 md:pt-20">
-        <div className="font-mono-label text-[11px] text-ink/50 mb-6 flex items-center gap-3">
-          <span className="text-accent">(ARTICLE)</span>
-          <span>
-            {new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
-          </span>
-          <span className="flex-1 h-px bg-ink/20" />
-        </div>
+          {/* Header — aligned to the article column */}
+          <header className="grid lg:grid-cols-12 gap-x-10">
+            <div className="lg:col-start-4 lg:col-span-8">
+              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono-label text-[10px] text-ink/50 mb-6">
+                <time dateTime={post.date} className="text-ink">
+                  {formatDate(post.date, 'long').toUpperCase()}
+                </time>
+                <span>·</span>
+                <span>{post.readingTime.toUpperCase()}</span>
+                <span className="hidden sm:block w-8 h-px bg-ink/25" />
+                {post.tags.slice(0, 4).map((t) => (
+                  <span key={t} className="px-1.5 py-0.5 border border-ink/25 text-ink/60">
+                    {t}
+                  </span>
+                ))}
+              </div>
 
-        {post.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mb-6">
-            {post.tags.map((tag) => (
-              <span key={tag} className="px-2.5 py-1 font-mono-label text-[10px] bg-ink text-paper">
-                {tag}
-              </span>
-            ))}
+              <h1 className="text-[clamp(2.3rem,5vw,4.4rem)] font-bold tracking-tight leading-[1.02] text-ink max-w-[20ch] text-balance">
+                <RevealText text={post.title} stagger={0.03} />
+              </h1>
+              <p className="mt-6 text-lg sm:text-xl text-ink/70 leading-relaxed max-w-[58ch] text-pretty">
+                {post.description}
+              </p>
+            </div>
+          </header>
+
+          {post.image && (
+            <figure className="grid lg:grid-cols-12 gap-x-10 mt-14">
+              <div className="lg:col-start-4 lg:col-span-9 relative aspect-[16/9] hard-border bg-ink overflow-hidden">
+                <Image
+                  src={post.image}
+                  alt=""
+                  fill
+                  priority
+                  sizes="(max-width: 1024px) 100vw, 75vw"
+                  className="object-cover"
+                />
+              </div>
+            </figure>
+          )}
+
+          {/* Body: pinned contents rail + reading column */}
+          <div className="grid lg:grid-cols-12 gap-x-10 mt-16">
+            <aside className="hidden lg:block lg:col-span-3">
+              <div className="sticky top-28 space-y-10">
+                <Toc headings={headings} />
+                <ShareButton slug={slug} />
+              </div>
+            </aside>
+
+            <article id="article-body" className="article-body lg:col-span-7 min-w-0 max-w-[70ch]">
+              <MDXRemote source={post.content} components={mdxComponents} />
+
+              <div className="mt-16 pt-6 border-t-2 border-ink flex flex-wrap items-center justify-between gap-4">
+                <span className="font-mono-label text-[10px] text-ink/50">END OF POST ✶</span>
+                <ShareButton slug={slug} />
+              </div>
+            </article>
           </div>
-        )}
 
-        <h1
-          className="font-bold text-ink mb-6 leading-[1.05]"
-          style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(2.25rem, 7vw, 4.5rem)' }}
-        >
-          {post.title}
-        </h1>
+          {others.length > 0 && (
+            <div className="grid lg:grid-cols-12 gap-x-10 mt-24">
+              <div className="lg:col-start-4 lg:col-span-9">
+                <p className="font-mono-label text-xs text-ink/60 mb-2">KEEP READING</p>
+                <PostLedger posts={others} />
+              </div>
+            </div>
+          )}
+        </Container>
+      </Section>
 
-        <p className="text-lg md:text-xl text-ink/70 mb-8 leading-relaxed">{post.description}</p>
-
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 py-4 border-y-2 border-ink">
-          <span className="flex items-center gap-2 font-mono-label text-[11px] text-ink/60">
-            <Clock size={14} />
-            {post.readingTime}
-          </span>
-          <ShareButton slug={slug} />
-        </div>
-      </header>
-
-      {/* Framed cover figure */}
-      {post.image && (
-        <figure className="max-w-3xl mx-auto px-4 sm:px-6 mt-10">
-          <div className="hard-border bg-ink relative aspect-[16/9] overflow-hidden">
-            <Image
-              src={post.image}
-              alt={post.title}
-              fill
-              className="object-cover"
-              priority
-              sizes="(max-width: 768px) 100vw, 768px"
-            />
-            <figcaption className="absolute bottom-0 inset-x-0 bg-ink/90 text-paper px-3 py-2 font-mono-label text-[10px] flex justify-between backdrop-blur-sm">
-              <span>FIG.01</span>
-              <span>COVER</span>
-            </figcaption>
-          </div>
-        </figure>
-      )}
-
-      {/* Content */}
-      <article className="max-w-3xl mx-auto px-4 sm:px-6 py-12 md:py-16">
-        <div className="prose prose-lg max-w-none">
-          <MDXRemote source={post.content} components={components} />
-        </div>
-      </article>
-
-      {/* Footer nav */}
-      <footer className="max-w-3xl mx-auto px-4 sm:px-6 pb-20">
-        <div className="pt-10 border-t-2 border-ink">
-          <Link
-            href="/blog"
-            className="inline-flex items-center gap-3 px-6 py-3.5 bg-ink text-paper hard-border font-mono-label text-xs hover:bg-paper hover:text-ink transition-colors"
-          >
-            <ArrowLeft size={16} />
-            BACK TO ALL POSTS
-          </Link>
-        </div>
-      </footer>
+      <Footer />
     </main>
   );
 }

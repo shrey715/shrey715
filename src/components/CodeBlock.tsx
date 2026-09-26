@@ -1,70 +1,52 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { isValidElement, useRef, useState } from 'react';
+import { Check, Copy } from 'lucide-react';
 
 interface CodeBlockProps {
   children: React.ReactNode;
 }
 
+/** Fenced code: an ink panel with a header bar naming the language and a copy button. */
 export default function CodeBlock({ children }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   const preRef = useRef<HTMLPreElement>(null);
 
+  // MDX hands us <code className="language-bash">…</code> as the only child.
+  const className = isValidElement<{ className?: string }>(children) ? children.props.className ?? '' : '';
+  const lang = className.match(/language-(\w+)/)?.[1];
+
   const copyToClipboard = async () => {
-    if (preRef.current) {
-      const code = preRef.current.textContent || '';
-      try {
-        await navigator.clipboard.writeText(code);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-      } catch (err) {
-        console.error('Failed to copy: ', err);
-      }
+    const code = preRef.current?.textContent ?? '';
+    try {
+      await navigator.clipboard.writeText(code);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy: ', err);
     }
   };
 
   return (
-    <div className="relative group my-6">
-      <button
-        onClick={copyToClipboard}
-        className="absolute right-2 top-2 p-2 rounded-md bg-[#2a2a2a] hover:bg-[#3a3a3a] text-[#f1efe7] opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10"
-        aria-label="Copy code"
-      >
-        {copied ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-        ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
-            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
-          </svg>
-        )}
-      </button>
-      <pre
-        ref={preRef}
-        className="code-block bg-[#1a1a1a] text-[#f1efe7] rounded-lg p-4 overflow-x-auto text-sm whitespace-pre"
-      >
+    <div className="my-8 hard-border bg-ink text-paper">
+      <div className="flex items-center justify-between border-b-2 border-paper/15 font-mono-label text-[10px]">
+        <span className="px-4 py-2 text-paper/50 flex items-center gap-2">
+          <span className="w-1.5 h-1.5 bg-accent" aria-hidden="true" />
+          {lang ?? 'CODE'}
+        </span>
+        <button
+          type="button"
+          onClick={copyToClipboard}
+          aria-label={copied ? 'Copied' : 'Copy code'}
+          className={`flex items-center gap-1.5 px-4 py-2 border-l-2 border-paper/15 transition-colors active:scale-95 ${
+            copied ? 'text-accent' : 'text-paper/60 hover:text-paper hover:bg-paper/5'
+          }`}
+        >
+          {copied ? <Check size={12} /> : <Copy size={12} />}
+          {copied ? 'COPIED' : 'COPY'}
+        </button>
+      </div>
+      <pre ref={preRef} className="code-block p-4 sm:p-5 overflow-x-auto text-[13px] leading-relaxed whitespace-pre font-mono">
         {children}
       </pre>
     </div>

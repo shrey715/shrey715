@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
 import readingTime from 'reading-time';
+import { slugify, stripInlineMarkdown } from './slug';
 
 export interface BlogPost {
     slug: string;
@@ -88,4 +89,32 @@ export function getAllPostSlugs(): string[] {
     return fs.readdirSync(BLOG_DIR)
         .filter(file => file.endsWith('.mdx'))
         .map(file => file.replace('.mdx', ''));
+}
+
+export interface Heading {
+    depth: 1 | 2;
+    text: string;
+    id: string;
+}
+
+/**
+ * Top-level (# and ##) headings for the table of contents, in document
+ * order. Lines inside fenced code blocks are skipped — shell comments
+ * start with "#" too.
+ */
+export function getHeadings(content: string): Heading[] {
+    const headings: Heading[] = [];
+    let inFence = false;
+    for (const line of content.split('\n')) {
+        if (/^\s*```/.test(line)) {
+            inFence = !inFence;
+            continue;
+        }
+        if (inFence) continue;
+        const m = line.match(/^(#{1,2})\s+(.+?)\s*#*\s*$/);
+        if (!m) continue;
+        const text = stripInlineMarkdown(m[2]);
+        headings.push({ depth: m[1].length as 1 | 2, text, id: slugify(text) });
+    }
+    return headings;
 }

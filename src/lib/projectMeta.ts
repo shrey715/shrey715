@@ -35,6 +35,8 @@ const TAG_DOMAINS: Record<string, Domain> = {
   'Knowledge Graph': 'ai',
   PyTorch: 'ai',
   'Deep Learning': 'ai',
+  Transformers: 'ai',
+  NLP: 'ai',
   LLM: 'ai',
   'Multi-Agent': 'ai',
   Ollama: 'ai',

@@ -1,5 +1,19 @@
 [
   {
+    "id": "project-17",
+    "title": "Indic Language Models",
+    "description": "Two fully independent, from-scratch decoder-only Transformer language models for Hindi and Nepali, built across three phases: data pipeline + tokenizer, pretraining + evaluation, and reasoning finetuning + attention analysis. No shared data, vocabulary, or weights between the two languages, and no pretrained models, tokenizers, or HuggingFace transformers classes anywhere; positional embeddings, multi-head attention, and causal masking are all implemented from scratch. Includes a custom BPE tokenizer swept across 5 vocab sizes, a KenLM-based perplexity filter for corpus cleaning, and a synthetic reasoning dataset generator for finetuning.",
+    "tech": [
+      "PyTorch",
+      "Transformers",
+      "NLP",
+      "Deep Learning"
+    ],
+    "link": "https://github.com/shrey715/indic-language-model",
+    "year": "2026",
+    "status": "Complete"
+  },
+  {
     "id": "project-16",
     "title": "Natsuki",
     "description": "Hybrid BM25 + dense retrieval search engine built from scratch (no IR library dependency), with a LambdaMART learned reranker and LLM query expansion on top. Validated end-to-end on BEIR/SciFact against real relevance judgments — each stage (bm25 < dense < hybrid < rerank) shows a clean, honestly-measured improvement, including an A/B test where query expansion was found to hurt more than it helped.",

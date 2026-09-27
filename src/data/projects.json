@@ -11,7 +11,7 @@
     ],
     "link": "https://github.com/shrey715/indic-language-model",
     "year": "2026",
-    "status": "Complete"
+    "featured": true
   },
   {
     "id": "project-16",
@@ -82,7 +82,7 @@
     ],
     "link": "https://github.com/shrey715/strat-backtester",
     "year": "2026",
-    "featured": true
+    "featured": false
   },
   {
     "id": "project-10",

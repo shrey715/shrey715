@@ -99,6 +99,19 @@
     "featured": true
   },
   {
+    "id": "project-18",
+    "title": "Tether",
+    "description": "A reliable, TCP-style transport built from scratch on UDP in C, with file transfer and live chat running on top. It uses its own 12-byte packet format with a three-way handshake, a sliding window with a retransmit timer on every packet, cumulative ACKs with out-of-order reassembly, and a four-way FIN teardown. Tested end to end under packet loss, delay, reordering and duplication, using a custom UDP proxy that injects those faults.",
+    "tech": [
+      "C",
+      "Networking",
+      "Systems",
+      "UDP"
+    ],
+    "link": "https://github.com/shrey715/tether",
+    "year": "2025"
+  },
+  {
     "id": "project-1",
     "title": "Network File System (Docs++)",
     "description": "Distributed file system called \"Docs++\" with Google Docs-like functionality, featuring concurrent editing with sentence-level locking, hierarchical folder structure, checkpoint-based version control, access control with request/approval workflow, and comprehensive logging. Architecture includes Name Server (central coordinator), Storage Servers (file storage nodes), and Client components with 12+ file operations.",

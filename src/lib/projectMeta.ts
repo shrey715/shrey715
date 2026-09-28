@@ -55,6 +55,8 @@ const TAG_DOMAINS: Record<string, Domain> = {
   'Multi-threading': 'systems',
   Shell: 'systems',
   OpenSSL: 'systems',
+  Networking: 'systems',
+  UDP: 'systems',
   Cointegration: 'quant',
   'Kalman Filter': 'quant',
   'Statistical Arbitrage': 'quant',

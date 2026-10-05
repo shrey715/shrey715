@@ -1,6 +1,6 @@
 "use client";
 import dynamic from "next/dynamic";
-import { motion, useScroll, useTransform, useSpring, useMotionValueEvent } from "framer-motion";
+import { motion, useScroll, useTransform, useSpring, useMotionValueEvent, type MotionValue } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Send } from "lucide-react";
 import { useLenis } from "lenis/react";
@@ -34,6 +34,9 @@ export default function Hero() {
   const smoothProgress = useSpring(scrollYProgress, { stiffness: 100, damping: 30 });
   const contentY = useTransform(smoothProgress, [0, 1], [0, -90]);
   const contentOpacity = useTransform(smoothProgress, [0, 0.75], [1, 0]);
+
+  // 0 → 1 as the hero scrolls away; drives the letters' scatter.
+  const scatterMV = useTransform(smoothProgress, [0.04, 0.7], [0, 1]);
 
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     scatter.current = Math.pow(Math.min(v * 1.3, 1), 1.4);
@@ -87,7 +90,7 @@ export default function Hero() {
       {/* Top metadata bar */}
       <motion.div
         initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
+        animate={introReady ? { opacity: 1 } : undefined}
         transition={{ duration: 0.8, delay: 0.2 }}
         className="relative z-20 w-full border-b-2 border-ink flex items-stretch justify-between font-mono-label text-[10px] sm:text-[11px] bg-paper/70 backdrop-blur-[2px]"
       >
@@ -107,59 +110,50 @@ export default function Hero() {
         <div className="lg:col-span-7 pointer-events-auto">
           <motion.p
             initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
+            animate={introReady ? { opacity: 1, x: 0 } : undefined}
             transition={{ duration: 0.6, delay: 0.5 }}
             className="font-mono-label text-xs text-ink/60 mb-4 flex items-center gap-3"
           >
             <span className="text-accent">
               {"// "}
-              <ScrambleText text="HELLO_WORLD" duration={1100} delay={700} />
+              <ScrambleText key={String(introReady)} text="HELLO_WORLD" duration={1100} delay={700} />
             </span>
             <span className="hidden sm:inline">I&apos;M</span>
           </motion.p>
 
-          <h1 className="font-display leading-[0.82] text-ink" style={{ fontSize: "clamp(3.4rem, 12vw, 11.5rem)" }}>
-            <span className="block overflow-hidden pr-[0.18em]">
-              <motion.span
-                className="block pr-[0.12em]"
-                initial={{ y: "110%" }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.9, ease: EASE, delay: 0.3 }}
-              >
-                SHREYAS
-              </motion.span>
+          {/* Name: letters rise in on the intro, then scatter as you scroll out —
+              flying apart alongside the particle figure. */}
+          <h1 className="font-display leading-[0.82] text-ink text-[24vw] sm:text-[17vw] lg:text-[clamp(3.4rem,12vw,11.5rem)]">
+            <span className="sr-only">Shreyas Deb</span>
+            <span aria-hidden="true" className="block whitespace-nowrap pr-[0.12em]">
+              <ScatterLetters text="SHREYAS" progress={scatterMV} show={introReady} delay={0.3} still={prefersReducedMotion} />
             </span>
-            <span className="block overflow-hidden pr-[0.18em]">
-              <motion.span
-                className="flex items-baseline gap-[0.1em] pr-[0.12em]"
-                initial={{ y: "110%" }}
-                animate={{ y: 0 }}
-                transition={{ duration: 0.9, ease: EASE, delay: 0.42 }}
-              >
-                <span className="text-accent">DEB</span>
-                <Magnetic strength={0.45} className="shrink-0 self-center">
-                  <motion.button
-                    type="button"
-                    onClick={scrollToContact}
-                    initial={{ opacity: 0, x: -10 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.6, delay: 1.1 }}
-                    whileHover={{ x: 5, y: -5, rotate: 8 }}
-                    whileTap={{ scale: 0.9 }}
-                    aria-label="Get in touch"
-                    data-cursor="SAY HI"
-                    className="text-ink cursor-pointer"
-                  >
-                    <Send className="w-9 h-9 sm:w-12 sm:h-12 lg:w-16 lg:h-16" strokeWidth={2} />
-                  </motion.button>
-                </Magnetic>
-              </motion.span>
+            <span aria-hidden="true" className="flex items-baseline gap-[0.1em] pr-[0.12em]">
+              <span className="text-accent whitespace-nowrap">
+                <ScatterLetters text="DEB" progress={scatterMV} show={introReady} delay={0.5} seed={7} still={prefersReducedMotion} />
+              </span>
+              <Magnetic strength={0.45} className="shrink-0 self-center">
+                <motion.button
+                  type="button"
+                  onClick={scrollToContact}
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={introReady ? { opacity: 1, x: 0 } : undefined}
+                  transition={{ duration: 0.6, delay: 1.1 }}
+                  whileHover={{ x: 5, y: -5, rotate: 8 }}
+                  whileTap={{ scale: 0.9 }}
+                  aria-label="Get in touch"
+                  data-cursor="SAY HI"
+                  className="text-ink cursor-pointer"
+                >
+                  <Send className="w-9 h-9 sm:w-12 sm:h-12 lg:w-16 lg:h-16" strokeWidth={2} />
+                </motion.button>
+              </Magnetic>
             </span>
           </h1>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            animate={introReady ? { opacity: 1, y: 0 } : undefined}
             transition={{ duration: 0.7, delay: 0.7 }}
             className="mt-8 max-w-md"
           >
@@ -185,7 +179,7 @@ export default function Hero() {
       <motion.div style={{ opacity: contentOpacity }} className="relative z-20 max-w-[1500px] w-full mx-auto px-4 sm:px-6 pb-6">
       <motion.div
         initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={introReady ? { opacity: 1, y: 0 } : undefined}
         transition={{ duration: 0.7, delay: 1 }}
         className="flex items-end justify-between gap-4"
       >
@@ -203,5 +197,70 @@ export default function Hero() {
       </motion.div>
       </motion.div>
     </section>
+  );
+}
+
+/** Deterministic 0..1 noise so every visit scatters the same way. */
+function noise(n: number) {
+  const x = Math.sin(n * 127.1 + 311.7) * 43758.5453;
+  return x - Math.floor(x);
+}
+
+function ScatterLetters({
+  text,
+  progress,
+  show,
+  delay,
+  seed = 0,
+  still,
+}: {
+  text: string;
+  progress: MotionValue<number>;
+  show: boolean;
+  delay: number;
+  seed?: number;
+  still: boolean;
+}) {
+  return (
+    <>
+      {text.split("").map((ch, i) => (
+        <ScatterLetter key={i} ch={ch} i={i + seed} progress={progress} show={show} delay={delay + i * 0.045} still={still} />
+      ))}
+    </>
+  );
+}
+
+function ScatterLetter({
+  ch,
+  i,
+  progress,
+  show,
+  delay,
+  still,
+}: {
+  ch: string;
+  i: number;
+  progress: MotionValue<number>;
+  show: boolean;
+  delay: number;
+  still: boolean;
+}) {
+  const dx = (noise(i) - 0.5) * 340;
+  const dy = -(70 + noise(i + 17) * 280);
+  const rot = (noise(i + 31) - 0.5) * 70;
+  const x = useTransform(progress, [0, 1], [0, still ? 0 : dx]);
+  const y = useTransform(progress, [0, 1], [0, still ? 0 : dy]);
+  const rotate = useTransform(progress, [0, 1], [0, still ? 0 : rot]);
+  return (
+    <motion.span
+      className="inline-block"
+      initial={{ y: "40%", opacity: 0 }}
+      animate={show ? { y: "0%", opacity: 1 } : undefined}
+      transition={{ duration: 0.8, ease: EASE, delay }}
+    >
+      <motion.span className="inline-block" style={{ x, y, rotate }}>
+        {ch}
+      </motion.span>
+    </motion.span>
   );
 }

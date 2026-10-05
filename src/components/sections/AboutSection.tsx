@@ -1,5 +1,6 @@
 "use client";
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useInView } from "framer-motion";
 import { FaGithub, FaLinkedin, FaGamepad } from "react-icons/fa";
 import { HiOutlineNewspaper, HiOutlineDocumentText } from "react-icons/hi";
 import { SiLinux } from "react-icons/si";
@@ -9,6 +10,7 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import Section, { Container } from "@/components/ui/Section";
 import Portrait from "@/components/ui/Portrait";
 import ScrollFillText from "@/components/ui/ScrollFillText";
+import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { SocialLink, HobbyItem } from "@/types";
 
 const socialLinks: SocialLink[] = [
@@ -157,30 +159,59 @@ export default function AboutSection() {
               </motion.div>
             ))}
 
-            {/* Draggable hobby chips */}
-            <div className="mt-10 flex flex-wrap gap-3">
-              <span className="font-mono-label text-[11px] text-paper/40 w-full mb-1">
-                OFF THE CLOCK — DRAG ME ↓
-              </span>
-              {hobbies.map(({ icon: Icon, label }, i) => (
-                <motion.div
-                  key={label}
-                  drag
-                  dragConstraints={{ left: -40, right: 40, top: -40, bottom: 40 }}
-                  dragElastic={0.4}
-                  whileHover={{ y: -3 }}
-                  whileDrag={{ scale: 1.1, rotate: i % 2 ? 4 : -4 }}
-                  data-cursor="DRAG"
-                  className="flex items-center gap-2 px-4 py-2.5 bg-paper text-ink hard-border cursor-grab active:cursor-grabbing select-none"
-                >
-                  <Icon size={18} />
-                  <span className="font-mono-label text-[11px]">{label}</span>
-                </motion.div>
-              ))}
-            </div>
+            {/* Hobby tray: chips drop in when it scrolls into view and can be thrown around inside it */}
+            <HobbyTray />
           </div>
         </div>
       </Container>
     </Section>
+  );
+}
+
+// Resting spots inside the tray (fractions of its width/height) and tilt.
+const REST = [
+  { x: 0.04, y: 0.32, r: -6 },
+  { x: 0.22, y: 0.7, r: 4 },
+  { x: 0.5, y: 0.32, r: -3 },
+  { x: 0.66, y: 0.7, r: 7 },
+];
+
+function HobbyTray() {
+  const trayRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(trayRef, { once: true, margin: "-80px" });
+  const prefersReducedMotion = useReducedMotion();
+
+  return (
+    <div className="mt-10">
+      <span className="block font-mono-label text-[11px] text-paper/40 mb-3">OFF THE CLOCK — GRAB ONE, THROW IT ↓</span>
+      <div
+        ref={trayRef}
+        className="relative h-44 sm:h-40 border-2 border-dashed border-paper/20 overflow-hidden"
+      >
+        {hobbies.map(({ icon: Icon, label }, i) => {
+          const rest = REST[i % REST.length];
+          return (
+            <motion.div
+              key={label}
+              drag
+              dragConstraints={trayRef}
+              dragElastic={0.18}
+              dragTransition={{ bounceStiffness: 420, bounceDamping: 18, power: 0.35 }}
+              initial={prefersReducedMotion ? false : { y: -220, rotate: rest.r * 3, opacity: 0 }}
+              animate={inView || prefersReducedMotion ? { y: 0, rotate: rest.r, opacity: 1 } : undefined}
+              transition={{ type: "spring", stiffness: 260, damping: 13, mass: 0.9, delay: i * 0.12 }}
+              whileHover={{ scale: 1.04 }}
+              whileDrag={{ scale: 1.1, rotate: 0, zIndex: 10 }}
+              data-cursor="THROW"
+              style={{ left: `min(${rest.x * 100}%, calc(100% - 11rem))`, top: `${rest.y * 100}%` }}
+              className="absolute -translate-y-1/2 flex items-center gap-2 px-4 py-2.5 bg-paper text-ink hard-border cursor-grab active:cursor-grabbing select-none touch-none whitespace-nowrap"
+            >
+              <Icon size={18} />
+              <span className="font-mono-label text-[11px]">{label}</span>
+            </motion.div>
+          );
+        })}
+      </div>
+    </div>
   );
 }

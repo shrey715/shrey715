@@ -40,6 +40,13 @@ interface ParticleFieldProps {
   tilt?: [number, number, number];
   /** How far the cloud turns to follow the cursor. */
   sway?: number;
+  /**
+   * Colour every particle right of this x (formation space) with the accent —
+   * the "D" of the SD monogram. Null fades the split back out.
+   */
+  splitX?: number | null;
+  /** Rock gently side to side instead of spinning (for flat, chart-like shapes). */
+  oscillate?: boolean;
   /** Cursor repulsion radius in world units (push distance scales with it). */
   repel?: number;
   /** Overall ink strength, 0..1 — keeps the cloud from shouting. */
@@ -108,6 +115,9 @@ uniform float uPixelRatio;
 uniform float uSize;
 uniform float uAccentRatio;
 uniform float uRepel;
+uniform float uSplitX;
+uniform float uSplitMix;
+uniform float uSplitSrc;
 
 attribute vec3 aTo;
 attribute vec4 aRand;
@@ -144,7 +154,12 @@ void main(){
   vec4 mv = viewMatrix * world;
   gl_Position = projectionMatrix * mv;
 
-  vAccent = step(1.0 - uAccentRatio, aRand.w);
+  // Monogram split: while forming, key off the destination (aTo); once the
+  // cloud leaves the monogram, key off where it came from (position) so the
+  // D stays orange in flight and then fades out.
+  float sx = mix(position.x, aTo.x, uSplitSrc);
+  float split = step(uSplitX, sx) * uSplitMix;
+  vAccent = max(step(1.0 - uAccentRatio, aRand.w), split);
   vHeat = heat;
   vDepth = clamp((-mv.z - 3.5) / 5.0, 0.0, 1.0);
 
@@ -192,6 +207,8 @@ export default function ParticleField({
   spin = 0.12,
   tilt = [0.18, 0, 0.08],
   sway = 1,
+  oscillate = false,
+  splitX = null,
   opacity = 1,
   heatTint = 0.9,
   repel = 1,
@@ -206,6 +223,7 @@ export default function ParticleField({
   const progress = useRef(still ? 1 : 0);
   const mouse = useRef(new THREE.Vector3(99, 99, 0));
   const mouseStrength = useRef(0);
+  const placed = useRef(false);
   const lastTarget = useRef<Float32Array | null>(null);
   const inkRef = useRef(ink);
   const accentRef = useRef(accent);
@@ -237,6 +255,9 @@ export default function ParticleField({
       uOpacity: { value: 1 },
       uHeatTint: { value: heatTint },
       uRepel: { value: repel },
+      uSplitX: { value: 1e4 },
+      uSplitMix: { value: 0 },
+      uSplitSrc: { value: 1 },
     }),
     // Colours/size are synced each frame below; the object itself lives for the mount.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -280,7 +301,9 @@ export default function ParticleField({
   }, [target, buffers, count, started, still, invalidate]);
 
   useFrame((state, delta) => {
-    const dt = Math.min(delta, 1 / 30);
+    // Cap long frames (tab switches, GC pauses) without stretching the
+    // animation on slow devices — 1/30 made a 2s morph take 30s+ at 4fps.
+    const dt = Math.min(delta, 0.1);
     const u = matRef.current?.uniforms;
     if (!u) return;
     u.uPixelRatio.value = dpr;
@@ -305,9 +328,18 @@ export default function ParticleField({
 
     const s = scatter?.current ?? 0;
     u.uScatter.value += (s - u.uScatter.value) * 0.12;
-    u.uOpacity.value = opacity * (1 - Math.min(s * 1.1, 0.85));
+    const targetOpacity = opacity * (1 - Math.min(s * 1.1, 0.85));
+    u.uOpacity.value = still ? targetOpacity : u.uOpacity.value + (targetOpacity - u.uOpacity.value) * 0.08;
     u.uHeatTint.value = heatTint;
     u.uRepel.value = repel;
+    if (splitX !== null) {
+      u.uSplitX.value = splitX;
+      u.uSplitSrc.value = 1;
+      u.uSplitMix.value = 1;
+    } else if (u.uSplitMix.value > 0) {
+      u.uSplitSrc.value = 0;
+      u.uSplitMix.value = Math.max(0, u.uSplitMix.value - dt / 1.4);
+    }
 
     const p = pointer.current;
     if (p && !still) {
@@ -319,21 +351,39 @@ export default function ParticleField({
 
     if (outer.current) {
       const l = layout?.(viewport) ?? { x: 0, y: 0, scale: 1 };
-      outer.current.position.set(l.x, l.y, 0);
-      outer.current.scale.setScalar(l.scale);
+      // Ease toward the layout (snap on the first frame / when still) so a
+      // layout change — monogram centre → hero position — glides.
+      const k = still || !placed.current ? 1 : 0.045;
+      placed.current = true;
+      const o = outer.current;
+      o.position.x += (l.x - o.position.x) * k;
+      o.position.y += (l.y - o.position.y) * k;
+      const sc = o.scale.x + (l.scale - o.scale.x) * k;
+      o.scale.setScalar(sc);
       if (!still && p) {
         outer.current.rotation.x += (-p.y * 0.18 * sway - outer.current.rotation.x) * 0.05;
         outer.current.rotation.y += (p.x * 0.3 * sway - outer.current.rotation.y) * 0.05;
       }
     }
+    if (inner.current) {
+      // Ease toward the resting tilt so switching shapes never snaps the view.
+      const k = still ? 1 : 0.04;
+      inner.current.rotation.x += (tilt[0] - inner.current.rotation.x) * k;
+      inner.current.rotation.z += (tilt[2] - inner.current.rotation.z) * k;
+    }
     if (inner.current && !still) {
-      inner.current.rotation.y += dt * spin * (1 + s * 4);
+      if (oscillate) {
+        const target = Math.sin(state.clock.elapsedTime * 0.35) * 0.45;
+        inner.current.rotation.y += (target - inner.current.rotation.y) * 0.04;
+      } else {
+        inner.current.rotation.y += dt * spin * (1 + s * 4);
+      }
     }
   });
 
   return (
     <group ref={outer}>
-      <group ref={inner} rotation={tilt}>
+      <group ref={inner}>
         {/* Particles get flung far outside their rest bounds — never cull. */}
         <points frustumCulled={false}>
           <bufferGeometry ref={geoRef}>

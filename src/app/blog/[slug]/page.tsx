@@ -3,6 +3,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
 import { MDXRemote } from 'next-mdx-remote/rsc';
+import rehypePrettyCode from 'rehype-pretty-code';
+import { inkTheme } from '@/lib/shikiTheme';
 import { getPostBySlug, getAllPostSlugs, getAllPosts, getHeadings } from '@/lib/blog';
 import { mdxComponents } from '../../../../mdx-components';
 import Section, { Container } from '@/components/ui/Section';
@@ -13,6 +15,7 @@ import Toc from '@/components/blog/Toc';
 import PostLedger from '@/components/blog/PostLedger';
 import { formatDate } from '@/components/blog/format';
 import ShareButton from './ShareButton';
+import ZoomImage from '@/components/blog/ZoomImage';
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -96,14 +99,16 @@ export default async function BlogPostPage({ params }: Props) {
           {post.image && (
             <figure className="grid lg:grid-cols-12 gap-x-10 mt-14">
               <div className="lg:col-start-4 lg:col-span-9 relative aspect-[16/9] hard-border bg-ink overflow-hidden">
-                <Image
-                  src={post.image}
-                  alt=""
-                  fill
-                  priority
-                  sizes="(max-width: 1024px) 100vw, 75vw"
-                  className="object-cover"
-                />
+                <ZoomImage src={post.image} alt={post.title} className="absolute inset-0">
+                  <Image
+                    src={post.image}
+                    alt=""
+                    fill
+                    priority
+                    sizes="(max-width: 1024px) 100vw, 75vw"
+                    className="object-cover"
+                  />
+                </ZoomImage>
               </div>
             </figure>
           )}
@@ -118,7 +123,15 @@ export default async function BlogPostPage({ params }: Props) {
             </aside>
 
             <article id="article-body" className="article-body lg:col-span-7 min-w-0 max-w-[70ch]">
-              <MDXRemote source={post.content} components={mdxComponents} />
+              <MDXRemote
+                source={post.content}
+                components={mdxComponents}
+                options={{
+                  mdxOptions: {
+                    rehypePlugins: [[rehypePrettyCode, { theme: inkTheme, keepBackground: false, bypassInlineCode: true }]],
+                  },
+                }}
+              />
 
               <div className="mt-16 pt-6 border-t-2 border-ink flex flex-wrap items-center justify-between gap-4">
                 <span className="font-mono-label text-[10px] text-ink/50">END OF POST ✶</span>

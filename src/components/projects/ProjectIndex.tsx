@@ -6,6 +6,8 @@ import { FaGithub } from 'react-icons/fa';
 import { EASE_OUT } from '@/lib/constants';
 import { previewImage } from '@/lib/projectMeta';
 import CursorPreview, { type PreviewItem } from '@/components/ui/CursorPreview';
+import TransitionLink from '@/components/ui/TransitionLink';
+import { projectTitleVT } from '@/lib/vtNames';
 import type { Project } from '@/types';
 
 interface ProjectIndexProps {
@@ -24,7 +26,7 @@ export default function ProjectIndex({ projects, numbers }: ProjectIndexProps) {
   const [hovered, setHovered] = useState<Project | null>(null);
   const hoveredSrc = hovered && !openId ? previewImage(hovered) : undefined;
   const preview: PreviewItem | null =
-    hovered && hoveredSrc ? { id: hovered.id, src: hoveredSrc, label: hovered.title } : null;
+    hovered && hoveredSrc ? { id: hovered.id, src: hoveredSrc, label: hovered.title, aspect: 'aspect-[1200/630]' } : null;
 
   const groups = new Map<string, Project[]>();
   for (const p of projects) {
@@ -114,7 +116,7 @@ function IndexRow({
         <span className="min-w-0">
           <span
             className="block font-display leading-[0.9] truncate transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-2"
-            style={{ fontSize: 'clamp(1.5rem, 2.6vw, 2.5rem)' }}
+            style={{ fontSize: 'clamp(1.5rem, 2.6vw, 2.5rem)', viewTransitionName: projectTitleVT(project.slug) }}
           >
             {project.title}
           </span>
@@ -166,6 +168,13 @@ function IndexRow({
                   </div>
                 </div>
                 <div className="flex flex-wrap gap-2">
+                  <TransitionLink
+                    href={`/projects/${project.slug}`}
+                    data-cursor="OPEN"
+                    className="inline-flex items-center gap-2 px-4 py-3 bg-accent text-paper font-mono-label text-[11px] hover:bg-paper hover:text-ink active:scale-[0.97] transition-[color,background-color,transform]"
+                  >
+                    PROJECT PAGE <ArrowUpRight size={14} />
+                  </TransitionLink>
                   <a
                     href={project.link}
                     target="_blank"
@@ -179,7 +188,7 @@ function IndexRow({
                       href={project.deployment_link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-3 bg-accent text-paper font-mono-label text-[11px] hover:bg-paper hover:text-ink active:scale-[0.97] transition-[color,background-color,transform]"
+                      className="inline-flex items-center gap-2 px-4 py-3 border-2 border-paper/40 text-paper font-mono-label text-[11px] hover:bg-paper hover:text-ink active:scale-[0.97] transition-[color,background-color,transform]"
                     >
                       <ExternalLink size={15} /> LIVE DEMO
                     </a>

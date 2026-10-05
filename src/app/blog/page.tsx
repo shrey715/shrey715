@@ -4,8 +4,7 @@ import { getAllPosts } from '@/lib/blog';
 import SectionHeader from '@/components/ui/SectionHeader';
 import Section, { Container } from '@/components/ui/Section';
 import Footer from '@/components/sections/Footer';
-import FeaturedPost from '@/components/blog/FeaturedPost';
-import PostLedger from '@/components/blog/PostLedger';
+import BlogIndex from '@/components/blog/BlogIndex';
 import { dateParts } from '@/components/blog/format';
 
 export const metadata = {
@@ -15,7 +14,7 @@ export const metadata = {
 
 export default async function BlogPage() {
   const posts = await getAllPosts();
-  const [latest, ...archive] = posts;
+  const latest = posts[0];
   const totalMinutes = posts.reduce((n, p) => n + (parseInt(p.readingTime, 10) || 0), 0);
 
   const stats = [
@@ -51,25 +50,7 @@ export default async function BlogPage() {
             else I end up taking apart.
           </p>
 
-          {latest ? (
-            <div className="mt-20 sm:mt-24">
-              <FeaturedPost post={latest} />
-            </div>
-          ) : (
-            <div className="mt-20 py-20 text-center hard-border bg-paper">
-              <p className="font-mono-label text-sm text-ink/60">NO POSTS YET — CHECK BACK SOON.</p>
-            </div>
-          )}
-
-          {archive.length > 0 && (
-            <div className="mt-24 sm:mt-32">
-              <div className="flex items-center gap-4 mb-2 font-mono-label text-xs text-ink/60">
-                ARCHIVE
-                <span className="text-accent tabular-nums">[{String(archive.length).padStart(2, '0')}]</span>
-              </div>
-              <PostLedger posts={archive} />
-            </div>
-          )}
+          <BlogIndex posts={posts} />
         </Container>
       </Section>
 

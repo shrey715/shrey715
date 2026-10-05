@@ -29,6 +29,15 @@ export interface Project {
     year?: string;
     status?: string;
     deployment_link?: string;
+    /** URL segment for /projects/[slug], derived from the title. */
+    slug: string;
+    /** Real commit activity from GitHub, when the repo is public. */
+    activity?: {
+        bins: number[];
+        commits: number;
+        first: string;
+        last: string;
+    } | null;
 }
 
 // Skill types

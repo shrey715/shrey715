@@ -5,16 +5,18 @@ import { Check, Copy } from 'lucide-react';
 
 interface CodeBlockProps {
   children: React.ReactNode;
+  /** From rehype-pretty-code's data-language. */
+  lang?: string;
 }
 
 /** Fenced code: an ink panel with a header bar naming the language and a copy button. */
-export default function CodeBlock({ children }: CodeBlockProps) {
+export default function CodeBlock({ children, lang: langProp }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
   const preRef = useRef<HTMLPreElement>(null);
 
   // MDX hands us <code className="language-bash">…</code> as the only child.
   const className = isValidElement<{ className?: string }>(children) ? children.props.className ?? '' : '';
-  const lang = className.match(/language-(\w+)/)?.[1];
+  const lang = langProp ?? className.match(/language-(\w+)/)?.[1];
 
   const copyToClipboard = async () => {
     const code = preRef.current?.textContent ?? '';

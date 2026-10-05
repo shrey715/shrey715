@@ -49,23 +49,67 @@ export default function Wordmark({ first, last, joined = false }: WordmarkProps)
     return () => ro.disconnect();
   }, []);
 
+  // Cursor proximity: each letter's solid fill fades in as the pointer nears
+  // it, so sweeping across the name inks it like a spotlight.
+  const fills = useRef<(HTMLSpanElement | null)[]>([]);
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    let raf = 0;
+    let mx = -1e4;
+    let my = -1e4;
+    const update = () => {
+      raf = 0;
+      for (const el of fills.current) {
+        if (!el) continue;
+        const r = el.getBoundingClientRect();
+        const d = Math.hypot(mx - (r.left + r.width / 2), my - (r.top + r.height / 2));
+        el.style.opacity = String(Math.max(0, 1 - d / (r.height * 1.1)));
+      }
+    };
+    const onMove = (e: MouseEvent) => {
+      mx = e.clientX;
+      my = e.clientY;
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    window.addEventListener('mousemove', onMove, { passive: true });
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('mousemove', onMove);
+    };
+  }, [prefersReducedMotion]);
+
+  let n = 0;
   const render = (word: string, accent: boolean) =>
-    word.split('').map((ch, i) => (
-      <span key={`${word}-${i}`} className="inline-block overflow-hidden align-bottom pt-[0.08em] pb-[0.02em]">
-        <motion.span
-          variants={prefersReducedMotion ? undefined : letter}
-          whileHover={prefersReducedMotion ? undefined : { y: '-6%' }}
-          transition={{ type: 'spring', stiffness: 500, damping: 22 }}
-          className={`inline-block transition-colors duration-300 ${
-            accent
-              ? 'text-transparent [-webkit-text-stroke:1.5px_var(--color-accent)] hover:text-accent'
-              : 'text-paper/[0.08] hover:text-paper'
-          }`}
-        >
-          {ch}
-        </motion.span>
-      </span>
-    ));
+    word.split('').map((ch, i) => {
+      const idx = n++;
+      return (
+        <span key={`${word}-${i}`} className="inline-block overflow-hidden align-bottom pt-[0.08em] pb-[0.02em]">
+          <motion.span
+            variants={prefersReducedMotion ? undefined : letter}
+            whileHover={prefersReducedMotion ? undefined : { y: '-6%' }}
+            transition={{ type: 'spring', stiffness: 500, damping: 22 }}
+            className="relative inline-block"
+          >
+            <span
+              className={
+                accent ? 'text-transparent [-webkit-text-stroke:1.5px_var(--color-accent)]' : 'text-paper/[0.08]'
+              }
+            >
+              {ch}
+            </span>
+            <span
+              ref={(el) => {
+                fills.current[idx] = el;
+              }}
+              aria-hidden="true"
+              className={`absolute inset-0 opacity-0 ${accent ? 'text-accent' : 'text-paper'}`}
+            >
+              {ch}
+            </span>
+          </motion.span>
+        </span>
+      );
+    });
 
   return (
     <div ref={boxRef} className="w-full overflow-hidden select-none" aria-label={joined ? `${first}${last}` : `${first} ${last}`} role="img">

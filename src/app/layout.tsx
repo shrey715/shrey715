@@ -8,7 +8,10 @@ import StatusReadout from "@/components/effects/StatusReadout";
 import Preloader from "@/components/effects/Preloader";
 import LenisProvider from "@/components/effects/LenisProvider";
 import Navbar from "@/components/ui/Navbar";
+import ViewTransitionBridge from "@/components/effects/ViewTransitionBridge";
 import { JsonLdScript } from "@/lib/schema";
+import { getSiteIndex } from "@/lib/siteIndex";
+import CommandPalette from "@/components/ui/CommandPalette";
 
 // Massive condensed display face for hero + section megatype
 const anton = Anton({
@@ -42,6 +45,7 @@ export const metadata: Metadata = {
   publisher: "Shreyas Deb",
   alternates: {
     canonical: "/",
+    types: { "application/rss+xml": [{ url: "/rss.xml", title: "Shreyas Deb — Field Notes" }] },
   },
   icons: {
     icon: [
@@ -90,11 +94,13 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const site = await getSiteIndex();
+
   return (
     // Font variables live on <html> so the :root-level Tailwind @theme tokens
     // (--font-display: var(--font-anton) …) can actually resolve them.
@@ -125,11 +131,13 @@ export default function RootLayout({
           SKIP TO CONTENT
         </a>
         <LenisProvider>
+          <ViewTransitionBridge />
           <Preloader />
           <CustomCursor />
           <ScrollIndicator />
-          <StatusReadout />
-          <Navbar />
+          <StatusReadout latestPush={site.latestPush} />
+          <Navbar counts={site.counts} />
+          <CommandPalette index={site} />
           {children}
         </LenisProvider>
       </body>

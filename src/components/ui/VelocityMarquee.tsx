@@ -36,20 +36,53 @@ function Row({ items, baseVelocity, className, starClassName }: RowProps) {
   const skewX = useTransform(velocity, [-2500, 2500], [12, -12], { clamp: true });
   const x = useTransform(baseX, (v) => `${wrap(-100 / COPIES, 0, v)}%`);
   const direction = useRef(1);
+  const trackRef = useRef<HTMLDivElement>(null);
+  // Hover eases the strip to a crawl; dragging takes over completely.
+  const speed = useRef(1);
+  const hovering = useRef(false);
+  const drag = useRef<{ x: number; base: number } | null>(null);
 
   useAnimationFrame((_, delta) => {
-    if (prefersReducedMotion) return;
+    if (prefersReducedMotion || drag.current) return;
+    speed.current += ((hovering.current ? 0.12 : 1) - speed.current) * 0.08;
     const b = boost.get();
     if (b < 0) direction.current = -1;
     else if (b > 0) direction.current = 1;
     let move = direction.current * baseVelocity * (delta / 1000);
     move += direction.current * move * b;
-    baseX.set(baseX.get() + move);
+    baseX.set(baseX.get() + move * speed.current);
   });
 
+  const onPointerDown = (e: React.PointerEvent) => {
+    if (prefersReducedMotion) return;
+    drag.current = { x: e.clientX, base: baseX.get() };
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
+  };
+  const onPointerMove = (e: React.PointerEvent) => {
+    const d = drag.current;
+    const width = trackRef.current?.offsetWidth;
+    if (!d || !width) return;
+    baseX.set(d.base + ((e.clientX - d.x) / width) * 100);
+  };
+  const endDrag = () => {
+    drag.current = null;
+  };
+
   return (
-    <div className={cn('overflow-hidden whitespace-nowrap flex', className)}>
-      <motion.div style={{ x, skewX: prefersReducedMotion ? 0 : skewX }} className="flex shrink-0">
+    <div
+      className={cn('overflow-hidden whitespace-nowrap flex cursor-grab active:cursor-grabbing select-none touch-pan-y', className)}
+      onPointerEnter={(e) => e.pointerType === 'mouse' && (hovering.current = true)}
+      onPointerLeave={() => {
+        hovering.current = false;
+        endDrag();
+      }}
+      onPointerDown={onPointerDown}
+      onPointerMove={onPointerMove}
+      onPointerUp={endDrag}
+      onPointerCancel={endDrag}
+      data-cursor="DRAG"
+    >
+      <motion.div ref={trackRef} style={{ x, skewX: prefersReducedMotion ? 0 : skewX }} className="flex shrink-0">
         {Array.from({ length: COPIES }, (_, c) => (
           <span key={c} className="flex shrink-0 items-center" aria-hidden={c > 0}>
             {items.map((item) => (

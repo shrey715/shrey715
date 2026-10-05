@@ -4,6 +4,22 @@ import { motion, useScroll, useSpring, useTransform } from 'framer-motion';
 import SectionHeader from '@/components/ui/SectionHeader';
 import Section, { Container } from '@/components/ui/Section';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import CareerMap, { parseMonth } from './CareerMap';
+
+/** Oldest first by start date (ties: whichever ended first), to read in step with the career map. */
+function chronological(items: Experience[]) {
+  const key = (e: Experience) => {
+    const [a, b] = e.duration.split(/\s*[–—-]\s*/);
+    const start = parseMonth(a ?? '') ?? Infinity;
+    const end = /present/i.test(b ?? '') ? Infinity : (parseMonth(b ?? '') ?? Infinity);
+    return [start, end] as const;
+  };
+  return [...items].sort((x, y) => {
+    const [sx, ex] = key(x);
+    const [sy, ey] = key(y);
+    return sx - sy || ex - ey;
+  });
+}
 import { ACCENT } from '@/lib/constants';
 import type { Experience, Achievement } from '@/types';
 
@@ -97,7 +113,8 @@ function TimelineItem({ exp }: { exp: Experience }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: '-12% 0px' }}
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative flex flex-col md:flex-row gap-3 md:gap-0 pl-9 md:pl-0 py-9 md:py-11"
+      id={`exp-${exp.id}`}
+      className="group relative flex flex-col md:flex-row gap-3 md:gap-0 pl-9 md:pl-0 py-9 md:py-11 scroll-mt-28"
     >
       {/* Left rail: when / where / what kind */}
       <div className="md:w-56 md:shrink-0 md:text-right md:pr-2 md:pt-1.5 font-mono-label text-[11px] text-ink/55 space-y-1.5">
@@ -169,7 +186,15 @@ export default function ExperienceSection({ workExperience, leadership, achievem
 
         {/* Work — sticky stacking deck: each row pins and the next slides over it */}
         <SubLabel>WORK</SubLabel>
-        <WorkTimeline items={workExperience} />
+        <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_15rem] xl:gap-12">
+          <WorkTimeline items={chronological(workExperience)} />
+          {/* Career mini-map in the timeline's otherwise empty right rail */}
+          <aside className="hidden xl:block pt-6">
+            <div className="sticky top-28">
+              <CareerMap work={workExperience} leadership={leadership} />
+            </div>
+          </aside>
+        </div>
 
         {/* Leadership — three equal columns hung from a rule, no boxes */}
         <SubLabel>LEADERSHIP</SubLabel>

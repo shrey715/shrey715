@@ -10,7 +10,6 @@ import { useSectionNav } from '@/hooks/useSectionNav';
 import { DOMAINS, projectDomains, type Domain } from '@/lib/projectMeta';
 import { EASE_OUT } from '@/lib/constants';
 import ProjectCard from './ProjectCard';
-import ProjectModal from './ProjectModal';
 import ProjectIndex from './ProjectIndex';
 import type { Project } from '@/types';
 
@@ -25,7 +24,6 @@ export default function ProjectsPageClient({ projects }: ProjectsPageClientProps
   const [query, setQuery] = useState('');
   const [domain, setDomain] = useState<Domain | 'all'>('all');
   const [view, setView] = useState<View>('index');
-  const [activeProject, setActiveProject] = useState<Project | null>(null);
 
   const fuse = useMemo(
     () =>
@@ -199,14 +197,11 @@ export default function ProjectsPageClient({ projects }: ProjectsPageClientProps
                 key={project.id}
                 project={project}
                 index={(numbers.get(project.id) ?? 1) - 1}
-                onOpen={setActiveProject}
               />
             ))}
           </div>
         )}
       </Container>
-
-      <ProjectModal project={activeProject} onClose={() => setActiveProject(null)} />
     </div>
   );
 }

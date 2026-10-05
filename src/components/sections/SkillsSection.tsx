@@ -2,10 +2,13 @@
 import { motion, type Variants } from "framer-motion";
 import SectionHeader from "@/components/ui/SectionHeader";
 import Section, { Container } from "@/components/ui/Section";
-import type { SkillCategory } from "@/types";
+import type { Project, SkillCategory } from "@/types";
+import SkillGraph from "./SkillGraph";
 
 interface SkillsSectionProps {
   categories: SkillCategory[];
+  /** For the stack × projects graph. */
+  projects: Project[];
 }
 
 // Column spans (lg, 12-col) tuned to the data order so the bento tiles cleanly:
@@ -41,7 +44,7 @@ function trackSpotlight(e: React.MouseEvent<HTMLElement>) {
   e.currentTarget.style.setProperty("--my", `${e.clientY - r.top}px`);
 }
 
-export default function SkillsSection({ categories }: SkillsSectionProps) {
+export default function SkillsSection({ categories, projects }: SkillsSectionProps) {
   const total = categories.reduce((n, c) => n + c.skills.length, 0);
 
   return (
@@ -55,6 +58,11 @@ export default function SkillsSection({ categories }: SkillsSectionProps) {
             {String(categories.length).padStart(2, "0")} DOMAINS / {total}+ TOOLS
           </span>
         </p>
+
+        {/* Graph of what the stack is actually used for (desktop) */}
+        <div className="hidden lg:block mb-12">
+          <SkillGraph projects={projects} />
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-3">
           {categories.map((category, i) => (
@@ -92,7 +100,7 @@ function SkillPanel({
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, delay: index * 0.06 }}
       onMouseMove={trackSpotlight}
-      className={`group relative overflow-hidden p-5 sm:p-6 min-h-[190px] flex flex-col ${span} ${
+      className={`group relative overflow-hidden p-5 sm:p-6 flex flex-col ${span} ${
         accent
           ? "bg-accent text-paper border-2 border-accent"
           : "bg-ink text-paper border-2 border-paper/35 transition-colors"
@@ -150,7 +158,7 @@ function SkillPanel({
           initial="hidden"
           whileInView="show"
           viewport={{ once: true, margin: "-40px" }}
-          className="flex flex-wrap gap-2 mt-auto"
+          className="flex flex-wrap gap-2"
         >
           {category.skills.map((skill) => (
             <motion.span

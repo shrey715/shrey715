@@ -4,7 +4,7 @@ import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
 import { HiOutlineNewspaper } from 'react-icons/hi';
 import { ArrowUp } from 'lucide-react';
 import { useLenis } from 'lenis/react';
-import ContactForm from '@/components/ui/ContactForm';
+import ContactTerminal from '@/components/ui/ContactTerminal';
 import DisplayTitle from '@/components/ui/DisplayTitle';
 import ScrambleText from '@/components/ui/ScrambleText';
 import { Container } from '@/components/ui/Section';
@@ -20,7 +20,12 @@ const socialLinks: SocialLink[] = [
   { icon: FaEnvelope, href: "mailto:shreyas.deb@research.iiit.ac.in", label: "Email", external: true },
 ];
 
-export default function Footer() {
+interface FooterProps {
+  /** Section number shown in the kicker — only meaningful on the home page. */
+  index?: string;
+}
+
+export default function Footer({ index }: FooterProps = {}) {
   const lenis = useLenis();
   const scrollTop = () => {
     if (lenis) {
@@ -35,7 +40,7 @@ export default function Footer() {
       <RegistrationMarks dark />
       <Container>
         <div className="font-mono-label text-[11px] text-paper/50 mb-4 flex items-center gap-3">
-          <span className="text-accent">(05)</span>
+          {index && <span className="text-accent">({index})</span>}
           <ScrambleText text="[ CONTACT ]" duration={700} />
           <span className="flex-1 h-px bg-paper/20" />
         </div>
@@ -74,7 +79,7 @@ export default function Footer() {
           </div>
 
           {/* Right: contact card */}
-          <ContactForm />
+          <ContactTerminal />
         </div>
 
         {/* Bottom bar */}

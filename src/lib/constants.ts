@@ -11,3 +11,6 @@ export const CONTENT_MAX_WIDTH = 1500;
 
 /** Fired on window the moment the Preloader's curtain starts lifting. */
 export const INTRO_EVENT = 'preloader:lift';
+
+/** Fired on window once the hero's WebGL scene has built its first target and drawn. */
+export const HERO_READY_EVENT = 'hero:ready';

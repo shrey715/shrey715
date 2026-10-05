@@ -1,8 +1,9 @@
 'use client';
 import Link from 'next/link';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   motion,
+  useMotionValue,
   useMotionValueEvent,
   useScroll,
   useSpring,
@@ -14,7 +15,10 @@ import SectionHeader from '@/components/ui/SectionHeader';
 import Section, { Container } from '@/components/ui/Section';
 import RegistrationMarks from '@/components/ui/RegistrationMarks';
 import { ACCENT } from '@/lib/constants';
-import { mulberry32 } from '@/components/three/formations';
+import TransitionLink from '@/components/ui/TransitionLink';
+import DotPlot, { activityCaption } from '@/components/projects/DotPlot';
+import { projectTitleVT } from '@/lib/vtNames';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import type { Project } from '@/types';
 
 interface ProjectsTeaserProps {
@@ -161,105 +165,99 @@ function PinnedGallery({ projects, total }: { projects: Project[]; total: number
   );
 }
 
-/** Seeded dot-plot per project — a tiny "specimen readout" echoing the hero particles. */
-function DotPlot({ seed }: { seed: string }) {
-  const cells = useMemo(() => {
-    let h = 0;
-    for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) | 0;
-    const rand = mulberry32(h);
-    const cols = 28;
-    const rows = 9;
-    const f1 = 0.15 + rand() * 0.35;
-    const f2 = 0.2 + rand() * 0.5;
-    const ph = rand() * Math.PI * 2;
-    const out: { x: number; y: number; hot: boolean }[] = [];
-    for (let c = 0; c < cols; c++) {
-      // A wavy "signal" height per column; dots fill up to it.
-      const level = (Math.sin(c * f1 + ph) * 0.5 + 0.5) * 0.6 + (Math.sin(c * f2) * 0.5 + 0.5) * 0.4;
-      const filled = Math.round(level * rows);
-      for (let r = 0; r < rows; r++) {
-        if (rows - r <= filled) out.push({ x: c, y: r, hot: rows - r === filled && rand() > 0.55 });
-      }
-    }
-    return out;
-  }, [seed]);
-
-  return (
-    <svg viewBox="0 0 28 9" className="w-full h-auto" aria-hidden="true" shapeRendering="crispEdges">
-      {cells.map((d) => (
-        <rect
-          key={`${d.x}-${d.y}`}
-          x={d.x + 0.2}
-          y={d.y + 0.2}
-          width={0.6}
-          height={0.6}
-          className={
-            d.hot
-              ? 'fill-accent'
-              : 'fill-ink/25 group-hover:fill-paper/40 transition-colors duration-300'
-          }
-          style={{ transitionDelay: `${d.x * 12}ms` }}
-        />
-      ))}
-    </svg>
-  );
+/** Long titles step down in size so they hold to two clean lines. */
+function titleSize(title: string) {
+  if (title.length <= 10) return 'clamp(2.4rem, 3.6vw, 3.8rem)';
+  if (title.length <= 16) return 'clamp(2.1rem, 3vw, 3.2rem)';
+  return 'clamp(1.8rem, 2.4vw, 2.6rem)';
 }
 
 function GalleryCard({ project, index }: { project: Project; index: number }) {
   const num = String(index + 1).padStart(2, '0');
+  const caption = activityCaption(project);
+  const prefersReducedMotion = useReducedMotion();
+
+  // Cursor tilt: springs keep it weighty rather than twitchy.
+  const tx = useMotionValue(0.5);
+  const ty = useMotionValue(0.5);
+  const rotateX = useSpring(useTransform(ty, [0, 1], [5, -5]), { stiffness: 160, damping: 20 });
+  const rotateY = useSpring(useTransform(tx, [0, 1], [-6, 6]), { stiffness: 160, damping: 20 });
+  const onMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (prefersReducedMotion) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    tx.set((e.clientX - r.left) / r.width);
+    ty.set((e.clientY - r.top) / r.height);
+  };
+  const onLeave = () => {
+    tx.set(0.5);
+    ty.set(0.5);
+  };
 
   return (
-    <Link
-      href="/projects"
+    <TransitionLink
+      href={`/projects/${project.slug}`}
       data-cursor="Open"
-      className="group relative flex flex-col w-[min(38vw,560px)] h-[min(56vh,520px)] p-7 bg-paper text-ink hard-border overflow-hidden transition-[box-shadow,transform] duration-300 hover:-translate-x-1 hover:-translate-y-1 hover:shadow-[8px_8px_0_0_var(--color-accent)]"
+      onMouseMove={onMove}
+      onMouseLeave={onLeave}
+      className="block [perspective:1000px]"
     >
-      {/* Ink flood that rises from the bottom on hover */}
-      <span
-        aria-hidden="true"
-        className="absolute inset-0 bg-ink origin-bottom scale-y-0 group-hover:scale-y-100 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
-      />
-
-      <div className="relative z-10 flex items-center justify-between font-mono-label text-[11px]">
-        <span className="text-accent tabular-nums">{num}</span>
-        <span className="flex items-center gap-3 text-ink/50 group-hover:text-paper/60 transition-colors">
-          {project.year && <data className="tabular-nums">{project.year}</data>}
-          <ArrowUpRight size={18} className="text-ink group-hover:text-accent transition-all group-hover:rotate-45" />
-        </span>
-      </div>
-
-      <div className="relative z-10 mt-6">
-        <DotPlot seed={project.id} />
-      </div>
-
-      <h3
-        className="relative z-10 font-display mt-auto leading-[0.88] group-hover:text-paper transition-colors"
-        style={{ fontSize: 'clamp(2.4rem, 3.6vw, 3.8rem)' }}
+      <motion.div
+        style={{ rotateX, rotateY }}
+        className="group relative flex flex-col w-[min(38vw,560px)] h-[min(56vh,520px)] p-7 bg-paper text-ink hard-border overflow-hidden transition-[box-shadow] duration-300 hover:shadow-[8px_8px_0_0_var(--color-accent)]"
       >
-        {project.title}
-      </h3>
-      <p className="relative z-10 text-sm leading-relaxed mt-3 line-clamp-3 text-ink/65 group-hover:text-paper/70 transition-colors">
-        {project.description}
-      </p>
-      <div className="relative z-10 flex flex-wrap gap-2 mt-5">
-        {project.tech.slice(0, 4).map((t) => (
-          <span
-            key={t}
-            className="px-2.5 py-1 font-mono-label text-[10px] border border-ink/25 text-ink/70 group-hover:border-paper/30 group-hover:text-paper/80 transition-colors"
-          >
-            {t}
+        {/* Ink flood that rises from the bottom on hover */}
+        <span
+          aria-hidden="true"
+          className="absolute inset-0 bg-ink origin-bottom scale-y-0 group-hover:scale-y-100 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]"
+        />
+
+        <div className="relative z-10 flex items-center justify-between font-mono-label text-[11px]">
+          <span className="text-accent tabular-nums">{num}</span>
+          <span className="flex items-center gap-3 text-ink/50 group-hover:text-paper/60 transition-colors">
+            {project.year && <data className="tabular-nums">{project.year}</data>}
+            <ArrowUpRight size={18} className="text-ink group-hover:text-accent transition-all group-hover:rotate-45" />
           </span>
-        ))}
-      </div>
-    </Link>
+        </div>
+
+        <div className="relative z-10 mt-6">
+          <DotPlot project={project} invertOnHover />
+          {caption && (
+            <span className="block mt-2 font-mono-label text-[9px] text-ink/40 group-hover:text-paper/45 transition-colors">
+              {caption}
+            </span>
+          )}
+        </div>
+
+        <h3
+          className="relative z-10 font-display mt-auto leading-[0.9] text-balance group-hover:text-paper transition-colors"
+          style={{ fontSize: titleSize(project.title), viewTransitionName: projectTitleVT(project.slug) }}
+        >
+          {project.title}
+        </h3>
+        <p className="relative z-10 text-sm leading-relaxed mt-3 line-clamp-3 text-ink/65 group-hover:text-paper/70 transition-colors">
+          {project.description}
+        </p>
+        <div className="relative z-10 flex flex-wrap gap-2 mt-5">
+          {project.tech.slice(0, 4).map((t) => (
+            <span
+              key={t}
+              className="px-2.5 py-1 font-mono-label text-[10px] border border-ink/25 text-ink/70 group-hover:border-paper/30 group-hover:text-paper/80 transition-colors"
+            >
+              {t}
+            </span>
+          ))}
+        </div>
+      </motion.div>
+    </TransitionLink>
   );
 }
 
 function FeaturedPanel({ project, index, span }: { project: Project; index: number; span: string }) {
   const num = String(index + 1).padStart(2, '0');
+  const caption = activityCaption(project);
 
   return (
-    <Link href="/projects" data-cursor="Open" className={span}>
+    <TransitionLink href={`/projects/${project.slug}`} data-cursor="Open" className={span}>
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -273,9 +271,12 @@ function FeaturedPanel({ project, index, span }: { project: Project; index: numb
           <ArrowUpRight size={18} className="opacity-40" />
         </div>
         <div className="mb-4">
-          <DotPlot seed={project.id} />
+          <DotPlot project={project} />
+          {caption && <span className="block mt-2 font-mono-label text-[9px] text-ink/40">{caption}</span>}
         </div>
-        <h4 className="font-display text-3xl leading-[0.9] mb-3">{project.title}</h4>
+        <h4 className="font-display text-3xl leading-[0.9] mb-3 text-balance" style={{ viewTransitionName: projectTitleVT(project.slug) }}>
+          {project.title}
+        </h4>
         <p className="text-sm text-ink/65 leading-relaxed line-clamp-2 mb-5">{project.description}</p>
         <div className="flex flex-wrap gap-2 mt-auto">
           {project.tech.slice(0, 3).map((t) => (
@@ -285,6 +286,6 @@ function FeaturedPanel({ project, index, span }: { project: Project; index: numb
           ))}
         </div>
       </motion.div>
-    </Link>
+    </TransitionLink>
   );
 }

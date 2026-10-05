@@ -21,10 +21,11 @@ export default function ScrollIndicator() {
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
-    if (window.scrollY > 0) setIsVisible(true);
+    const initial = requestAnimationFrame(() => window.scrollY > 0 && setIsVisible(true));
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      cancelAnimationFrame(initial);
       clearTimeout(hideTimeout);
     };
   }, []);

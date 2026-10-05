@@ -1,46 +1,67 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useLayoutEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { consumeTransitionNav } from '@/lib/viewTransition';
 
-const CURTAIN_EASE = [0.76, 0, 0.24, 1] as const; // matches Preloader's exit curve
+const CELL = 96; // px — a multiple of the 64px background grid reads as the same paper
+const STAGGER = 0.022;
+const DURATION = 0.42;
+const EASE = [0.76, 0, 0.24, 1] as const;
+
+interface Grid {
+  cols: number;
+  rows: number;
+}
 
 /**
- * A lighter echo of the Preloader's curtain-lift, replayed on every
- * client-side route change (Next.js mounts a fresh instance of this file
- * per navigation) so in-app navigation shares the same visual grammar as
- * the initial load. Suppressed on the very first page load — the Preloader
- * already owns that beat, tracked via the same sessionStorage flag — and
- * under reduced motion.
+ * Route transition, replayed on every client-side navigation (Next mounts a
+ * fresh template per route): the screen starts tiled in ink cells, which fold
+ * away in a diagonal wave from the top-left to reveal the new page — the
+ * site's own grid paper, turning over.
  *
- * Deliberately does NOT touch Lenis (no stop/start): a route change can
- * carry a pending cross-page section scroll (see useSectionNav), and
- * pausing Lenis here would cancel that in-flight scroll animation. The
- * curtain is purely a visual overlay — nothing needs to actually stop
- * scrolling underneath it for its ~0.7s.
+ * Stands down on the very first load (the Preloader owns that beat), under
+ * reduced motion, and for View Transition navigations (those morph shared
+ * elements instead, and a cover would hide the morph).
  */
 export default function Template({ children }: { children: React.ReactNode }) {
-  const prefersReducedMotion = useReducedMotion();
-  // Starts false on both server and client so hydration always agrees —
-  // sessionStorage is client-only, so this can only be checked after mount.
-  const [playCurtain, setPlayCurtain] = useState(false);
+  const [grid, setGrid] = useState<Grid | null>(null);
 
-  useEffect(() => {
-    if (prefersReducedMotion) return;
+  // Layout effect: the cover must be up before the new page's first paint.
+  useLayoutEffect(() => {
+    // Read directly: the useReducedMotion hook reports false on first render.
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced || consumeTransitionNav()) return;
     if (sessionStorage.getItem('preloaded') !== '1') return;
-    setPlayCurtain(true);
-  }, [prefersReducedMotion]);
+    const cols = Math.ceil(window.innerWidth / CELL);
+    const rows = Math.ceil(window.innerHeight / CELL);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- must commit before paint
+    setGrid({ cols, rows });
+    const done = setTimeout(() => setGrid(null), ((cols + rows) * STAGGER + DURATION) * 1000 + 120);
+    return () => clearTimeout(done);
+  }, []);
 
   return (
     <>
-      {playCurtain && (
-        <motion.div
+      {grid && (
+        <div
           aria-hidden="true"
-          initial={{ y: 0 }}
-          animate={{ y: '-100%' }}
-          transition={{ duration: 0.7, ease: CURTAIN_EASE, delay: 0.05 }}
-          className="fixed inset-0 z-[100000] bg-ink grid-lines-dark pointer-events-none print:hidden"
-        />
+          className="fixed inset-0 z-[100000] pointer-events-none print:hidden grid"
+          style={{ gridTemplateColumns: `repeat(${grid.cols}, 1fr)`, gridTemplateRows: `repeat(${grid.rows}, 1fr)` }}
+        >
+          {Array.from({ length: grid.cols * grid.rows }, (_, i) => {
+            const c = i % grid.cols;
+            const r = Math.floor(i / grid.cols);
+            return (
+              <motion.div
+                key={i}
+                className="bg-ink origin-bottom-right"
+                initial={{ scale: 1.02 }}
+                animate={{ scale: 0 }}
+                transition={{ duration: DURATION, ease: EASE, delay: (c + r) * STAGGER }}
+              />
+            );
+          })}
+        </div>
       )}
       {children}
     </>

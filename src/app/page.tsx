@@ -8,7 +8,7 @@ import ProjectsTeaser from '@/components/sections/ProjectsTeaser';
 import Footer from '@/components/sections/Footer';
 import SectionDivider from '@/components/ui/SectionDivider';
 import VelocityMarquee from '@/components/ui/VelocityMarquee';
-import { getProjects } from '@/lib/projects';
+import { getProjectsWithActivity } from '@/lib/projects';
 
 import type { SkillCategory, Experience, Achievement } from '@/types';
 
@@ -36,7 +36,7 @@ async function getExperience(): Promise<ExperienceData> {
 }
 
 export default async function Home() {
-  const projects = await getProjects();
+  const projects = await getProjectsWithActivity();
   const skillCategories = await getSkills();
   const experienceData = await getExperience();
 
@@ -58,13 +58,13 @@ export default async function Home() {
       />
 
       <SectionDivider />
-      <SkillsSection categories={skillCategories} />
+      <SkillsSection categories={skillCategories} projects={projects} />
 
       <SectionDivider />
       <ProjectsTeaser projects={projects} />
 
       <SectionDivider />
-      <Footer />
+      <Footer index="05" />
     </main>
   );
 }

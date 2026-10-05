@@ -2,6 +2,7 @@ import { MetadataRoute } from 'next'
 import fs from 'fs'
 import path from 'path'
 import matter from 'gray-matter'
+import { slugify } from '@/lib/slug'
 
 // Required for `output: export` (static HTML export for the college-forum mirror).
 export const dynamic = 'force-static'
@@ -30,6 +31,12 @@ function getBlogPosts(): { slug: string; lastModified: Date }[] {
     })
 }
 
+function getProjectSlugs(): string[] {
+    const file = path.join(process.cwd(), 'src/data/projects.json')
+    const projects: { title: string }[] = JSON.parse(fs.readFileSync(file, 'utf-8'))
+    return projects.map(p => slugify(p.title))
+}
+
 export default function sitemap(): MetadataRoute.Sitemap {
     const blogPosts = getBlogPosts()
 
@@ -39,6 +46,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
             lastModified: new Date(),
             changeFrequency: 'weekly',
             priority: 1,
+        },
+        {
+            url: `${BASE_URL}/projects`,
+            lastModified: new Date(),
+            changeFrequency: 'weekly',
+            priority: 0.9,
         },
         {
             url: `${BASE_URL}/blog`,
@@ -55,5 +68,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
         priority: 0.7,
     }))
 
-    return [...staticPages, ...blogPages]
+    const projectPages: MetadataRoute.Sitemap = getProjectSlugs().map(slug => ({
+        url: `${BASE_URL}/projects/${slug}`,
+        lastModified: new Date(),
+        changeFrequency: 'monthly',
+        priority: 0.7,
+    }))
+
+    return [...staticPages, ...projectPages, ...blogPages]
 }

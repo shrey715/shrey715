@@ -6,7 +6,7 @@ import Section, { Container } from '@/components/ui/Section';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import CareerMap, { parseMonth } from './CareerMap';
 
-/** Oldest first by start date (ties: whichever ended first), to read in step with the career map. */
+/** Oldest first by end date — ongoing roles last (ties: whichever started first), in step with the career map. */
 function chronological(items: Experience[]) {
   const key = (e: Experience) => {
     const [a, b] = e.duration.split(/\s*[–—-]\s*/);
@@ -17,7 +17,7 @@ function chronological(items: Experience[]) {
   return [...items].sort((x, y) => {
     const [sx, ex] = key(x);
     const [sy, ey] = key(y);
-    return sx - sy || ex - ey;
+    return ex - ey || sx - sy;
   });
 }
 import { ACCENT } from '@/lib/constants';

@@ -75,5 +75,5 @@ export async function getLatestPush(): Promise<LatestPush | null> {
     `${API}/users/${OWNER}/events/public?per_page=30`,
   );
   const push = events?.find((e) => e.type === 'PushEvent');
-  return push ? { repo: push.repo.name.replace(`${OWNER}/`, ''), at: push.created_at } : null;
+  return push ? { repo: push.repo.name.split('/').pop() ?? push.repo.name, at: push.created_at } : null;
 }

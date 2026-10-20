@@ -5,7 +5,7 @@ import { HiOutlineNewspaper } from 'react-icons/hi';
 import { ArrowUp } from 'lucide-react';
 import { useLenis } from 'lenis/react';
 import ContactTerminal from '@/components/ui/ContactTerminal';
-import DisplayTitle from '@/components/ui/DisplayTitle';
+import PlotText from '@/components/plot/PlotText';
 import ScrambleText from '@/components/ui/ScrambleText';
 import { Container } from '@/components/ui/Section';
 import RegistrationMarks from '@/components/ui/RegistrationMarks';
@@ -36,7 +36,7 @@ export default function Footer({ index }: FooterProps = {}) {
   };
 
   return (
-    <footer id="contact" className="relative bg-ink text-paper grid-lines-dark pt-24 border-t-2 border-ink overflow-hidden">
+    <footer id="contact" data-sheet="CONTACT" data-specimen="monogram" className="relative bg-ink text-paper grid-lines-dark pt-24 border-t-2 border-ink overflow-hidden">
       <RegistrationMarks dark />
       <Container>
         <div className="font-mono-label text-[11px] text-paper/50 mb-4 flex items-center gap-3">
@@ -46,8 +46,12 @@ export default function Footer({ index }: FooterProps = {}) {
         </div>
 
         <h2 className="font-display leading-[0.82]" style={{ fontSize: 'clamp(3rem, 12vw, 10rem)' }}>
-          <DisplayTitle text="SAY" dark />
-          <span className="text-accent"><DisplayTitle text="HELLO!" dark delay={0.12} /></span>
+          <span className="flex flex-wrap items-end gap-x-[0.22em] gap-y-2">
+            <PlotText text="SAY" />
+            <span className="text-accent">
+              <PlotText text="HELLO!" delay={0.15} />
+            </span>
+          </span>
         </h2>
 
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 mt-14 items-start">

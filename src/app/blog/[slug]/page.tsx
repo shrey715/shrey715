@@ -10,11 +10,13 @@ import { mdxComponents } from '../../../../mdx-components';
 import Section, { Container } from '@/components/ui/Section';
 import RevealText from '@/components/ui/RevealText';
 import Footer from '@/components/sections/Footer';
+import SheetBreak from '@/components/plot/SheetBreak';
 import ReadingProgress from '@/components/blog/ReadingProgress';
 import Toc from '@/components/blog/Toc';
 import PostLedger from '@/components/blog/PostLedger';
 import { formatDate } from '@/components/blog/format';
 import ShareButton from './ShareButton';
+import SheetHeader from '@/components/sections/SheetHeader';
 import ZoomImage from '@/components/blog/ZoomImage';
 
 interface Props {
@@ -61,7 +63,7 @@ export default async function BlogPostPage({ params }: Props) {
     <main id="main" className="relative overflow-x-clip bg-paper">
       <ReadingProgress targetId="article-body" />
 
-      <Section className="justify-start min-h-0 pt-28 sm:pt-36 pb-20 sm:pb-28">
+      <Section sheet={`NOTE — ${post.title}`} className="justify-start min-h-0 pt-28 sm:pt-36 pb-20 sm:pb-28">
         <Container>
           <Link
             href="/blog"
@@ -73,26 +75,27 @@ export default async function BlogPostPage({ params }: Props) {
           {/* Header — aligned to the article column */}
           <header className="grid lg:grid-cols-12 gap-x-10">
             <div className="lg:col-start-4 lg:col-span-8">
-              <div className="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono-label text-[10px] text-ink/50 mb-6">
-                <time dateTime={post.date} className="text-ink">
-                  {formatDate(post.date, 'long').toUpperCase()}
-                </time>
-                <span>·</span>
-                <span>{post.readingTime.toUpperCase()}</span>
-                <span className="hidden sm:block w-8 h-px bg-ink/25" />
-                {post.tags.slice(0, 4).map((t) => (
-                  <span key={t} className="px-1.5 py-0.5 border border-ink/25 text-ink/60">
-                    {t}
-                  </span>
-                ))}
+              <div className="font-mono-label text-[11px] text-ink/60 mb-5 flex items-center gap-3">
+                <span className="text-accent">(NOTE)</span> FIELD NOTES
+                <span className="flex-1 h-px bg-ink/20" />
               </div>
-
               <h1 className="text-[clamp(2.3rem,5vw,4.4rem)] font-bold tracking-tight leading-[1.02] text-ink max-w-[20ch] text-balance">
                 <RevealText text={post.title} stagger={0.03} />
               </h1>
               <p className="mt-6 text-lg sm:text-xl text-ink/70 leading-relaxed max-w-[58ch] text-pretty">
                 {post.description}
               </p>
+
+              {/* The note's spec block — same sheet header as the rest of the set */}
+              <SheetHeader
+                className="mt-10"
+                fields={[
+                  { k: 'FILED', v: <time dateTime={post.date}>{formatDate(post.date, 'long')}</time> },
+                  { k: 'READ', v: post.readingTime },
+                  { k: 'SECTIONS', v: String(headings.length).padStart(2, '0') },
+                  { k: 'TAGS', v: post.tags.slice(0, 3).join(' · ') || '—', sub: post.tags.length > 3 ? `+${post.tags.length - 3} MORE` : undefined },
+                ]}
+              />
             </div>
           </header>
 
@@ -151,6 +154,7 @@ export default async function BlogPostPage({ params }: Props) {
         </Container>
       </Section>
 
+      <SheetBreak from="paper" to="ink" sheet="02" title="CONTACT" />
       <Footer />
     </main>
   );

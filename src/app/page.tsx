@@ -6,7 +6,7 @@ import ExperienceSection from '@/components/sections/ExperienceSection';
 import SkillsSection from '@/components/sections/SkillsSection';
 import ProjectsTeaser from '@/components/sections/ProjectsTeaser';
 import Footer from '@/components/sections/Footer';
-import SectionDivider from '@/components/ui/SectionDivider';
+import SheetBreak from '@/components/plot/SheetBreak';
 import VelocityMarquee from '@/components/ui/VelocityMarquee';
 import { getProjectsWithActivity } from '@/lib/projects';
 
@@ -48,22 +48,28 @@ export default async function Home() {
         top={['RESEARCHER', 'DEVELOPER', 'SYSTEMS NERD', 'ML ENGINEER', 'DISTRO HOPPER']}
         bottom={['ATTACK ON TITAN', 'RE:ZERO', 'MINECRAFT', 'BASKETBALL']}
       />
-      <AboutSection />
+      <AboutSection
+        stats={{
+          projects: projects.length,
+          tools: skillCategories.reduce((n, c) => n + c.skills.length, 0),
+          domains: skillCategories.length,
+        }}
+      />
 
-      <SectionDivider />
+      <SheetBreak from="ink" to="paper" sheet="02" title="EXPERIENCE" />
       <ExperienceSection
         workExperience={experienceData.workExperience}
         leadership={experienceData.leadership}
         achievements={experienceData.achievements}
       />
 
-      <SectionDivider />
+      <SheetBreak from="paper" to="ink" sheet="03" title="SKILLS" />
       <SkillsSection categories={skillCategories} projects={projects} />
 
-      <SectionDivider />
+      <SheetBreak from="ink" to="paper" sheet="04" title="PROJECTS" />
       <ProjectsTeaser projects={projects} />
 
-      <SectionDivider />
+      <SheetBreak from="paper" to="ink" sheet="05" title="CONTACT" />
       <Footer index="05" />
     </main>
   );

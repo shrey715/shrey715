@@ -3,6 +3,7 @@ import { memo } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { ACCENT } from '@/lib/constants';
+import { plotIn, STAGGER } from '@/lib/motion';
 import { previewImage } from '@/lib/projectMeta';
 import { projectTitleVT } from '@/lib/vtNames';
 import TransitionLink from '@/components/ui/TransitionLink';
@@ -17,13 +18,10 @@ interface ProjectCardProps {
 function ProjectCard({ project, index }: ProjectCardProps) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
-      transition={{ duration: 0.5, delay: Math.min((index % 3) * 0.08, 0.3) }}
+      {...plotIn((index % 3) * STAGGER)}
       className="h-full py-2"
     >
-      <TransitionLink href={`/projects/${project.slug}`} data-cursor="Open" className="block h-full">
+      <TransitionLink href={`/projects/${project.slug}`} data-cursor="Open" className="weighted block h-full">
         <motion.div
           initial={{ boxShadow: '6px 6px 0 0 #0e0e0e' }}
           whileHover={{ x: -4, y: -4, boxShadow: `12px 12px 0 0 ${ACCENT}` }}

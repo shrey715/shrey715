@@ -16,6 +16,10 @@ export function Container({
 
 interface SectionProps {
   id?: string;
+  /** Sheet title for the title block (makes this section a sheet in the drawing set). */
+  sheet?: string;
+  /** Particle shape the docked specimen takes on this sheet. */
+  specimen?: string;
   /** Dark (ink) surface instead of the default paper surface. */
   dark?: boolean;
   className?: string;
@@ -27,10 +31,12 @@ interface SectionProps {
  * grid lines, a top hard rule, and vertically-centred content so nav jumps
  * land cleanly.
  */
-export default function Section({ id, dark = false, className, children }: SectionProps) {
+export default function Section({ id, sheet, specimen, dark = false, className, children }: SectionProps) {
   return (
     <section
       id={id}
+      data-sheet={sheet}
+      data-specimen={specimen}
       className={cn(
         'relative min-h-dvh flex flex-col justify-center py-24 sm:py-32 overflow-clip border-t-2 border-ink',
         dark ? 'bg-ink text-paper grid-lines-dark' : 'bg-paper text-ink grid-lines',

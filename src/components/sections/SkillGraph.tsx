@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useInView } from 'framer-motion';
 import {
   forceCollide,
   forceLink,
@@ -47,6 +48,11 @@ export default function SkillGraph({ projects }: { projects: Project[] }) {
   const router = useRouter();
   const prefersReducedMotion = useReducedMotion();
   const wrapRef = useRef<HTMLDivElement>(null);
+  const seen = useInView(wrapRef, { once: true, margin: '-20% 0px' });
+  // The simulation only runs while the graph is (nearly) on screen.
+  const visible = useInView(wrapRef, { margin: '200px 0px' });
+  // Reduced motion: edges are simply there from the start.
+  const drawn = seen || prefersReducedMotion;
   const nodeEls = useRef(new Map<string, SVGGElement>());
   const linkEls = useRef<(SVGLineElement | null)[]>([]);
   const simRef = useRef<Simulation<GNode, GLink> | null>(null);
@@ -139,6 +145,13 @@ export default function SkillGraph({ projects }: { projects: Project[] }) {
     };
   }, [nodes, links, width, prefersReducedMotion]);
 
+  useEffect(() => {
+    const sim = simRef.current;
+    if (!sim || prefersReducedMotion) return;
+    if (visible) sim.alphaTarget(0.008).restart();
+    else sim.stop();
+  }, [visible, prefersReducedMotion]);
+
   // Drag (pointer events): pin the node under the pointer while dragging.
   const dragging = useRef<{ node: GNode; moved: boolean } | null>(null);
   const toLocal = (e: React.PointerEvent) => {
@@ -187,9 +200,16 @@ export default function SkillGraph({ projects }: { projects: Project[] }) {
                   ref={(el) => {
                     linkEls.current[i] = el;
                   }}
-                  className={`transition-[stroke,stroke-opacity] duration-300 ${on ? 'stroke-accent' : 'stroke-paper'}`}
+                  className={`${on ? 'stroke-accent' : 'stroke-paper'}`}
                   strokeOpacity={on ? 0.9 : hover ? 0.04 : 0.12}
                   strokeWidth={on ? 1.5 : 1}
+                  // Edges route in like traces on a circuit board the first time the graph is seen.
+                  pathLength={1}
+                  strokeDasharray="1 1"
+                  style={{
+                    strokeDashoffset: drawn ? 0 : 1,
+                    transition: `stroke-dashoffset 1.1s cubic-bezier(0.16,1,0.3,1) ${Math.min(i * 6, 900)}ms, stroke 0.3s, stroke-opacity 0.3s`,
+                  }}
                 />
               );
             })}

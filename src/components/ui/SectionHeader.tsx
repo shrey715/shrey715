@@ -1,5 +1,5 @@
 'use client';
-import DisplayTitle from '@/components/ui/DisplayTitle';
+import PlotText from '@/components/plot/PlotText';
 import ScrambleText from '@/components/ui/ScrambleText';
 
 interface SectionHeaderProps {
@@ -14,8 +14,9 @@ interface SectionHeaderProps {
 }
 
 /**
- * Editorial section header: a mono index row (with a decoding kicker) and a
- * huge display-type title that starts as an outline and fills in word-by-word.
+ * Sheet header: a mono index row (with a decoding kicker) and a huge display
+ * title that's plotted — outlines traced like a pen plotter, then inked, with
+ * a misregistered accent pass snapping into register.
  */
 export default function SectionHeader({
   index,
@@ -30,17 +31,13 @@ export default function SectionHeader({
 
   return (
     <div className={`relative ${className}`}>
-      {/* Bleeding outline numeral — sits behind the title, cropped by the section. */}
+      {/* Bleeding outline numeral — traced slowly as a faint construction drawing. */}
       <span
-        className="hidden md:block absolute -z-10 top-[-0.42em] right-[-0.04em] font-display leading-none select-none"
-        style={{
-          fontSize: 'clamp(9rem, 24vw, 20rem)',
-          WebkitTextStroke: `1.5px ${dark ? 'rgba(237,232,220,0.16)' : 'rgba(14,14,14,0.1)'}`,
-          color: 'transparent',
-        }}
+        className={`hidden md:block absolute -z-10 top-[-0.36em] right-[-0.02em] select-none ${dark ? 'text-paper' : 'text-ink'}`}
+        style={{ fontSize: 'clamp(9rem, 24vw, 20rem)' }}
         aria-hidden="true"
       >
-        {index}
+        <PlotText text={index} variant="ghost" stroke={0.45} />
       </span>
 
       <div className={`flex items-center gap-4 mb-3 font-mono-label text-[11px] ${metaColor}`}>
@@ -52,7 +49,7 @@ export default function SectionHeader({
         className={`font-display ${titleColor}`}
         style={{ fontSize: 'clamp(3rem, 11vw, 9rem)' }}
       >
-        <DisplayTitle text={title} dark={dark} />
+        <PlotText text={title} delay={0.1} />
       </h2>
     </div>
   );

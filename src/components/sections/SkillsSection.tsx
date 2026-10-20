@@ -4,6 +4,7 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import Section, { Container } from "@/components/ui/Section";
 import type { Project, SkillCategory } from "@/types";
 import SkillGraph from "./SkillGraph";
+import { plotIn } from '@/lib/motion';
 
 interface SkillsSectionProps {
   categories: SkillCategory[];
@@ -48,7 +49,7 @@ export default function SkillsSection({ categories, projects }: SkillsSectionPro
   const total = categories.reduce((n, c) => n + c.skills.length, 0);
 
   return (
-    <Section id="skills" dark>
+    <Section id="skills" dark sheet="SKILLS" specimen="network">
       <Container>
         <SectionHeader dark index="03" kicker="THE STACK" title="ARSENAL" className="mb-6" />
 
@@ -95,10 +96,7 @@ function SkillPanel({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.5, delay: index * 0.06 }}
+      {...plotIn(index * 0.06)}
       onMouseMove={trackSpotlight}
       className={`group relative overflow-hidden p-5 sm:p-6 flex flex-col ${span} ${
         accent
@@ -142,16 +140,36 @@ function SkillPanel({
         {num}
       </span>
 
-      <div className="relative z-10 flex flex-col h-full">
-        <div className="flex items-baseline gap-3 mb-5">
-          <span className={`font-mono-label text-[11px] tabular-nums ${accent ? "text-paper/80" : "text-accent"}`}>
-            {num}
-          </span>
-          <h3 className="font-display text-2xl sm:text-3xl leading-none">{category.title}</h3>
-          <span className={`font-mono-label text-[10px] tabular-nums ml-auto ${accent ? "text-paper/70" : "text-paper/40"}`}>
-            [{String(category.skills.length).padStart(2, "0")}]
-          </span>
-        </div>
+      <div className="weighted relative z-10 flex flex-col h-full">
+        {/* Three header layouts in rotation, so eight panels don't read as one stamp repeated */}
+        {index % 3 === 0 && (
+          <div className="flex items-baseline gap-3 mb-5">
+            <span className={`font-mono-label text-[11px] tabular-nums ${accent ? "text-paper/80" : "text-accent"}`}>{num}</span>
+            <h3 className="font-display text-2xl sm:text-3xl leading-none">{category.title}</h3>
+            <span className={`font-mono-label text-[10px] tabular-nums ml-auto ${accent ? "text-paper/70" : "text-paper/40"}`}>
+              [{String(category.skills.length).padStart(2, "0")}]
+            </span>
+          </div>
+        )}
+        {index % 3 === 1 && (
+          <div className="mb-5">
+            <div className="flex items-center gap-3 font-mono-label text-[10px] text-paper/40 tabular-nums">
+              <span className="text-accent">{num}</span>
+              <span className="flex-1 h-px bg-paper/15" />
+              <span>{String(category.skills.length).padStart(2, "0")} TOOLS</span>
+            </div>
+            <h3 className="font-display text-3xl sm:text-4xl leading-none mt-3">{category.title}</h3>
+          </div>
+        )}
+        {index % 3 === 2 && (
+          <div className="flex items-end justify-between gap-3 mb-5">
+            <h3 className="font-display text-2xl sm:text-3xl leading-none">
+              <span className="text-accent mr-2">/</span>
+              {category.title}
+            </h3>
+            <span className="font-annot text-lg text-paper/50 leading-none">×{category.skills.length}</span>
+          </div>
+        )}
 
         <motion.div
           variants={chipList}

@@ -5,6 +5,8 @@ import SectionHeader from '@/components/ui/SectionHeader';
 import Section, { Container } from '@/components/ui/Section';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import CareerMap, { parseMonth } from './CareerMap';
+import Dimension from '@/components/plot/Dimension';
+import Annot from '@/components/plot/Annot';
 
 /** Oldest first by end date — ongoing roles last (ties: whichever started first), in step with the career map. */
 function chronological(items: Experience[]) {
@@ -22,6 +24,7 @@ function chronological(items: Experience[]) {
 }
 import { ACCENT } from '@/lib/constants';
 import type { Experience, Achievement } from '@/types';
+import { plotIn } from '@/lib/motion';
 
 interface ExperienceSectionProps {
   workExperience: Experience[];
@@ -104,15 +107,24 @@ function TimelineNode({ current }: { current: boolean }) {
   );
 }
 
+/** "Aug 2025 – Present" → "14 MO" (inclusive months; ongoing counts to now). */
+function tenure(duration: string) {
+  const [a, b] = duration.split(/\s*[–—-]\s*/);
+  const start = parseMonth(a ?? '');
+  const now = new Date();
+  const end = /present/i.test(b ?? '') ? now.getFullYear() * 12 + now.getMonth() : parseMonth(b ?? '');
+  if (start === null || end === null) return null;
+  const m = end - start + 1;
+  return m >= 12 ? `${Math.floor(m / 12)} YR${m % 12 ? ` ${m % 12} MO` : ''}` : `${m} MO`;
+}
+
 function TimelineItem({ exp }: { exp: Experience }) {
   const current = /present/i.test(exp.duration);
+  const span = tenure(exp.duration);
 
   return (
     <motion.li
-      initial={{ opacity: 0, y: 24 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-12% 0px' }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      {...plotIn(0)}
       id={`exp-${exp.id}`}
       className="group relative flex flex-col md:flex-row gap-3 md:gap-0 pl-9 md:pl-0 py-9 md:py-11 scroll-mt-28"
     >
@@ -122,6 +134,11 @@ function TimelineItem({ exp }: { exp: Experience }) {
         {exp.location && <div>{exp.location}</div>}
         {exp.type && (
           <span className="inline-block mt-1 px-1.5 py-0.5 border border-ink/25 text-[9px] text-ink/60">{exp.type}</span>
+        )}
+        {span && (
+          <div className="pt-2 w-40 md:w-full md:pl-10">
+            <Dimension label={current ? `${span} · ONGOING` : span} />
+          </div>
         )}
       </div>
 
@@ -139,6 +156,11 @@ function TimelineItem({ exp }: { exp: Experience }) {
           {current && <span className="px-1.5 py-0.5 bg-accent text-paper font-mono-label text-[9px]">NOW</span>}
         </div>
         <p className="font-mono-label text-[11px] text-accent mt-1.5">{exp.organization}</p>
+        {current && (
+          <Annot point="left" leader={24} className="mt-3" delay={0.3}>
+            still here, still curious.
+          </Annot>
+        )}
         <HighlightList highlights={exp.highlights} />
       </div>
     </motion.li>
@@ -153,10 +175,7 @@ function AchievementRow({ a, index }: { a: Achievement; index: number }) {
 
   return (
     <motion.li
-      initial={{ opacity: 0, y: 18 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-40px' }}
-      transition={{ duration: 0.5, delay: index * 0.06, ease: [0.16, 1, 0.3, 1] }}
+      {...plotIn(index * 0.06)}
       className="group relative grid grid-cols-[4.5rem_1fr] md:grid-cols-[7rem_minmax(0,1fr)_minmax(0,1.15fr)] gap-x-6 gap-y-2 py-7 border-b border-ink/15"
     >
       <span
@@ -179,19 +198,21 @@ function AchievementRow({ a, index }: { a: Achievement; index: number }) {
 }
 
 export default function ExperienceSection({ workExperience, leadership, achievements }: ExperienceSectionProps) {
+  const timelineRef = useRef<HTMLDivElement>(null);
+
   return (
-    <Section id="experience">
+    <Section id="experience" sheet="EXPERIENCE" specimen="candles">
       <Container>
         <SectionHeader index="02" kicker="TIMELINE" title="EXPERIENCE" className="mb-16" />
 
         {/* Work — sticky stacking deck: each row pins and the next slides over it */}
         <SubLabel>WORK</SubLabel>
-        <div className="xl:grid xl:grid-cols-[minmax(0,1fr)_15rem] xl:gap-12">
+        <div ref={timelineRef} className="xl:grid xl:grid-cols-[minmax(0,1fr)_15rem] xl:gap-12">
           <WorkTimeline items={chronological(workExperience)} />
           {/* Career mini-map in the timeline's otherwise empty right rail */}
           <aside className="hidden xl:block pt-6">
             <div className="sticky top-28">
-              <CareerMap work={workExperience} leadership={leadership} />
+              <CareerMap work={workExperience} leadership={leadership} trackRef={timelineRef} />
             </div>
           </aside>
         </div>
@@ -202,10 +223,7 @@ export default function ExperienceSection({ workExperience, leadership, achievem
           {leadership.map((exp, i) => (
             <motion.article
               key={exp.id}
-              initial={{ opacity: 0, y: 24 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-60px' }}
-              transition={{ duration: 0.6, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
+              {...plotIn(i * 0.1)}
               className="group relative pt-6"
             >
               {/* Rule: ink at rest, accent draws across on hover */}

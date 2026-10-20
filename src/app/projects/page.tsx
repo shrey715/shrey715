@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Footer from '@/components/sections/Footer';
+import SheetBreak from '@/components/plot/SheetBreak';
 import ProjectsPageClient from '@/components/projects/ProjectsPageClient';
 import { getProjects } from '@/lib/projects';
 
@@ -17,6 +18,7 @@ export default async function ProjectsPage() {
   return (
     <main className="relative overflow-x-clip bg-paper">
       <ProjectsPageClient projects={projects} />
+      <SheetBreak from="paper" to="ink" sheet="02" title="CONTACT" />
       <Footer />
     </main>
   );

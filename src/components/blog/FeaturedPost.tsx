@@ -6,6 +6,7 @@ import { ArrowUpRight } from 'lucide-react';
 import { EASE_OUT } from '@/lib/constants';
 import type { BlogPost } from '@/lib/blog';
 import { formatDate } from './format';
+import { plotIn } from '@/lib/motion';
 
 /** Latest post, given room: cover on one side, the pitch on the other. */
 export default function FeaturedPost({ post }: { post: BlogPost }) {
@@ -35,10 +36,7 @@ export default function FeaturedPost({ post }: { post: BlogPost }) {
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-60px' }}
-        transition={{ duration: 0.7, delay: 0.15, ease: EASE_OUT }}
+        {...plotIn(0.15)}
         className="lg:col-span-5"
       >
         <div className="flex items-center gap-3 font-mono-label text-[10px] text-ink/50 mb-5">

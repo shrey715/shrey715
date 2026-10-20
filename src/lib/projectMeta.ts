@@ -152,3 +152,14 @@ export function primaryDomain(project: Project): Domain {
   }
   return best;
 }
+
+/** Each domain's particle figure is something you'd recognise from that field. */
+export const DOMAIN_SHAPE: Record<Domain, 'network' | 'chip' | 'candles' | 'browser'> = {
+  ai: 'network', // layers of neurons and weights
+  systems: 'chip', // a CPU package: cores, pins, traces
+  quant: 'candles', // a candlestick chart with a moving average
+  web: 'browser', // a browser window exploded into DOM layers
+};
+
+/** Projects with an animated system diagram on their page (see components/diagrams). */
+export const DIAGRAM_SLUGS = new Set(['tether', 'cuffka-kafka-with-raft', 'natsuki']);

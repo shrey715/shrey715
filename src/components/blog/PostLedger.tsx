@@ -3,10 +3,10 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
-import { EASE_OUT } from '@/lib/constants';
 import CursorPreview, { type PreviewItem } from '@/components/ui/CursorPreview';
 import type { BlogPost } from '@/lib/blog';
 import { dateParts } from './format';
+import { plotIn } from '@/lib/motion';
 
 /** Archive: one dated row per post, with the cover trailing the cursor on hover. */
 export default function PostLedger({ posts }: { posts: BlogPost[] }) {
@@ -20,10 +20,7 @@ export default function PostLedger({ posts }: { posts: BlogPost[] }) {
           return (
             <motion.li
               key={post.slug}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, delay: i * 0.05, ease: EASE_OUT }}
+              {...plotIn(i * 0.05)}
               className="border-b border-ink/20"
             >
               <Link

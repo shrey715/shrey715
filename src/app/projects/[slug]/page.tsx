@@ -3,13 +3,22 @@ import type { Metadata } from 'next';
 import { ArrowLeft, ArrowRight, ArrowUpRight, ExternalLink } from 'lucide-react';
 import { FaGithub } from 'react-icons/fa';
 import { getProjects, getProjectBySlug } from '@/lib/projects';
-import { DOMAINS, previewImage, primaryDomain, projectDomains, getRepoInfo } from '@/lib/projectMeta';
+import { DIAGRAM_SLUGS, DOMAINS, DOMAIN_SHAPE, previewImage, primaryDomain, projectDomains, getRepoInfo } from '@/lib/projectMeta';
+import SystemDiagram from '@/components/diagrams/SystemDiagram';
+import Annot from '@/components/plot/Annot';
 import { projectTitleVT } from '@/lib/vtNames';
 import Section, { Container } from '@/components/ui/Section';
 import Footer from '@/components/sections/Footer';
+import SheetBreak from '@/components/plot/SheetBreak';
 import TransitionLink from '@/components/ui/TransitionLink';
 import DotPlot, { activityCaption } from '@/components/projects/DotPlot';
 import ProjectSceneSlot from '@/components/projects/ProjectSceneSlot';
+
+const DIAGRAM_NOTES: Record<string, string> = {
+  tether: 'watch #2 get dropped — and recovered.',
+  'cuffka-kafka-with-raft': 'the leader dies; a new one is elected.',
+  natsuki: 'watch the relevant docs climb.',
+};
 
 /** Long titles step down so they stay at two or three clean lines. */
 function titleSize(title: string) {
@@ -102,7 +111,7 @@ export default async function ProjectPage({ params }: Props) {
 
   return (
     <main id="main" className="relative overflow-x-clip bg-paper">
-      <Section className="justify-start min-h-0 pt-28 sm:pt-36 pb-20 sm:pb-28">
+      <Section sheet={project.title} specimen={DOMAIN_SHAPE[primaryDomain(project)]} className="justify-start min-h-0 pt-28 sm:pt-36 pb-20 sm:pb-28">
         <Container>
           <div className="flex items-center justify-between gap-4 font-mono-label text-[11px] text-ink/60 mb-12">
             <TransitionLink href="/projects" className="inline-flex items-center gap-2 hover:text-accent transition-colors">
@@ -160,6 +169,19 @@ export default async function ProjectPage({ params }: Props) {
             </div>
           </div>
 
+          {/* How it works, drawn: an animated system diagram (where one exists) */}
+          {DIAGRAM_SLUGS.has(project.slug) && (
+            <section className="mt-20 sm:mt-24" aria-label="System diagram">
+              <div className="flex flex-wrap items-end justify-between gap-4 mb-5">
+                <div className="flex items-center gap-4 font-mono-label text-[11px] text-ink/60">
+                  <span className="text-accent">(FIG)</span> HOW IT WORKS
+                </div>
+                <Annot point="none">{DIAGRAM_NOTES[project.slug]}</Annot>
+              </div>
+              <SystemDiagram slug={project.slug} />
+            </section>
+          )}
+
           {/* Spec sheet */}
           <dl className="mt-20 sm:mt-24 border-t-2 border-ink">
             {rows.map((r) => (
@@ -203,6 +225,7 @@ export default async function ProjectPage({ params }: Props) {
         </Container>
       </Section>
 
+      <SheetBreak from="paper" to="ink" sheet="02" title="CONTACT" />
       <Footer />
     </main>
   );

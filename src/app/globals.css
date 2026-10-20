@@ -8,10 +8,13 @@
   --color-ink-soft: #2a2a2a;
   --color-accent: #ff3d00;
   --color-accent-dim: #d63300;
+  /* Drafting blue: construction lines, dimensions, annotations only. Never content. */
+  --color-draft: #4b8ec9;
 
   --font-sans: var(--font-space-grotesk), system-ui, -apple-system, sans-serif;
   --font-display: var(--font-anton), "Arial Narrow", Impact, sans-serif;
   --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-annot: var(--font-instrument-serif), Georgia, serif;
 }
 
 :root {
@@ -53,8 +56,9 @@ body::after {
   z-index: 9990;
   pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-  opacity: 0.4;
-  mix-blend-mode: overlay;
+  /* Plain alpha, not mix-blend-mode: a full-screen blended layer forces the
+     compositor to re-blend the whole viewport on every scroll frame. */
+  opacity: 0.22;
 }
 
 /* ===== HIDE NATIVE SCROLLBAR (custom indicator used) ===== */
@@ -86,6 +90,14 @@ body::after {
   font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.18em;
+}
+
+/* Margin annotations: the italic serif "handwriting" voice */
+.font-annot {
+  font-family: var(--font-annot);
+  font-style: italic;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 /* Outlined / stroked display text for layered headlines */
@@ -139,15 +151,6 @@ body::after {
 .glass-cake {
   background: var(--color-paper);
   border: 2px solid var(--color-ink);
-}
-
-/* ===== HAZARD STRIPES (section separator bands) ===== */
-.hazard-stripes {
-  background: repeating-linear-gradient(
-    -45deg,
-    var(--color-accent) 0 14px,
-    var(--color-ink) 14px 28px
-  );
 }
 
 /* ===== SERIAL BARCODE STRIP (footer stamp, varied-width bars) ===== */
@@ -290,6 +293,14 @@ a:focus-visible {
   /* Wrapped chips keep their padding/border on both halves */
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
+}
+
+/* ===== SCROLL WEIGHT ===== */
+/* Driven by --vel from <ScrollWeight>. Put on an element with no transform
+   of its own (framer-motion would overwrite it). */
+.weighted {
+  transform: skewY(calc(var(--vel, 0) * 1.6deg)) translateY(calc(var(--vel, 0) * -4px));
+  transform-origin: 50% 50%;
 }
 
 /* ===== VIEW TRANSITIONS ===== */

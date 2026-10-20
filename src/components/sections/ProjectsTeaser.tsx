@@ -20,6 +20,7 @@ import DotPlot, { activityCaption } from '@/components/projects/DotPlot';
 import { projectTitleVT } from '@/lib/vtNames';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import type { Project } from '@/types';
+import { plotIn } from '@/lib/motion';
 
 interface ProjectsTeaserProps {
   projects: Project[];
@@ -32,7 +33,7 @@ export default function ProjectsTeaser({ projects }: ProjectsTeaserProps) {
   const featured = projects.filter((p) => p.featured);
 
   return (
-    <div id="projects">
+    <div id="projects" data-sheet="PROJECTS" data-specimen="chip">
       <PinnedGallery projects={featured} total={projects.length} />
 
       {/* Below lg: the composed grid — pinned horizontal scroll is a desktop move. */}
@@ -259,10 +260,7 @@ function FeaturedPanel({ project, index, span }: { project: Project; index: numb
   return (
     <TransitionLink href={`/projects/${project.slug}`} data-cursor="Open" className={span}>
       <motion.div
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: '-40px' }}
-        transition={{ duration: 0.5, delay: (index % 2) * 0.07 }}
+        {...plotIn((index % 2) * 0.07)}
         whileTap={{ x: -2, y: -2, scale: 0.99 }}
         className="relative overflow-hidden p-6 min-h-[190px] h-full flex flex-col bg-paper text-ink hard-border cursor-pointer group"
       >

@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Anton, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { Anton, Space_Grotesk, JetBrains_Mono, Instrument_Serif } from "next/font/google";
 import "./globals.css";
 import CustomCursor from "@/components/effects/CustomCursor";
 import ScrollIndicator from "@/components/effects/ScrollIndicator";
-import StatusReadout from "@/components/effects/StatusReadout";
+import TitleBlock from "@/components/effects/TitleBlock";
+import Rulers from "@/components/effects/Rulers";
+import SoundLayer from "@/components/effects/SoundLayer";
+import ScrollWeight from "@/components/effects/ScrollWeight";
 import Preloader from "@/components/effects/Preloader";
 import LenisProvider from "@/components/effects/LenisProvider";
 import Navbar from "@/components/ui/Navbar";
@@ -25,6 +28,15 @@ const anton = Anton({
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
   subsets: ["latin"],
+  display: "swap",
+});
+
+// Italic serif for margin annotations — the draftsman's handwritten voice
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["italic"],
   display: "swap",
 });
 
@@ -104,7 +116,7 @@ export default async function RootLayout({
   return (
     // Font variables live on <html> so the :root-level Tailwind @theme tokens
     // (--font-display: var(--font-anton) …) can actually resolve them.
-    <html lang="en" className={`${anton.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`${anton.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable}`}>
       <head>
         <JsonLdScript />
         {/* Google Analytics */}
@@ -135,7 +147,10 @@ export default async function RootLayout({
           <Preloader />
           <CustomCursor />
           <ScrollIndicator />
-          <StatusReadout latestPush={site.latestPush} />
+          <Rulers />
+          <TitleBlock latestPush={site.latestPush} />
+          <SoundLayer />
+          <ScrollWeight />
           <Navbar counts={site.counts} />
           <CommandPalette index={site} />
           {children}

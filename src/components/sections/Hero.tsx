@@ -11,6 +11,7 @@ import Magnetic from "@/components/ui/Magnetic";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import { useIntroReady } from "@/hooks/useIntroReady";
 import { FORMATIONS } from "@/components/three/formations";
+import HeroConstruction from "@/components/sections/HeroConstruction";
 
 // three.js stays out of the server bundle and off the critical path.
 const HeroScene = dynamic(() => import("@/components/three/HeroScene"), { ssr: false });
@@ -67,6 +68,7 @@ export default function Hero() {
   return (
     <section
       ref={sectionRef}
+      data-sheet="COVER"
       className="min-h-dvh relative bg-paper text-ink grid-lines overflow-hidden flex flex-col"
     >
       <RegistrationMarks />
@@ -78,6 +80,11 @@ export default function Hero() {
         scatter={scatter}
         className="absolute inset-0 z-0"
       />
+
+      {/* Construction lines re-drawn around the figure on every morph */}
+      <motion.div style={{ opacity: contentOpacity }} className="absolute inset-0 pointer-events-none">
+        <HeroConstruction index={specimen} show={introReady} still={prefersReducedMotion} />
+      </motion.div>
 
       {/* Click target over the sculpture — morphs it to the next shape */}
       <button

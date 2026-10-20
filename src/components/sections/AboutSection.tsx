@@ -10,8 +10,11 @@ import SectionHeader from "@/components/ui/SectionHeader";
 import Section, { Container } from "@/components/ui/Section";
 import Portrait from "@/components/ui/Portrait";
 import ScrollFillText from "@/components/ui/ScrollFillText";
+import SheetHeader, { useIstClock } from "@/components/sections/SheetHeader";
+import Annot from "@/components/plot/Annot";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 import type { SocialLink, HobbyItem } from "@/types";
+import { plotIn } from '@/lib/motion';
 
 const socialLinks: SocialLink[] = [
   { icon: FaGithub, href: "https://github.com/shrey715", label: "GitHub", external: true },
@@ -84,11 +87,31 @@ function Ink({ children }: { children: React.ReactNode }) {
   return <span className="text-paper font-semibold underline decoration-accent decoration-2 underline-offset-4">{children}</span>;
 }
 
-export default function AboutSection() {
+export interface AboutStats {
+  projects: number;
+  tools: number;
+  domains: number;
+}
+
+export default function AboutSection({ stats }: { stats: AboutStats }) {
+  const clock = useIstClock();
   return (
-    <Section id="about" dark>
+    <Section id="about" dark sheet="ABOUT" specimen="cell">
       <Container>
-        <SectionHeader dark index="01" kicker="WHOAMI" title="ABOUT" className="mb-14" />
+        <SectionHeader dark index="01" kicker="WHOAMI" title="ABOUT" className="mb-12" />
+
+        {/* Sheet header: the facts, printed like the spec block on a drawing */}
+        <SheetHeader
+          dark
+          className="mb-16 sm:mb-20"
+          fields={[
+            { k: 'STUDYING', v: 'B.Tech CS + MS by Research', sub: 'COMPUTATIONAL NATURAL SCIENCES · YEAR 4' },
+            { k: 'RESEARCH', v: 'Network biology × deep learning', sub: 'CCNSB, IIIT HYDERABAD' },
+            { k: 'BASED IN', v: 'Hyderabad, India', sub: <span className="tabular-nums">{clock || '--:--:--'} IST</span> },
+            { k: 'BUILT', v: `${stats.projects} projects`, sub: `${stats.tools}+ TOOLS · ${stats.domains} DOMAINS` },
+            { k: 'OFF THE CLOCK', v: 'Anime, hoops, distros', sub: 'SEE THE TRAY BELOW' },
+          ]}
+        />
 
         <div className="grid lg:grid-cols-12 gap-14 lg:gap-16">
           {/* Left: tall portrait + socials */}
@@ -110,6 +133,9 @@ export default function AboutSection() {
               >
                 <Portrait aspect="aspect-[3/4] lg:aspect-[2/3]" />
               </motion.div>
+              <Annot dark point="up" leader={28} className="mt-5 ml-6" delay={0.4}>
+                fig. 02 — usually mid-debug, occasionally mid-anime.
+              </Annot>
             </motion.div>
 
             <div className="grid grid-cols-2 gap-0 hard-border border-paper/40">
@@ -145,10 +171,7 @@ export default function AboutSection() {
             {blocks.map((block, i) => (
               <motion.div
                 key={block.num}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
-                transition={{ duration: 0.6, delay: i * 0.1 }}
+                {...plotIn(i * 0.1)}
                 className="py-7 border-t-2 border-paper/15 last:border-b-2"
               >
                 <div className="flex items-baseline gap-3 mb-3">

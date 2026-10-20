@@ -80,7 +80,7 @@ export default function ProjectsPageClient({ projects }: ProjectsPageClientProps
     }`;
 
   return (
-    <div className="relative bg-paper text-ink grid-lines border-t-2 border-ink">
+    <div data-sheet="PROJECT INDEX" className="relative bg-paper text-ink grid-lines border-t-2 border-ink">
       <RegistrationMarks />
 
       <Container className="pt-28 sm:pt-36 pb-12">

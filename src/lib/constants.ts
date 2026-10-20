@@ -1,7 +1,7 @@
 // Shared design + motion tokens used across components.
 
-/** Expo-out easing curve used for entrance/reveal animations. */
-export const EASE_OUT = [0.16, 1, 0.3, 1] as const;
+/** Re-exported from the motion system (src/lib/motion.ts). */
+export { EASE_OUT } from './motion';
 
 /** Accent colour, for JS contexts (motion style strings) where a Tailwind class can't be used. */
 export const ACCENT = '#ff3d00';

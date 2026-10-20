@@ -4,6 +4,7 @@ import { getAllPosts } from '@/lib/blog';
 import SectionHeader from '@/components/ui/SectionHeader';
 import Section, { Container } from '@/components/ui/Section';
 import Footer from '@/components/sections/Footer';
+import SheetBreak from '@/components/plot/SheetBreak';
 import BlogIndex from '@/components/blog/BlogIndex';
 import { dateParts } from '@/components/blog/format';
 
@@ -25,7 +26,7 @@ export default async function BlogPage() {
 
   return (
     <main id="main" className="relative overflow-x-clip bg-paper">
-      <Section className="justify-start min-h-0 pt-28 sm:pt-36">
+      <Section sheet="FIELD NOTES" className="justify-start min-h-0 pt-28 sm:pt-36">
         <Container>
           <Link
             href="/"
@@ -54,6 +55,7 @@ export default async function BlogPage() {
         </Container>
       </Section>
 
+      <SheetBreak from="paper" to="ink" sheet="02" title="CONTACT" />
       <Footer />
     </main>
   );

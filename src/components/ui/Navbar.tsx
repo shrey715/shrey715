@@ -12,7 +12,9 @@ import { useLenis } from 'lenis/react';
 import { useSectionNav } from '@/hooks/useSectionNav';
 import RegistrationMarks from '@/components/ui/RegistrationMarks';
 import ScrambleText from '@/components/ui/ScrambleText';
+import SheetThumb from '@/components/ui/SheetThumb';
 import { EASE_OUT } from '@/lib/constants';
+import { playSound } from '@/lib/sound';
 import type { SiteIndex } from '@/lib/siteIndex';
 import { OPEN_PALETTE_EVENT } from '@/components/ui/CommandPalette';
 
@@ -114,6 +116,7 @@ export default function Navbar({ counts }: { counts: SiteIndex['counts'] }) {
   };
 
   const openMenu = () => {
+    playSound('paper');
     setInstantClose(false);
     setIsOpen(true);
   };
@@ -201,7 +204,7 @@ export default function Navbar({ counts }: { counts: SiteIndex['counts'] }) {
               <div className="lg:col-span-7">
                 <div className="font-mono-label text-[11px] text-paper/50 mb-8 flex items-center gap-3">
                   <span className="text-accent">(NAV)</span>
-                  <ScrambleText text="[ INDEX ]" duration={700} />
+                  <ScrambleText text="[ INDEX OF SHEETS ]" duration={700} />
                 </div>
                 <nav className="flex flex-col gap-1 sm:gap-2">
                   {NAV_ITEMS.map((item, i) => {
@@ -246,13 +249,20 @@ export default function Navbar({ counts }: { counts: SiteIndex['counts'] }) {
                     transition={{ duration: 0.3, ease: EASE_OUT }}
                     className="absolute inset-0 flex flex-col justify-end border-l-2 border-paper/15 pl-10"
                   >
-                    <span
-                      aria-hidden="true"
-                      className="font-display leading-none select-none text-transparent [-webkit-text-stroke:1.5px_rgba(255,61,0,0.7)]"
-                      style={{ fontSize: '12rem' }}
-                    >
-                      {String(hovered + 1).padStart(2, '0')}
-                    </span>
+                    <div className="flex items-end justify-between gap-6">
+                      <span
+                        aria-hidden="true"
+                        className="font-display leading-none select-none text-transparent [-webkit-text-stroke:1.5px_rgba(255,61,0,0.7)]"
+                        style={{ fontSize: '10rem' }}
+                      >
+                        {String(hovered + 1).padStart(2, '0')}
+                      </span>
+                      {/* The sheet's schematic, drawn as you hover */}
+                      <SheetThumb
+                        id={preview.type === 'route' ? preview.href.slice(1) : preview.id}
+                        className="w-44 h-28 mb-4 shrink-0"
+                      />
+                    </div>
                     <p className="mt-6 text-xl text-paper/80 leading-snug max-w-sm text-pretty">{preview.blurb(counts)}</p>
                     <span className="mt-4 font-mono-label text-[10px] text-paper/40">
                       {preview.type === 'route' ? `GO TO ${preview.href.toUpperCase()}` : `JUMP TO #${preview.id.toUpperCase()}`}

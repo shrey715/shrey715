@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useMemo, useState, useSyncExternalStore } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useScroll, useTransform, type MotionValue } from 'framer-motion';
+import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { useLenis } from 'lenis/react';
 import type { Experience } from '@/types';
 
@@ -59,7 +60,58 @@ const BAR = 9;
  * bar on a real time axis (oldest at top, matching the timeline beside it), the role you're reading lit up,
  * hover to name a bar, click a work bar to jump to it.
  */
-export default function CareerMap({ work, leadership }: { work: Experience[]; leadership: Experience[] }) {
+/** One role's bar, drawn downward (oldest at top) as the timeline scrolls past. */
+function Bar({
+  s,
+  x,
+  y0,
+  h,
+  progress,
+  range,
+  lit,
+  onHover,
+  onJump,
+}: {
+  s: Span;
+  x: number;
+  y0: number;
+  h: number;
+  progress: MotionValue<number>;
+  range: [number, number];
+  lit: boolean;
+  onHover: (id: string | null) => void;
+  onJump: (s: Span) => void;
+}) {
+  const height = useTransform(progress, range, [0, h], { clamp: true });
+  return (
+    <motion.rect
+      x={x}
+      y={y0}
+      width={BAR}
+      style={{ height }}
+      className={`${lit ? 'fill-accent' : s.kind === 'work' ? 'fill-ink' : 'fill-ink/25'} transition-colors duration-300 ${
+        s.kind === 'work' ? 'cursor-pointer' : ''
+      }`}
+      onMouseEnter={() => onHover(s.exp.id)}
+      onMouseLeave={() => onHover(null)}
+      onClick={() => onJump(s)}
+    />
+  );
+}
+
+export default function CareerMap({
+  work,
+  leadership,
+  trackRef,
+}: {
+  work: Experience[];
+  leadership: Experience[];
+  /** The timeline it sits beside — scrolling through it draws the bars. */
+  trackRef: React.RefObject<HTMLElement | null>;
+}) {
+  const { scrollYProgress } = useScroll({ target: trackRef, offset: ['start 75%', 'end 85%'] });
+  const prefersReducedMotion = useReducedMotion();
+  const fullProgress = useMotionValue(1);
   const isClient = useSyncExternalStore(noop, () => true, () => false);
   const [hovered, setHovered] = useState<string | null>(null);
   const [active, setActive] = useState<string | null>(null);
@@ -98,6 +150,12 @@ export default function CareerMap({ work, leadership }: { work: Experience[]; le
   if (!isClient || spans.length === 0) return null;
 
   const y = (m: number) => TOP + ((m - minM) / (maxM - minM)) * (H - TOP - BOTTOM);
+  // Bars draw in time order as you scroll the timeline (oldest first, like the list).
+  const drawRange = (sp: Span): [number, number] => {
+    const span = maxM - minM;
+    const a = ((sp.start - minM) / span) * 0.85;
+    return [a, a + Math.max(0.1, ((sp.end - sp.start) / span) * 0.85)];
+  };
   const years: number[] = [];
   for (let yr = Math.ceil(minM / 12); yr * 12 <= maxM; yr++) years.push(yr);
   const focus = spans.find((s) => s.exp.id === (hovered ?? active));
@@ -157,20 +215,17 @@ export default function CareerMap({ work, leadership }: { work: Experience[]; le
           const lit = s.exp.id === (hovered ?? active);
           const x = AXIS_X + s.lane * LANE;
           return (
-            <motion.rect
+            <Bar
               key={`${s.kind}-${s.exp.id}`}
+              s={s}
               x={x}
-              width={BAR}
-              initial={{ y: y(s.start), height: 0 }}
-              whileInView={{ y: y(s.start), height: Math.max(3, y(s.end) - y(s.start)) }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.1 + s.lane * 0.05 }}
-              className={`${lit ? 'fill-accent' : s.kind === 'work' ? 'fill-ink' : 'fill-ink/25'} transition-colors duration-300 ${
-                s.kind === 'work' ? 'cursor-pointer' : ''
-              }`}
-              onMouseEnter={() => setHovered(s.exp.id)}
-              onMouseLeave={() => setHovered(null)}
-              onClick={() => jump(s)}
+              y0={y(s.start)}
+              h={Math.max(3, y(s.end) - y(s.start))}
+              progress={prefersReducedMotion ? fullProgress : scrollYProgress}
+              range={drawRange(s)}
+              lit={lit}
+              onHover={setHovered}
+              onJump={jump}
             />
           );
         })}
